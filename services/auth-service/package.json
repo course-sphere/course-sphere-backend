@@ -1,0 +1,22 @@
+{
+  "name": "auth-service",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/index.ts"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.4.1",
+    "better-auth": "^1.4.17",
+    "drizzle-orm": "^0.45.1",
+    "elysia": "^1.4.22",
+    "hono": "^4.11.7",
+    "pg": "^8.17.2"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.16.0",
+    "bun-types": "latest",
+    "drizzle-kit": "^0.31.8"
+  },
+  "module": "src/index.js"
+}
