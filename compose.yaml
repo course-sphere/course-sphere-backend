@@ -27,7 +27,7 @@ services:
       - network
 
   auth-service:
-    image: course-sphere/auth-service:latest
+    image: ${REGISTRY}/auth-service:latest
     container_name: course-sphere-auth
     restart: always
     networks:
