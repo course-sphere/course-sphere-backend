@@ -1,0 +1,44 @@
+services:
+  database:
+    image: postgres:latest
+    container_name: course-sphere-database
+    restart: always
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASS}
+      POSTGRES_DB: ${PG_DB}
+    volumes:
+      - database:/var/lib/postgresql/data
+    networks:
+      - network
+
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:latest
+    container_name: course-sphere-cloudbeaver
+    restart: always
+    depends_on:
+      - database
+    volumes:
+      - cloudbeaver:/opt/cloudbeaver/workspace
+    networks:
+      - network
+
+  auth-service:
+    image: course-sphere/auth-service:latest
+    container_name: course-sphere-auth
+    restart: always
+    networks:
+      - network
+
+networks:
+  network:
+    name: course-sphere-network
+    external: true
+
+volumes:
+  database:
+    name: blood-donation-system-database
+    external: true
+  cloudbeaver:
+    name: blood-donation-system-cloudbeaver
+    external: true

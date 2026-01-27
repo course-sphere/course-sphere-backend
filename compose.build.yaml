@@ -1,0 +1,6 @@
+services:
+  auth-service:
+    image: course-sphere/auth-service:latest
+    build:
+      context: services/auth-service
+      dockerfile: Dockerfile
