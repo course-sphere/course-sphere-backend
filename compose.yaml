@@ -2,20 +2,20 @@ services:
   database:
     image: postgres:latest
     container_name: course-sphere-database
-    restart: always
+    restart: on-failure:5
     environment:
       POSTGRES_USER: ${PG_USER}
       POSTGRES_PASSWORD: ${PG_PASS}
       POSTGRES_DB: ${PG_DB}
     volumes:
-      - database:/var/lib/postgresql/data
+      - database:/var/lib/postgresql
     networks:
       - network
 
   cloudbeaver:
     image: dbeaver/cloudbeaver:latest
     container_name: course-sphere-cloudbeaver
-    restart: always
+    restart: on-failure:5
     volumes:
       - cloudbeaver:/opt/cloudbeaver/workspace
     networks:
@@ -24,7 +24,7 @@ services:
   auth-service:
     image: ${REGISTRY}/auth-service:latest
     container_name: course-sphere-auth
-    restart: always
+    restart: on-failure:5
     depends_on:
       - database
     environment:
