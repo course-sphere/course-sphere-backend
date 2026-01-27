@@ -15,8 +15,6 @@ app.use(
         credentials: true,
     }),
 );
-console.log(process.env.CORS_ORIGIN);
-console.log(process.env.BETTER_AUTH_BASE_URL);
 
 app.on(["POST", "GET"], "/*", async (c) => {
     return await auth.handler(c.req.raw);
