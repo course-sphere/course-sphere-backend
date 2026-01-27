@@ -16,9 +16,9 @@ app.use(
     }),
 );
 
-app.on(["POST", "GET"], "/*", (c) => {
+app.on(["POST", "GET"], "/*", async (c) => {
     console.log(c.req.raw);
-    auth.handler(c.req.raw);
+    await auth.handler(c.req.raw);
 });
 
 export default app;
