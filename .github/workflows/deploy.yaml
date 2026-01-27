@@ -54,6 +54,6 @@ jobs:
           username: ${{ github.actor}}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Clean Container, Image And Prepare For Deploy
-        run: docker compose -f compose.yaml -p course-spehere down --rmi all -v
+        run: docker compose -f compose.yaml -p course-sphere down --rmi all -v
       - name: Deploy Application
         run: docker compose -f compose.yaml -p course-sphere up -d
