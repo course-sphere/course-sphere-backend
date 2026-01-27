@@ -18,6 +18,9 @@ services:
     restart: always
     depends_on:
       - database
+    environment:
+      DATABASE_URL: postgres://${PG_USER}:${PG_PASS}@database/${PG_DB}
+      CORS_ORIGIN: ${CORS_ORIGIN}
     volumes:
       - cloudbeaver:/opt/cloudbeaver/workspace
     networks:
