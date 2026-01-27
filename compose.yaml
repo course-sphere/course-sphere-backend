@@ -16,11 +16,6 @@ services:
     image: dbeaver/cloudbeaver:latest
     container_name: course-sphere-cloudbeaver
     restart: always
-    depends_on:
-      - database
-    environment:
-      DATABASE_URL: postgres://${PG_USER}:${PG_PASS}@database/${PG_DB}
-      CORS_ORIGIN: ${CORS_ORIGIN}
     volumes:
       - cloudbeaver:/opt/cloudbeaver/workspace
     networks:
@@ -30,6 +25,11 @@ services:
     image: ${REGISTRY}/auth-service:latest
     container_name: course-sphere-auth
     restart: always
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: postgres://${PG_USER}:${PG_PASS}@database/${PG_DB}
+      CORS_ORIGIN: ${CORS_ORIGIN}
     networks:
       - network
 
@@ -40,8 +40,8 @@ networks:
 
 volumes:
   database:
-    name: blood-donation-system-database
+    name: course-sphere-database
     external: true
   cloudbeaver:
-    name: blood-donation-system-cloudbeaver
+    name: course-sphere-cloudbeaver
     external: true
