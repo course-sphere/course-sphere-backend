@@ -4,6 +4,7 @@ import { db } from "./db";
 import * as schema from "./db/auth-schema";
 
 export const auth = betterAuth({
+    baseURL: process.env.BETTER_AUTH_BASE_URL,
     emailAndPassword: {
         enabled: true,
     },
