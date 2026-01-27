@@ -30,6 +30,7 @@ services:
     environment:
       DATABASE_URL: postgres://${PG_USER}:${PG_PASS}@database/${PG_DB}
       CORS_ORIGIN: ${CORS_ORIGIN}
+      BETTER_AUTH_BASE_URL: ${BETTER_AUTH_BASE_URL}  
     networks:
       - network
 

@@ -16,6 +16,6 @@ app.use(
     }),
 );
 
-app.on(["POST", "GET"], "/auth/*", (c) => auth.handler(c.req.raw));
+app.on(["POST", "GET"], "/*", (c) => auth.handler(c.req.raw));
 
 export default app;

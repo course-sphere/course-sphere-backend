@@ -41,6 +41,8 @@ jobs:
       PG_DB: ${{ secrets.PG_DB }}
 
       CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
+
+      BETTER_AUTH_BASE_URL: ${{ secrets.BETTER_AUTH_BASE_URL }}
     steps:
       - name: Checkout Develop
         uses: actions/checkout@v3
