@@ -3,21 +3,22 @@ package usecase
 import (
 	"context"
 
-	"github.com/course-sphere/course-sphere-backend/services/general/internal/domain"
-	"github.com/course-sphere/course-sphere-backend/services/general/internal/ports/repo"
 	"github.com/google/uuid"
+
+	"github.com/course-sphere/course-sphere-backend/services/general/internal/domain"
+	"github.com/course-sphere/course-sphere-backend/services/general/internal/ports"
 )
 
-type CourseUsecase struct {
-	repo repo.CourseRepository
+type Course struct {
+	repo ports.Repository
 }
 
-func NewCourseUsecase(r repo.CourseRepository) *CourseUsecase {
-	return &CourseUsecase{repo: r}
+func NewCourse(r ports.Repository) *Course {
+	return &Course{repo: r}
 }
 
-func (u *CourseUsecase) Get(ctx context.Context, id uuid.UUID) (*domain.Course, error) {
-	course, err := u.repo.Get(ctx, id)
+func (u *Course) Get(ctx context.Context, id uuid.UUID) (*domain.Course, error) {
+	course, err := u.repo.GetCourse(ctx, id)
 	if err != nil {
 		return nil, err
 	}
