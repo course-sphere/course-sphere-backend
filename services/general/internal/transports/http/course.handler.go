@@ -1,9 +1,10 @@
 package http
 
 import (
-	"github.com/course-sphere/course-sphere-backend/services/general/internal/domain"
 	"github.com/go-fuego/fuego"
 	"github.com/google/uuid"
+
+	"github.com/course-sphere/course-sphere-backend/services/general/internal/domain"
 )
 
 func (h *Handler) GetCourse(c fuego.ContextNoBody) (*domain.Course, error) {
