@@ -22,10 +22,6 @@ func (h *Handler) RegisterRoutes(s *fuego.Server) {
 	fuego.Get(s, "/course/{id}", h.GetCourse)
 }
 
-func (h *Handler) Ping(c fuego.ContextNoBody) (string, error) {
-	return "pong", nil
-}
-
 func (h *Handler) OpenAPI(specURL string) http.Handler {
 	return httpSwagger.Handler(
 		httpSwagger.Layout(httpSwagger.BaseLayout),
