@@ -19,7 +19,9 @@ func NewHandler(course *usecase.Course) *Handler {
 
 func (h *Handler) RegisterRoutes(s *fuego.Server) {
 	fuego.Get(s, "/", h.Ping)
-	fuego.Get(s, "/course/{id}", h.GetCourse)
+
+	course := fuego.Group(s, "/course")
+	fuego.Get(course, "/{id}", h.GetCourse)
 }
 
 func (h *Handler) OpenAPI(specURL string) http.Handler {
