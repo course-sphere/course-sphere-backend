@@ -26,7 +26,7 @@ func (h *Handler) RegisterRoutes(s *fuego.Server) {
 
 func (h *Handler) OpenAPI(specURL string) http.Handler {
 	return httpSwagger.Handler(
-		httpSwagger.Layout(httpSwagger.BaseLayout),
+		httpSwagger.Layout(httpSwagger.StandaloneLayout),
 		httpSwagger.PersistAuthorization(true),
 		httpSwagger.URL(specURL),
 	)
