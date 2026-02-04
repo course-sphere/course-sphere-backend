@@ -4,3 +4,9 @@ services:
     build:
       context: services/auth
       dockerfile: Dockerfile
+
+  general-service:
+    image: ${REGISTRY}/general-service:latest
+    build:
+      context: services/general
+      dockerfile: cmd/server/Dockerfile
