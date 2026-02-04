@@ -34,6 +34,19 @@ services:
     networks:
       - network
 
+  general-service:
+    image: ${REGISTRY}/general-service:latest
+    container_name: course-sphere-general
+    restart: on-failure:5
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: postgres://${PG_USER}:${PG_PASS}@database/${PG_DB}
+      CORS_ORIGIN: ${CORS_ORIGIN}
+    networks:
+      - network
+
+
 networks:
   network:
     name: course-sphere-network

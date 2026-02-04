@@ -18,7 +18,7 @@ func NewServer(
 	handler := NewHandler(course)
 	s := fuego.NewServer(
 		fuego.WithAddr(fmt.Sprintf(":%d", cfg.Port)),
-		fuego.WithGlobalMiddlewares(middleware.Cors(cfg.AllowOrigin)),
+		fuego.WithGlobalMiddlewares(middleware.Cors(cfg.CorsOrigin)),
 		fuego.WithEngineOptions(
 			fuego.WithOpenAPIConfig(fuego.OpenAPIConfig{
 				UIHandler:            handler.OpenAPI,
