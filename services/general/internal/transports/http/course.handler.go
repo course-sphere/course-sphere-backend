@@ -3,11 +3,10 @@ package http
 import (
 	"github.com/go-fuego/fuego"
 	"github.com/google/uuid"
-
-	"github.com/course-sphere/course-sphere-backend/services/general/internal/domain"
+	"github.com/jinzhu/copier"
 )
 
-func (h *Handler) GetCourse(c fuego.ContextNoBody) (*domain.Course, error) {
+func (h *Handler) GetCourse(c fuego.ContextNoBody) (*Course, error) {
 	id, err := uuid.Parse(c.PathParam("id"))
 	if err != nil {
 		return nil, fuego.BadRequestError{
@@ -16,13 +15,15 @@ func (h *Handler) GetCourse(c fuego.ContextNoBody) (*domain.Course, error) {
 		}
 	}
 
-	course, err := h.course.Get(c.Context(), id)
+	raw, err := h.course.Get(c.Context(), id)
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Err:    err,
 			Detail: "No course with given ID",
 		}
 	}
+	course := Course{}
+	copier.Copy(&course, raw)
 
-	return course, nil
+	return &course, nil
 }
