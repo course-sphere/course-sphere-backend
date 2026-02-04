@@ -9,9 +9,13 @@ import (
 	"syscall"
 	"time"
 
-	server "github.com/course-sphere/course-sphere-backend/services/general/internal/transports/http"
-	"github.com/course-sphere/course-sphere-backend/services/general/internal/usecase"
+	"github.com/caarlos0/env/v11"
 	"github.com/go-fuego/fuego"
+
+	"github.com/course-sphere/course-sphere-backend/services/general/internal/adapters/repo"
+	"github.com/course-sphere/course-sphere-backend/services/general/internal/config"
+	httpServer "github.com/course-sphere/course-sphere-backend/services/general/internal/transports/http"
+	"github.com/course-sphere/course-sphere-backend/services/general/internal/usecase"
 )
 
 func gracefulShutdown(apiServer *fuego.Server, done chan bool) {
@@ -35,10 +39,11 @@ func gracefulShutdown(apiServer *fuego.Server, done chan bool) {
 }
 
 func main() {
-	courseRepo := adapters
-	courseUsecase := usecase.NewCourseUsecase(courseRepo)
+	cfg, _ := env.ParseAs[config.Config]()
+	repo := repo.NewInMemory()
+	course := usecase.NewCourse(repo)
 
-	server := server.NewHandler()
+	server := httpServer.NewServer(&cfg, course)
 
 	done := make(chan bool, 1)
 
