@@ -1,12 +1,19 @@
 package http
 
 import (
+	"fmt"
+
+	"github.com/course-sphere/course-sphere-backend/pkg/middleware"
 	"github.com/go-fuego/fuego"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
 )
 
 func (h *Handler) GetCourse(c fuego.ContextNoBody) (*Course, error) {
+	token := c.Value(middleware.TokenKey).(jwt.Token)
+	fmt.Printf("token=%+v", token)
+
 	id, err := uuid.Parse(c.PathParam("id"))
 	if err != nil {
 		return nil, fuego.BadRequestError{
