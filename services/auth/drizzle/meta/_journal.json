@@ -15,6 +15,13 @@
       "when": 1769755376687,
       "tag": "0001_add_role",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770363445682,
+      "tag": "0002_add_jwks",
+      "breakpoints": true
     }
   ]
 }

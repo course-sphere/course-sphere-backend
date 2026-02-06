@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth";
+import { jwt } from "better-auth/plugins";
 import { z } from "zod";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
@@ -43,4 +44,5 @@ export const auth = betterAuth({
         level: "debug",
         log: (l, m, ...a) => console.log(`[better-auth][${l}]`, m, ...a),
     },
+    plugins: [jwt()],
 });
