@@ -1,4 +1,4 @@
-module github.com/course-sphere/course-sphere-backend/pkg/token-parser
+module github.com/course-sphere/course-sphere-backend/pkg/token
 
 go 1.25.6
 

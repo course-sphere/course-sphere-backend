@@ -1,4 +1,4 @@
-package token_parser
+package token
 
 import (
 	"context"
@@ -12,14 +12,14 @@ type Parser struct {
 	keyset jwk.Set
 }
 
-func New(authService string) (*Parser, error) {
+func NewParser(authService string) Parser {
 	jwkEndpoint := fmt.Sprintf("%s/jwks", authService)
 	keyset, err := jwk.Fetch(context.Background(), jwkEndpoint)
 	if err != nil {
-		return nil, err
+		panic(fmt.Sprintf("Invalid auth service: %s", err))
 	}
 
-	return &Parser{keyset}, nil
+	return Parser{keyset}
 }
 
 func (p *Parser) Parse(rawToken string) (jwt.Token, error) {

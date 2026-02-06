@@ -2,6 +2,6 @@ go 1.25.6
 
 use (
 	./pkg/middleware
-	./pkg/token-parser
+	./pkg/token
 	./services/general
 )
