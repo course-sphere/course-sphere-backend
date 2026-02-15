@@ -3,7 +3,7 @@ module github.com/course-sphere/course-sphere-backend/services/general
 go 1.25.6
 
 require (
-	github.com/course-sphere/course-sphere-backend/pkg/middleware v0.0.0-20260206082446-32a16ea2286b
+	github.com/course-sphere/course-sphere-backend/pkg/middleware v0.0.0-20260215092109-004597c74d59
 	github.com/go-fuego/fuego v0.19.0
 	github.com/jinzhu/copier v0.4.0
 )
@@ -11,6 +11,7 @@ require (
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/course-sphere/course-sphere-backend/pkg/token v0.0.0-20260206081914-1b003ac344fc // indirect
+	github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260215092109-004597c74d59 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
 	github.com/go-openapi/jsonreference v0.21.4 // indirect
 	github.com/go-openapi/spec v0.22.3 // indirect
@@ -25,7 +26,7 @@ require (
 	github.com/lestrrat-go/dsig v1.0.0 // indirect
 	github.com/lestrrat-go/dsig-secp256k1 v1.0.0 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
-	github.com/lestrrat-go/httprc/v3 v3.0.3 // indirect
+	github.com/lestrrat-go/httprc/v3 v3.0.4 // indirect
 	github.com/lestrrat-go/jwx/v3 v3.0.13 // indirect
 	github.com/lestrrat-go/option/v2 v2.0.0 // indirect
 	github.com/segmentio/asm v1.2.1 // indirect
@@ -59,8 +60,8 @@ require (
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
 	github.com/swaggo/http-swagger/v2 v2.0.2
 	github.com/woodsbury/decimal128 v1.4.0 // indirect
-	golang.org/x/crypto v0.47.0 // indirect
-	golang.org/x/sys v0.40.0 // indirect
-	golang.org/x/text v0.33.0 // indirect
+	golang.org/x/crypto v0.48.0 // indirect
+	golang.org/x/sys v0.41.0 // indirect
+	golang.org/x/text v0.34.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
