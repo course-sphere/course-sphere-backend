@@ -27,7 +27,7 @@ func MaybeToken(service Service) func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			rawToken, err := getRawToken(r)
 			if err != nil {
-				fuego.SendJSONError(w, nil, err)
+				fuego.SendJSONError(w, nil, fuego.ErrorHandler(r.Context(), err))
 				return
 			}
 			if rawToken == "" {
@@ -35,12 +35,14 @@ func MaybeToken(service Service) func(next http.Handler) http.Handler {
 				return
 			}
 
-			token, err := jwt.ParseString(rawToken, jwt.WithKeySet(jwks))
+			var token jwt.Token
+			token, err = jwt.ParseString(rawToken, jwt.WithKeySet(jwks))
 			if err != nil {
-				fuego.SendJSONError(w, nil, fuego.UnauthorizedError{
+				err = fuego.ErrorHandler(r.Context(), fuego.UnauthorizedError{
 					Err:    err,
 					Detail: "Invalid authorization token",
 				})
+				fuego.SendJSONError(w, nil, err)
 				return
 			}
 
@@ -57,22 +59,25 @@ func MustToken(service Service) func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			rawToken, err := getRawToken(r)
 			if err != nil {
-				fuego.SendJSONError(w, nil, err)
+				fuego.SendJSONError(w, nil, fuego.ErrorHandler(r.Context(), err))
 				return
 			}
 			if rawToken == "" {
-				fuego.SendJSONError(w, nil, fuego.UnauthorizedError{
+				err = fuego.ErrorHandler(r.Context(), fuego.UnauthorizedError{
 					Detail: "Missing authorization token",
 				})
+				fuego.SendJSONError(w, nil, err)
 				return
 			}
 
-			token, err := jwt.ParseString(rawToken, jwt.WithKeySet(jwks))
+			var token jwt.Token
+			token, err = jwt.ParseString(rawToken, jwt.WithKeySet(jwks))
 			if err != nil {
-				fuego.SendJSONError(w, nil, fuego.UnauthorizedError{
+				err = fuego.ErrorHandler(r.Context(), fuego.UnauthorizedError{
 					Err:    err,
 					Detail: "Invalid authorization token",
 				})
+				fuego.SendJSONError(w, nil, err)
 				return
 			}
 
