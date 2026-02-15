@@ -49,6 +49,7 @@ services:
 
   caddy:
     image: caddy:latest
+    container_name: course-sphere-caddy
     restart: on-failure:5
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
