@@ -41,8 +41,17 @@ services:
     depends_on:
       - database
     environment:
-      DATABASE_URL: postgres://${PG_USER}:${PG_PASS}@database/${PG_DB}
       CORS_ORIGIN: ${CORS_ORIGIN}
+      PROXY_URL: caddy:8080
+      DATABASE_URL: postgres://${PG_USER}:${PG_PASS}@database/${PG_DB}
+    networks:
+      - network
+
+  caddy:
+    image: caddy:latest
+    restart: on-failure:5
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
     networks:
       - network
 

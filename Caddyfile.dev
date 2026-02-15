@@ -1,0 +1,13 @@
+{
+    auto_https off
+}
+
+:8080
+
+handle /auth/* {
+    reverse_proxy :3000
+}
+
+handle {
+    reverse_proxy :3001
+ }
