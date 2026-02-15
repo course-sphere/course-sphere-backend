@@ -5,7 +5,9 @@
 :8080
 
 handle /auth/* {
-    reverse_proxy auth-service:3000
+    reverse_proxy auth-service:3000 {
+        header_up Host "course-sphere-api.akagiyuu.dev"
+    }
 }
 
 handle {
