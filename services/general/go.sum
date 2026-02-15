@@ -12,6 +12,8 @@ github.com/course-sphere/course-sphere-backend/pkg/token v0.0.0-20260206081914-1
 github.com/course-sphere/course-sphere-backend/pkg/token v0.0.0-20260206081914-1b003ac344fc/go.mod h1:6Nnv7P/tYMcxWYIVB9sDXG5KpVkyRvOKdlnu0p49HX0=
 github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260215092109-004597c74d59 h1:Is5SvyixB9+kLj/2d9p97kObTTFhcK5rQdXV+mFUEqU=
 github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260215092109-004597c74d59/go.mod h1:+TlKbmQceIHlkCtugebtMKY+SQAe3+StLako+A29GP0=
+github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260215092349-a2dd34865cc0 h1:7r6A6PFAlJ3/Shp25UDVTB3zbqAw+FeG2MyLASD7r10=
+github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260215092349-a2dd34865cc0/go.mod h1:+TlKbmQceIHlkCtugebtMKY+SQAe3+StLako+A29GP0=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
