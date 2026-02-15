@@ -17,7 +17,7 @@ func (s *AuthService) MustGetJwks(ctx context.Context) jwk.Set {
 	jwks, err := jwk.Fetch(context.Background(), jwkEndpoint)
 
 	if err != nil {
-		panic(fmt.Sprintf("fatal: no auth service detected at %s", jwkEndpoint))
+		panic(fmt.Sprintf("jwk fetch error: %s", err))
 	}
 
 	return jwks
