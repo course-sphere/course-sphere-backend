@@ -3,11 +3,12 @@ package http
 import (
 	"fmt"
 
-	"github.com/course-sphere/course-sphere-backend/pkg/middleware"
 	"github.com/go-fuego/fuego"
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
+	"github.com/lestrrat-go/jwx/v3/jwt"
+
+	"github.com/course-sphere/course-sphere-backend/pkg/middleware"
 )
 
 func (h *Handler) GetCourse(c fuego.ContextNoBody) (*Course, error) {
