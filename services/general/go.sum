@@ -2,12 +2,8 @@ github.com/KyleBanks/depth v1.2.1 h1:5h8fQADFrWtarTdtDudMmGsC7GPbOAu6RVB3ffsVFHc
 github.com/KyleBanks/depth v1.2.1/go.mod h1:jzSb9d0L43HxTQfT+oSA1EEp2q+ne2uh6XgeJcm8brE=
 github.com/caarlos0/env/v11 v11.3.1 h1:cArPWC15hWmEt+gWk7YBi7lEXTXCvpaSdCiZE2X5mCA=
 github.com/caarlos0/env/v11 v11.3.1/go.mod h1:qupehSf/Y0TUTsxKywqRt/vJjN5nz6vauiYEUUr8P4U=
-github.com/course-sphere/course-sphere-backend/pkg/middleware v0.0.0-20260215092109-004597c74d59 h1:0BcHthHsYB7T3FI58MVBAzwcGd9ouX0VMMtweGaG0jc=
-github.com/course-sphere/course-sphere-backend/pkg/middleware v0.0.0-20260215092109-004597c74d59/go.mod h1:k+5WnFwJ+baJFqY+o5wgj2+zmThrUU+SB7sCmXtsD4k=
 github.com/course-sphere/course-sphere-backend/pkg/middleware v0.0.0-20260215125255-6218f845844f h1:Ls+9wI8VAd70jgz+g7w1qQuaaoA3UEUxaEktNn8Mt/0=
 github.com/course-sphere/course-sphere-backend/pkg/middleware v0.0.0-20260215125255-6218f845844f/go.mod h1:k+5WnFwJ+baJFqY+o5wgj2+zmThrUU+SB7sCmXtsD4k=
-github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260215092349-a2dd34865cc0 h1:7r6A6PFAlJ3/Shp25UDVTB3zbqAw+FeG2MyLASD7r10=
-github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260215092349-a2dd34865cc0/go.mod h1:+TlKbmQceIHlkCtugebtMKY+SQAe3+StLako+A29GP0=
 github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260215105514-91d5cd0e8995 h1:95D2qNESyTbmi8v5jS7aARx3YZThM+ouUmOoXIz81O0=
 github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260215105514-91d5cd0e8995/go.mod h1:+TlKbmQceIHlkCtugebtMKY+SQAe3+StLako+A29GP0=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
