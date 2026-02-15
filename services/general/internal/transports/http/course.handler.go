@@ -22,7 +22,7 @@ func (h *Handler) GetCourse(c fuego.ContextNoBody) (*Course, error) {
 		}
 	}
 
-	raw, err := h.course.Get(c.Context(), id)
+	raw, err := h.Course.Get(c.Context(), id)
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Err:    err,

@@ -7,5 +7,5 @@ import (
 )
 
 type AuthService interface {
-	GetJwks(ctx context.Context) (jwk.Set, error)
+	MustGetJwks(ctx context.Context) jwk.Set
 }

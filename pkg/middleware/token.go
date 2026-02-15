@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/go-fuego/fuego"
+	"github.com/lestrrat-go/jwx/v3/jwk"
 	"github.com/lestrrat-go/jwx/v3/jwt"
 )
 
@@ -15,11 +16,13 @@ const (
 	TokenKey      string = "token"
 )
 
-type TokenParser interface {
-	Parse(raw string) (jwt.Token, error)
+type Service interface {
+	MustGetJwks(ctx context.Context) jwk.Set
 }
 
-func MaybeToken(parser TokenParser) func(next http.Handler) http.Handler {
+func MaybeToken(service Service) func(next http.Handler) http.Handler {
+	jwks := service.MustGetJwks(context.Background())
+
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			rawToken, err := getRawToken(r)
@@ -32,7 +35,7 @@ func MaybeToken(parser TokenParser) func(next http.Handler) http.Handler {
 				return
 			}
 
-			token, err := parser.Parse(rawToken)
+			token, err := jwt.ParseString(rawToken, jwt.WithKeySet(jwks))
 			if err != nil {
 				fuego.SendJSONError(w, nil, fuego.UnauthorizedError{
 					Err:    err,
@@ -47,7 +50,9 @@ func MaybeToken(parser TokenParser) func(next http.Handler) http.Handler {
 	}
 }
 
-func MustToken(parser TokenParser) func(next http.Handler) http.Handler {
+func MustToken(service Service) func(next http.Handler) http.Handler {
+	jwks := service.MustGetJwks(context.Background())
+
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			rawToken, err := getRawToken(r)
@@ -62,7 +67,7 @@ func MustToken(parser TokenParser) func(next http.Handler) http.Handler {
 				return
 			}
 
-			token, err := parser.Parse(rawToken)
+			token, err := jwt.ParseString(rawToken, jwt.WithKeySet(jwks))
 			if err != nil {
 				fuego.SendJSONError(w, nil, fuego.UnauthorizedError{
 					Err:    err,

@@ -11,8 +11,14 @@ type AuthService struct {
 	BaseUrl string
 }
 
-func (s *AuthService) GetJwks(ctx context.Context) (jwk.Set, error) {
+func (s *AuthService) MustGetJwks(ctx context.Context) jwk.Set {
 	jwkEndpoint := fmt.Sprintf("%s/jwks", s.BaseUrl)
 
-	return jwk.Fetch(context.Background(), jwkEndpoint)
+	jwks, err := jwk.Fetch(context.Background(), jwkEndpoint)
+
+	if err != nil {
+		panic(fmt.Sprintf("fatal: no auth service detected at %s", jwkEndpoint))
+	}
+
+	return jwks
 }

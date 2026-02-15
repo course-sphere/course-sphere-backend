@@ -10,22 +10,19 @@ import (
 
 	"github.com/course-sphere/course-sphere-backend/pkg/middleware"
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/usecase"
+	"github.com/course-sphere/course-sphere-backend/shared/adapters/external"
 )
 
 type Handler struct {
-	course *usecase.Course
-}
-
-func NewHandler(course *usecase.Course) *Handler {
-	return &Handler{course}
+	Course      *usecase.Course
+	AuthService *external.AuthService
 }
 
 func (h *Handler) RegisterRoutes(s *fuego.Server) {
 	fuego.Get(s, "/", h.Ping)
 
-	// TODO: remove hard url
 	course := fuego.Group(s, "/course",
-		option.Middleware(middleware.MustToken("http://auth-service:3000")),
+		option.Middleware(middleware.MustToken(h.AuthService)),
 		option.Security(openapi3.SecurityRequirement{"bearerAuth": []string{}}),
 	)
 	fuego.Get(course, "/{id}", h.GetCourse)
