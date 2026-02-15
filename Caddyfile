@@ -11,5 +11,5 @@ handle /auth/* {
 }
 
 handle {
-    reverse_proxy general-service:3001
+    reverse_proxy general-service:3000
 }
