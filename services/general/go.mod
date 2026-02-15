@@ -11,7 +11,7 @@ require (
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/course-sphere/course-sphere-backend/pkg/token v0.0.0-20260206081914-1b003ac344fc // indirect
-	github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260215092109-004597c74d59 // indirect
+	github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260215092349-a2dd34865cc0 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
 	github.com/go-openapi/jsonreference v0.21.4 // indirect
 	github.com/go-openapi/spec v0.22.3 // indirect
