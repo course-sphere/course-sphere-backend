@@ -16,6 +16,7 @@ import (
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/config"
 	httpServer "github.com/course-sphere/course-sphere-backend/services/general/internal/transports/http"
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/usecase"
+	"github.com/course-sphere/course-sphere-backend/shared/adapters/external"
 )
 
 func gracefulShutdown(apiServer *fuego.Server, done chan bool) {
@@ -42,8 +43,11 @@ func main() {
 	cfg, _ := env.ParseAs[config.Config]()
 	repo := repo.NewInMemory()
 	course := usecase.NewCourse(repo)
+	authService := external.AuthService{
+		BaseUrl: fmt.Sprintf("%s/auth", cfg.ProxyURL),
+	}
 
-	server := httpServer.NewServer(&cfg, course)
+	server := httpServer.NewServer(&cfg, course, &authService)
 
 	done := make(chan bool, 1)
 
