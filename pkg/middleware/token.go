@@ -35,7 +35,8 @@ func MaybeToken(service Service) func(next http.Handler) http.Handler {
 				return
 			}
 
-			token, err := jwt.ParseString(rawToken, jwt.WithKeySet(jwks))
+			var token jwt.Token
+			token, err = jwt.ParseString(rawToken, jwt.WithKeySet(jwks))
 			if err != nil {
 				err = fuego.ErrorHandler(r.Context(), fuego.UnauthorizedError{
 					Err:    err,
@@ -69,7 +70,8 @@ func MustToken(service Service) func(next http.Handler) http.Handler {
 				return
 			}
 
-			token, err := jwt.ParseString(rawToken, jwt.WithKeySet(jwks))
+			var token jwt.Token
+			token, err = jwt.ParseString(rawToken, jwt.WithKeySet(jwks))
 			if err != nil {
 				err = fuego.ErrorHandler(r.Context(), fuego.UnauthorizedError{
 					Err:    err,
