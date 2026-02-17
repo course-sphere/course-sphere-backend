@@ -1,7 +1,7 @@
 import { render } from "@react-email/render";
-import { type User } from "better-auth/types";
 import nodemailer from "nodemailer";
 import { EmailTemplate } from "@daveyplate/better-auth-ui/server";
+import { type User } from "better-auth/types";
 
 export const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -18,9 +18,6 @@ export const template = async (
     url: string,
     request?: Request,
 ): Promise<string> => {
-    const builder = new URL(url);
-    builder.host = new URL(request?.headers.get("origin") as string).host;
-
     return await render(
         EmailTemplate({
             action,
