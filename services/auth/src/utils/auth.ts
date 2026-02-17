@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth";
-import { jwt, username } from "better-auth/plugins";
+import { jwt, twoFactor, username } from "better-auth/plugins";
 import { z } from "zod";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
@@ -9,6 +9,7 @@ import { template, transporter } from "./mail";
 const roleSchema = z.enum(["student", "instructor", "admin"]);
 
 export const auth = betterAuth({
+    appName: "Course Sphere",
     baseURL: process.env.BETTER_AUTH_BASE_URL,
     emailAndPassword: {
         enabled: true,
@@ -71,7 +72,7 @@ export const auth = betterAuth({
             clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
         },
     },
-    plugins: [username(), jwt()],
+    plugins: [username(), jwt(), twoFactor()],
     user: {
         additionalFields: {
             role: {
