@@ -4,6 +4,7 @@ import { z } from "zod";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
 import * as schema from "./db/schema";
+import { template, transporter } from "./mail";
 
 const roleSchema = z.enum(["student", "instructor", "admin"]);
 
@@ -11,6 +12,19 @@ export const auth = betterAuth({
     baseURL: process.env.BETTER_AUTH_BASE_URL,
     emailAndPassword: {
         enabled: true,
+        sendResetPassword: async ({ user, url }, request) => {
+            await transporter.sendMail({
+                to: user.email,
+                subject: "Reset your password",
+                html: await template(
+                    "Reset Password",
+                    "Click the button below to reset your password.",
+                    user,
+                    url,
+                    request,
+                ),
+            });
+        },
     },
     account: {
         accountLinking: {
