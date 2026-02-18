@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1769534283360,
+      "when": 1771410914482,
       "tag": "0000_init",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1769755376687,
-      "tag": "0001_add_role",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1770363445682,
-      "tag": "0002_add_jwks",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1771307924304,
-      "tag": "0003_add_username",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1771329820257,
-      "tag": "0004_add_two_factor",
       "breakpoints": true
     }
   ]

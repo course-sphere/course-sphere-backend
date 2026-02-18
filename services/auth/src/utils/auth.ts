@@ -105,4 +105,9 @@ export const auth = betterAuth({
         level: "debug",
         log: (l, m, ...a) => console.log(`[better-auth][${l}]`, m, ...a),
     },
+    advanced: {
+        database: {
+            generateId: "uuid",
+        },
+    },
 });
