@@ -8,6 +8,10 @@ handle /auth/* {
     reverse_proxy :3000
 }
 
+handle /user/* {
+    reverse_proxy :3000
+}
+
 handle {
     reverse_proxy :3001
- }
+}

@@ -2,8 +2,8 @@ import { betterAuth } from "better-auth";
 import { jwt, twoFactor, username } from "better-auth/plugins";
 import { z } from "zod";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "./db";
-import * as schema from "./db/schema";
+import { db } from "../adapters/repo/db";
+import * as schema from "../adapters/repo/db/schema";
 import { template, transporter } from "./mail";
 
 const roleSchema = z.enum(["student", "instructor", "admin"]);
@@ -100,7 +100,7 @@ export const auth = betterAuth({
         provider: "pg",
         schema: schema,
     }),
-    trustedOrigins: [process.env.CORS_ORIGIN || "http://localhost:3001"],
+    trustedOrigins: [process.env.CORS_ORIGIN || "http://localhost:3002"],
     logger: {
         level: "debug",
         log: (l, m, ...a) => console.log(`[better-auth][${l}]`, m, ...a),
