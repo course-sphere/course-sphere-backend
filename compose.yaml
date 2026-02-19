@@ -21,9 +21,9 @@ services:
     networks:
       - network
 
-  auth-service:
-    image: ${REGISTRY}/auth-service:latest
-    container_name: course-sphere-auth
+  account-service:
+    image: ${REGISTRY}/account-service:latest
+    container_name: course-sphere-account
     restart: on-failure:5
     depends_on:
       - database

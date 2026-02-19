@@ -1,8 +1,8 @@
 services:
-  auth-service:
-    image: ${REGISTRY}/auth-service:latest
+  account-service:
+    image: ${REGISTRY}/account-service:latest
     build:
-      context: services/auth
+      context: services/account
       dockerfile: Dockerfile
 
   general-service:
