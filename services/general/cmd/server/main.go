@@ -41,13 +41,18 @@ func gracefulShutdown(apiServer *fuego.Server, done chan bool) {
 
 func main() {
 	cfg, _ := env.ParseAs[config.Config]()
-	repo := repo.NewInMemory()
-	course := usecase.NewCourse(repo)
-	authService := external.AuthService{
-		BaseUrl: fmt.Sprintf("%s/auth", cfg.ProxyURL),
+
+	repo := repo.NewMemory()
+
+	course := usecase.Course{
+		CourseRepo:   repo.Course,
+		MaterialRepo: repo.Material,
 	}
 
-	server := httpServer.NewServer(&cfg, course, &authService)
+	authClient := external.HTTPAuthClient{ProxyURL: cfg.ProxyURL}
+	userClient := external.HTTPUserClient{ProxyURL: cfg.ProxyURL}
+
+	server := httpServer.NewServer(&cfg, &course, &authClient, &userClient)
 
 	done := make(chan bool, 1)
 
