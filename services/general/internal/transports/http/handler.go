@@ -10,22 +10,35 @@ import (
 
 	"github.com/course-sphere/course-sphere-backend/pkg/middleware"
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/usecase"
-	"github.com/course-sphere/course-sphere-backend/shared/adapters/external"
+	"github.com/course-sphere/course-sphere-backend/shared/ports"
 )
 
 type Handler struct {
-	Course      *usecase.Course
-	AuthService *external.AuthService
+	Course     *usecase.Course
+	AuthClient ports.AuthClient
+	UserClient ports.UserClient
 }
 
 func (h *Handler) RegisterRoutes(s *fuego.Server) {
 	fuego.Get(s, "/", h.Ping)
 
 	course := fuego.Group(s, "/course",
-		option.Middleware(middleware.MustToken(h.AuthService)),
+		option.Middleware(middleware.MustToken(h.AuthClient)),
 		option.Security(openapi3.SecurityRequirement{"bearerAuth": []string{}}),
 	)
+	fuego.Post(course, "/", h.CreateCourse)
 	fuego.Get(course, "/{id}", h.GetCourse)
+	fuego.Patch(course, "/{id}", h.UpdateCourse)
+	fuego.Delete(course, "/{id}", h.UpdateCourse)
+	fuego.Post(course, "/{id}/material", h.CreateMaterial)
+	fuego.Get(course, "/{id}/material", h.GetMaterials)
+
+	material := fuego.Group(s, "/material",
+		option.Middleware(middleware.MustToken(h.AuthClient)),
+		option.Security(openapi3.SecurityRequirement{"bearerAuth": []string{}}),
+	)
+	fuego.Patch(material, "/{id}", h.UpdateMaterial)
+	fuego.Delete(material, "/{id}", h.DeleteMaterial)
 }
 
 func (h *Handler) OpenAPI(specURL string) http.Handler {

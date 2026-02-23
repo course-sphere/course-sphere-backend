@@ -10,7 +10,15 @@ import (
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/domain"
 )
 
-func (h *Handler) CreateCourse(c fuego.ContextWithBody[CreateCourse]) (uuid.UUID, error) {
+func (h *Handler) CreateMaterial(c fuego.ContextWithBody[CreateMaterial]) (uuid.UUID, error) {
+	courseID, err := uuid.Parse(c.PathParam("id"))
+	if err != nil {
+		return uuid.Nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "ID must be UUIDv4",
+		}
+	}
+
 	token := c.Value(middleware.TokenKey).(jwt.Token)
 	sub, _ := token.Subject()
 	userID, err := uuid.Parse(sub)
@@ -25,10 +33,10 @@ func (h *Handler) CreateCourse(c fuego.ContextWithBody[CreateCourse]) (uuid.UUID
 	if err != nil {
 		return uuid.Nil, err
 	}
-	course := domain.CreateCourse{}
-	copier.Copy(&course, raw)
+	material := domain.CreateMaterial{}
+	copier.Copy(&material, raw)
 
-	id, err := h.Course.Create(c.Context(), userID, course)
+	materialID, err := h.Course.CreateMaterial(c.Context(), courseID, userID, material)
 	if err != nil {
 		return uuid.Nil, fuego.BadRequestError{
 			Err:    err,
@@ -36,11 +44,11 @@ func (h *Handler) CreateCourse(c fuego.ContextWithBody[CreateCourse]) (uuid.UUID
 		}
 	}
 
-	return id, nil
+	return materialID, nil
 }
 
-func (h *Handler) GetCourse(c fuego.ContextNoBody) (*Course, error) {
-	id, err := uuid.Parse(c.PathParam("id"))
+func (h *Handler) GetMaterials(c fuego.ContextNoBody) ([]Material, error) {
+	courseID, err := uuid.Parse(c.PathParam("id"))
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Err:    err,
@@ -48,7 +56,7 @@ func (h *Handler) GetCourse(c fuego.ContextNoBody) (*Course, error) {
 		}
 	}
 
-	raw, err := h.Course.Get(c.Context(), id)
+	raw, err := h.Course.GetMaterials(c.Context(), courseID)
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Err:    err,
@@ -56,21 +64,13 @@ func (h *Handler) GetCourse(c fuego.ContextNoBody) (*Course, error) {
 		}
 	}
 
-	course := Course{}
-	copier.Copy(&course, raw)
+	var materials []Material
+	copier.Copy(&materials, raw)
 
-	instructor, err := h.UserClient.Get(c.Context(), raw.ID)
-	if err != nil {
-		return nil, fuego.InternalServerError{
-			Err: err,
-		}
-	}
-	course.Instructor = instructor.Name
-
-	return &course, nil
+	return materials, nil
 }
 
-func (h *Handler) UpdateCourse(c fuego.ContextWithBody[UpdateCourse]) (any, error) {
+func (h *Handler) UpdateMaterial(c fuego.ContextWithBody[UpdateMaterial]) (any, error) {
 	token := c.Value(middleware.TokenKey).(jwt.Token)
 	sub, _ := token.Subject()
 	userID, err := uuid.Parse(sub)
@@ -81,7 +81,7 @@ func (h *Handler) UpdateCourse(c fuego.ContextWithBody[UpdateCourse]) (any, erro
 		}
 	}
 
-	id, err := uuid.Parse(c.PathParam("id"))
+	materialID, err := uuid.Parse(c.PathParam("id"))
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Err:    err,
@@ -93,10 +93,10 @@ func (h *Handler) UpdateCourse(c fuego.ContextWithBody[UpdateCourse]) (any, erro
 	if err != nil {
 		return nil, err
 	}
-	course := domain.UpdateCourse{}
-	copier.Copy(&course, raw)
+	material := domain.UpdateMaterial{}
+	copier.Copy(&material, raw)
 
-	err = h.Course.Update(c.Context(), id, userID, course)
+	err = h.Course.UpdateMaterial(c.Context(), materialID, userID, material)
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Err:    err,
@@ -107,7 +107,7 @@ func (h *Handler) UpdateCourse(c fuego.ContextWithBody[UpdateCourse]) (any, erro
 	return nil, nil
 }
 
-func (h *Handler) DeleteCourse(c fuego.ContextNoBody) (any, error) {
+func (h *Handler) DeleteMaterial(c fuego.ContextNoBody) (any, error) {
 	token := c.Value(middleware.TokenKey).(jwt.Token)
 	sub, _ := token.Subject()
 	userID, err := uuid.Parse(sub)
@@ -118,7 +118,7 @@ func (h *Handler) DeleteCourse(c fuego.ContextNoBody) (any, error) {
 		}
 	}
 
-	id, err := uuid.Parse(c.PathParam("id"))
+	materialID, err := uuid.Parse(c.PathParam("id"))
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Err:    err,
@@ -126,7 +126,7 @@ func (h *Handler) DeleteCourse(c fuego.ContextNoBody) (any, error) {
 		}
 	}
 
-	err = h.Course.Delete(c.Context(), id, userID)
+	err = h.Course.DeleteMaterial(c.Context(), materialID, userID)
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Err:    err,
