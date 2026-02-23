@@ -9,17 +9,19 @@ import (
 	"github.com/course-sphere/course-sphere-backend/pkg/middleware"
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/config"
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/usecase"
-	"github.com/course-sphere/course-sphere-backend/shared/adapters/external"
+	"github.com/course-sphere/course-sphere-backend/shared/ports"
 )
 
 func NewServer(
 	cfg *config.Config,
 	course *usecase.Course,
-	authService *external.AuthService,
+	authClient ports.AuthClient,
+	userClient ports.UserClient,
 ) *fuego.Server {
 	handler := Handler{
-		Course:      course,
-		AuthService: authService,
+		Course:     course,
+		AuthClient: authClient,
+		UserClient: userClient,
 	}
 
 	s := fuego.NewServer(

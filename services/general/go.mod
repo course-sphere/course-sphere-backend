@@ -1,11 +1,11 @@
 module github.com/course-sphere/course-sphere-backend/services/general
 
-go 1.25.6
+go 1.25.7
 
 require (
 	github.com/course-sphere/course-sphere-backend/pkg/middleware v0.0.0-20260215125255-6218f845844f
-	github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260215105514-91d5cd0e8995
-	github.com/go-fuego/fuego v0.19.0
+	github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260219110809-a2f0e3276b0a
+	github.com/go-fuego/fuego v0.19.1-0.20260216133348-6131472aff93
 	github.com/jinzhu/copier v0.4.0
 	github.com/lestrrat-go/jwx/v3 v3.0.13
 )
@@ -29,6 +29,7 @@ require (
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
 	github.com/lestrrat-go/httprc/v3 v3.0.4 // indirect
 	github.com/lestrrat-go/option/v2 v2.0.0 // indirect
+	github.com/moznion/go-optional v0.13.0 // indirect
 	github.com/segmentio/asm v1.2.1 // indirect
 	github.com/swaggo/files/v2 v2.0.2 // indirect
 	github.com/swaggo/swag v1.16.6 // indirect
