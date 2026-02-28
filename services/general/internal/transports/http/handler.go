@@ -3,17 +3,21 @@ package http
 import (
 	"net/http"
 
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-fuego/fuego"
 	"github.com/go-fuego/fuego/option"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 
 	"github.com/course-sphere/course-sphere-backend/pkg/middleware"
+	"github.com/course-sphere/course-sphere-backend/services/general/internal/config"
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/usecase"
 	"github.com/course-sphere/course-sphere-backend/shared/ports"
 )
 
 type Handler struct {
+	Config     *config.Config
+	Presigner  *s3.PresignClient
 	Course     *usecase.Course
 	AuthClient ports.AuthClient
 	UserClient ports.UserClient
