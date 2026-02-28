@@ -5,5 +5,6 @@ type Config struct {
 	CorsOrigin  string `env:"CORS_ORIGIN" envDefault:"*"`
 	ProxyURL    string `env:"PROXY_URL" envDefault:"http://localhost:8080"`
 	DatabaseURL string `env:"DATABASE_URL" envDefault:"postgres://user:password@localhost/db"`
+	S3Endpoint  string `env:"S3_ENDPOINT"`
 	S3Bucket    string `env:"S3_BUCKET"`
 }
