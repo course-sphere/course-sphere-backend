@@ -3,6 +3,7 @@ package http
 import (
 	"fmt"
 
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-fuego/fuego"
 
@@ -15,11 +16,14 @@ import (
 func NewServer(
 	cfg *config.Config,
 	course *usecase.Course,
+	s3Client *s3.Client,
 	authClient ports.AuthClient,
 	userClient ports.UserClient,
 ) *fuego.Server {
 	handler := Handler{
+		Config:     cfg,
 		Course:     course,
+		Presigner:  s3.NewPresignClient(s3Client),
 		AuthClient: authClient,
 		UserClient: userClient,
 	}

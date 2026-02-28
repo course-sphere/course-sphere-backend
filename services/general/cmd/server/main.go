@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"os/signal"
@@ -16,6 +15,7 @@ import (
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/config"
 	httpServer "github.com/course-sphere/course-sphere-backend/services/general/internal/transports/http"
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/usecase"
+	"github.com/course-sphere/course-sphere-backend/services/general/internal/util"
 	"github.com/course-sphere/course-sphere-backend/shared/adapters/external"
 )
 
@@ -40,7 +40,12 @@ func gracefulShutdown(apiServer *fuego.Server, done chan bool) {
 }
 
 func main() {
-	cfg, _ := env.ParseAs[config.Config]()
+	ctx := context.Background()
+
+	cfg, err := env.ParseAs[config.Config]()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	repo := repo.NewMemory()
 
@@ -49,18 +54,29 @@ func main() {
 		MaterialRepo: repo.Material,
 	}
 
+	s3Client, err := util.NewS3ClientWithEndpoint(ctx, cfg.S3Endpoint)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	authClient := external.HTTPAuthClient{ProxyURL: cfg.ProxyURL}
 	userClient := external.HTTPUserClient{ProxyURL: cfg.ProxyURL}
 
-	server := httpServer.NewServer(&cfg, &course, &authClient, &userClient)
+	server := httpServer.NewServer(
+		&cfg,
+		&course,
+		s3Client,
+		&authClient,
+		&userClient,
+	)
 
 	done := make(chan bool, 1)
 
 	go gracefulShutdown(server, done)
 
-	err := server.Run()
+	err = server.Run()
 	if err != nil && err != http.ErrServerClosed {
-		panic(fmt.Sprintf("http server error: %s", err))
+		log.Fatal("http server error: %s", err)
 	}
 
 	<-done

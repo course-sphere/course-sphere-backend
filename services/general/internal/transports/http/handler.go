@@ -17,8 +17,8 @@ import (
 
 type Handler struct {
 	Config     *config.Config
-	Presigner  *s3.PresignClient
 	Course     *usecase.Course
+	Presigner  *s3.PresignClient
 	AuthClient ports.AuthClient
 	UserClient ports.UserClient
 }
@@ -43,6 +43,9 @@ func (h *Handler) RegisterRoutes(s *fuego.Server) {
 	)
 	fuego.Patch(material, "/{id}", h.UpdateMaterial)
 	fuego.Delete(material, "/{id}", h.DeleteMaterial)
+
+	storage := fuego.Group(s, "/storage")
+	fuego.Post(storage, "/create-presigned-url", h.CreateS3PresignedURL)
 }
 
 func (h *Handler) OpenAPI(specURL string) http.Handler {
