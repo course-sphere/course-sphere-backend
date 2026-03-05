@@ -3,5 +3,6 @@ go 1.25.7
 use (
 	./pkg/middleware
 	./services/general
+	./services/storage
 	./shared
 )

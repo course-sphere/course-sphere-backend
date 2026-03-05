@@ -3,7 +3,6 @@ package http
 import (
 	"net/http"
 
-	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-fuego/fuego"
 	"github.com/go-fuego/fuego/option"
@@ -18,7 +17,6 @@ import (
 type Handler struct {
 	Config     *config.Config
 	Course     *usecase.Course
-	Presigner  *s3.PresignClient
 	AuthClient ports.AuthClient
 	UserClient ports.UserClient
 }
@@ -43,9 +41,6 @@ func (h *Handler) RegisterRoutes(s *fuego.Server) {
 	)
 	fuego.Patch(material, "/{id}", h.UpdateMaterial)
 	fuego.Delete(material, "/{id}", h.DeleteMaterial)
-
-	storage := fuego.Group(s, "/storage")
-	fuego.Post(storage, "/create-presigned-url", h.CreateS3PresignedURL)
 }
 
 func (h *Handler) OpenAPI(specURL string) http.Handler {
