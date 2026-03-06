@@ -6,6 +6,8 @@ github.com/course-sphere/course-sphere-backend/pkg/middleware v0.0.0-20260215125
 github.com/course-sphere/course-sphere-backend/pkg/middleware v0.0.0-20260215125255-6218f845844f/go.mod h1:k+5WnFwJ+baJFqY+o5wgj2+zmThrUU+SB7sCmXtsD4k=
 github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260219110809-a2f0e3276b0a h1:P+6T2IM2lSOKSOZGXI00xnARDX0g1opYQ5v3BDrLOsY=
 github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260219110809-a2f0e3276b0a/go.mod h1:GPxN1dLmErDL7pqOjdPSfe5Y+FF8plJvkVW83kKzeS4=
+github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260306061803-d855409ce3d0 h1:OEMQbQhA6B5RwHy8g7rqs4pt78aYErJFTd9ERjtOaYU=
+github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260306061803-d855409ce3d0/go.mod h1:GPxN1dLmErDL7pqOjdPSfe5Y+FF8plJvkVW83kKzeS4=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=

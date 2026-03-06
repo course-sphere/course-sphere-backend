@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os/signal"
@@ -13,7 +14,7 @@ import (
 
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/adapters/repo"
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/config"
-	httpServer "github.com/course-sphere/course-sphere-backend/services/general/internal/transports/http"
+	server "github.com/course-sphere/course-sphere-backend/services/general/internal/transports/http"
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/usecase"
 	"github.com/course-sphere/course-sphere-backend/shared/adapters/external"
 )
@@ -54,12 +55,15 @@ func main() {
 	authClient := external.HTTPAuthClient{ProxyURL: cfg.ProxyURL}
 	userClient := external.HTTPUserClient{ProxyURL: cfg.ProxyURL}
 
-	server := httpServer.NewServer(
-		&cfg,
-		&course,
-		&authClient,
-		&userClient,
-	)
+	s := server.Server{
+		Config: &cfg,
+
+		AuthClient: &authClient,
+		UserClient: &userClient,
+
+		Course: course,
+	}
+	server := s.Build()
 
 	done := make(chan bool, 1)
 
@@ -67,7 +71,7 @@ func main() {
 
 	err = server.Run()
 	if err != nil && err != http.ErrServerClosed {
-		log.Fatal("http server error: %s", err)
+		panic(fmt.Sprintf("http server error: %s", err))
 	}
 
 	<-done

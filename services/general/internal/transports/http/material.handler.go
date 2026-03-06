@@ -6,11 +6,11 @@ import (
 	"github.com/jinzhu/copier"
 	"github.com/lestrrat-go/jwx/v3/jwt"
 
-	"github.com/course-sphere/course-sphere-backend/pkg/middleware"
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/domain"
+	"github.com/course-sphere/course-sphere-backend/shared/transports/http/middleware"
 )
 
-func (h *Handler) CreateMaterial(c fuego.ContextWithBody[CreateMaterial]) (uuid.UUID, error) {
+func (s *Server) CreateMaterial(c fuego.ContextWithBody[CreateMaterial]) (uuid.UUID, error) {
 	courseID, err := uuid.Parse(c.PathParam("id"))
 	if err != nil {
 		return uuid.Nil, fuego.BadRequestError{
@@ -36,7 +36,7 @@ func (h *Handler) CreateMaterial(c fuego.ContextWithBody[CreateMaterial]) (uuid.
 	material := domain.CreateMaterial{}
 	copier.Copy(&material, raw)
 
-	materialID, err := h.Course.CreateMaterial(c.Context(), courseID, userID, material)
+	materialID, err := s.Course.CreateMaterial(c.Context(), courseID, userID, material)
 	if err != nil {
 		return uuid.Nil, fuego.BadRequestError{
 			Err:    err,
@@ -47,7 +47,7 @@ func (h *Handler) CreateMaterial(c fuego.ContextWithBody[CreateMaterial]) (uuid.
 	return materialID, nil
 }
 
-func (h *Handler) GetMaterials(c fuego.ContextNoBody) ([]Material, error) {
+func (s *Server) GetMaterials(c fuego.ContextNoBody) ([]Material, error) {
 	courseID, err := uuid.Parse(c.PathParam("id"))
 	if err != nil {
 		return nil, fuego.BadRequestError{
@@ -56,7 +56,7 @@ func (h *Handler) GetMaterials(c fuego.ContextNoBody) ([]Material, error) {
 		}
 	}
 
-	raw, err := h.Course.GetMaterials(c.Context(), courseID)
+	raw, err := s.Course.GetMaterials(c.Context(), courseID)
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Err:    err,
@@ -70,7 +70,7 @@ func (h *Handler) GetMaterials(c fuego.ContextNoBody) ([]Material, error) {
 	return materials, nil
 }
 
-func (h *Handler) UpdateMaterial(c fuego.ContextWithBody[UpdateMaterial]) (any, error) {
+func (s *Server) UpdateMaterial(c fuego.ContextWithBody[UpdateMaterial]) (any, error) {
 	token := c.Value(middleware.TokenKey).(jwt.Token)
 	sub, _ := token.Subject()
 	userID, err := uuid.Parse(sub)
@@ -96,7 +96,7 @@ func (h *Handler) UpdateMaterial(c fuego.ContextWithBody[UpdateMaterial]) (any, 
 	material := domain.UpdateMaterial{}
 	copier.Copy(&material, raw)
 
-	err = h.Course.UpdateMaterial(c.Context(), materialID, userID, material)
+	err = s.Course.UpdateMaterial(c.Context(), materialID, userID, material)
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Err:    err,
@@ -107,7 +107,7 @@ func (h *Handler) UpdateMaterial(c fuego.ContextWithBody[UpdateMaterial]) (any, 
 	return nil, nil
 }
 
-func (h *Handler) DeleteMaterial(c fuego.ContextNoBody) (any, error) {
+func (s *Server) DeleteMaterial(c fuego.ContextNoBody) (any, error) {
 	token := c.Value(middleware.TokenKey).(jwt.Token)
 	sub, _ := token.Subject()
 	userID, err := uuid.Parse(sub)
@@ -126,7 +126,7 @@ func (h *Handler) DeleteMaterial(c fuego.ContextNoBody) (any, error) {
 		}
 	}
 
-	err = h.Course.DeleteMaterial(c.Context(), materialID, userID)
+	err = s.Course.DeleteMaterial(c.Context(), materialID, userID)
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Err:    err,

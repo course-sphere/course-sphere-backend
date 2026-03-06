@@ -9,7 +9,7 @@ services:
     image: ${REGISTRY}/general-service:latest
     build:
       context: services/general
-      dockerfile: cmd/server/Dockerfile
+      dockerfile: cmd/http/Dockerfile
 
   storage-service:
     image: ${REGISTRY}/storage-service:latest
