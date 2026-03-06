@@ -6,31 +6,28 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-fuego/fuego"
 
-	"github.com/course-sphere/course-sphere-backend/pkg/middleware"
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/config"
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/usecase"
 	"github.com/course-sphere/course-sphere-backend/shared/ports"
+	"github.com/course-sphere/course-sphere-backend/shared/transports/http/middleware"
 )
 
-func NewServer(
-	cfg *config.Config,
-	course *usecase.Course,
-	authClient ports.AuthClient,
-	userClient ports.UserClient,
-) *fuego.Server {
-	handler := Handler{
-		Config:     cfg,
-		Course:     course,
-		AuthClient: authClient,
-		UserClient: userClient,
-	}
+type Server struct {
+	Config *config.Config
 
-	s := fuego.NewServer(
-		fuego.WithAddr(fmt.Sprintf(":%d", cfg.Port)),
-		fuego.WithGlobalMiddlewares(middleware.Cors(cfg.CorsOrigin)),
+	Course usecase.Course
+
+	AuthClient ports.AuthClient
+	UserClient ports.UserClient
+}
+
+func (s *Server) Build() *fuego.Server {
+	f := fuego.NewServer(
+		fuego.WithAddr(fmt.Sprintf(":%d", s.Config.Port)),
+		fuego.WithGlobalMiddlewares(middleware.Cors(s.Config.CorsOrigin)),
 		fuego.WithEngineOptions(
 			fuego.WithOpenAPIConfig(fuego.OpenAPIConfig{
-				UIHandler:            handler.OpenAPI,
+				UIHandler:            s.OpenAPI,
 				DisableDefaultServer: true,
 				DisableMessages:      true,
 				Info: &openapi3.Info{
@@ -49,7 +46,7 @@ func NewServer(
 			},
 		}),
 	)
-	handler.RegisterRoutes(s)
+	s.RegisterRoutes(f)
 
-	return s
+	return f
 }
