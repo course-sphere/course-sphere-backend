@@ -12,6 +12,10 @@ handle /user/* {
     reverse_proxy :3000
 }
 
-handle {
+handle /storage/* {
     reverse_proxy :3001
+}
+
+handle {
+    reverse_proxy :3002
 }
