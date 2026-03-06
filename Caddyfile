@@ -16,7 +16,7 @@ handle /user/* {
     }
 }
 
-handle_path /storage/* {
+handle /storage/* {
     reverse_proxy storage-service:3000
 }
 
