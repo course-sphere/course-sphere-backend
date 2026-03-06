@@ -8,6 +8,7 @@ import (
 
 	"github.com/course-sphere/course-sphere-backend/services/storage/internal/config"
 	"github.com/course-sphere/course-sphere-backend/services/storage/internal/usecase"
+	"github.com/course-sphere/course-sphere-backend/shared/transports/http/middleware"
 )
 
 type Server struct {
@@ -18,6 +19,7 @@ type Server struct {
 func (s *Server) Build() *fuego.Server {
 	f := fuego.NewServer(
 		fuego.WithBasePath("/storage"),
+		fuego.WithGlobalMiddlewares(middleware.Cors(s.Config.CorsOrigin)),
 		fuego.WithAddr(fmt.Sprintf(":%d", s.Config.Port)),
 		fuego.WithEngineOptions(
 			fuego.WithOpenAPIConfig(fuego.OpenAPIConfig{
