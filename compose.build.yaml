@@ -10,3 +10,9 @@ services:
     build:
       context: services/general
       dockerfile: cmd/server/Dockerfile
+
+  storage-service:
+    image: ${REGISTRY}/storage-service:latest
+    build:
+      context: services/storage
+      dockerfile: cmd/http/Dockerfile
