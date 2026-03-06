@@ -17,6 +17,7 @@ type Server struct {
 
 func (s *Server) Build() *fuego.Server {
 	f := fuego.NewServer(
+		fuego.WithBasePath("/storage"),
 		fuego.WithAddr(fmt.Sprintf(":%d", s.Config.Port)),
 		fuego.WithEngineOptions(
 			fuego.WithOpenAPIConfig(fuego.OpenAPIConfig{

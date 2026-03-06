@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/go-fuego/fuego"
@@ -18,7 +19,7 @@ func (s *Server) OpenAPI(specURL string) http.Handler {
 	return httpSwagger.Handler(
 		httpSwagger.Layout(httpSwagger.StandaloneLayout),
 		httpSwagger.PersistAuthorization(true),
-		httpSwagger.URL(specURL),
+		httpSwagger.URL(fmt.Sprintf("/storage%s", specURL)),
 	)
 }
 
