@@ -1,0 +1,28 @@
+package http
+
+import (
+	"fmt"
+	"net/http"
+
+	"github.com/go-fuego/fuego"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
+)
+
+func (s *Server) RegisterRoutes(f *fuego.Server) {
+	fuego.Get(f, "/", s.Ping)
+
+	presign := fuego.Group(f, "/presign")
+	fuego.Post(presign, "/", s.CreatePresignedRequest)
+}
+
+func (s *Server) OpenAPI(specURL string) http.Handler {
+	return httpSwagger.Handler(
+		httpSwagger.Layout(httpSwagger.StandaloneLayout),
+		httpSwagger.PersistAuthorization(true),
+		httpSwagger.URL(fmt.Sprintf("/storage%s", specURL)),
+	)
+}
+
+func (s *Server) Ping(c fuego.ContextNoBody) (string, error) {
+	return "pong", nil
+}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os/signal"
@@ -11,11 +12,10 @@ import (
 	"github.com/caarlos0/env/v11"
 	"github.com/go-fuego/fuego"
 
-	"github.com/course-sphere/course-sphere-backend/services/general/internal/adapters/repo"
-	"github.com/course-sphere/course-sphere-backend/services/general/internal/config"
-	httpServer "github.com/course-sphere/course-sphere-backend/services/general/internal/transports/http"
-	"github.com/course-sphere/course-sphere-backend/services/general/internal/usecase"
-	"github.com/course-sphere/course-sphere-backend/shared/adapters/external"
+	"github.com/course-sphere/course-sphere-backend/services/storage/internal/adapters/presign"
+	"github.com/course-sphere/course-sphere-backend/services/storage/internal/config"
+	server "github.com/course-sphere/course-sphere-backend/services/storage/internal/transports/http"
+	"github.com/course-sphere/course-sphere-backend/services/storage/internal/usecase"
 )
 
 func gracefulShutdown(apiServer *fuego.Server, done chan bool) {
@@ -39,27 +39,24 @@ func gracefulShutdown(apiServer *fuego.Server, done chan bool) {
 }
 
 func main() {
+	ctx := context.Background()
+
 	cfg, err := env.ParseAs[config.Config]()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	repo := repo.NewMemory()
-
-	course := usecase.Course{
-		CourseRepo:   repo.Course,
-		MaterialRepo: repo.Material,
+	presigner, err := presign.NewS3PresignClient(ctx, cfg.S3Endpoint, cfg.S3Bucket)
+	if err != nil {
+		log.Fatal(err)
 	}
+	presign := usecase.Presign{Presigner: presigner}
 
-	authClient := external.HTTPAuthClient{ProxyURL: cfg.ProxyURL}
-	userClient := external.HTTPUserClient{ProxyURL: cfg.ProxyURL}
-
-	server := httpServer.NewServer(
-		&cfg,
-		&course,
-		&authClient,
-		&userClient,
-	)
+	s := server.Server{
+		Config:  &cfg,
+		Presign: presign,
+	}
+	server := s.Build()
 
 	done := make(chan bool, 1)
 
@@ -67,7 +64,7 @@ func main() {
 
 	err = server.Run()
 	if err != nil && err != http.ErrServerClosed {
-		log.Fatal("http server error: %s", err)
+		panic(fmt.Sprintf("http server error: %s", err))
 	}
 
 	<-done

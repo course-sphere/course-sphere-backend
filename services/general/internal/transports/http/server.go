@@ -19,6 +19,7 @@ func NewServer(
 	userClient ports.UserClient,
 ) *fuego.Server {
 	handler := Handler{
+		Config:     cfg,
 		Course:     course,
 		AuthClient: authClient,
 		UserClient: userClient,
