@@ -20,7 +20,7 @@ type Course struct {
 	MaterialRepo ports.MaterialRepository
 }
 
-func (u *Course) Create(ctx context.Context, instructorID uuid.UUID, course domain.CreateCourse) (uuid.UUID, error) {
+func (u *Course) Create(ctx context.Context, instructorID uuid.UUID, course domain.CreateCourseData) (uuid.UUID, error) {
 	if course.Price < 0 {
 		return uuid.Nil, ErrInvalidPrice
 	}
@@ -52,7 +52,7 @@ func (u *Course) Update(
 	ctx context.Context,
 	id uuid.UUID,
 	instructorID uuid.UUID,
-	course domain.UpdateCourse,
+	course domain.UpdateCourseData,
 ) error {
 	if err := u.AssertOwner(ctx, id, instructorID); err != nil {
 		return err

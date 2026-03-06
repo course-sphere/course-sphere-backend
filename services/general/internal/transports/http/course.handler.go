@@ -10,7 +10,7 @@ import (
 	"github.com/course-sphere/course-sphere-backend/shared/transports/http/middleware"
 )
 
-func (s *Server) CreateCourse(c fuego.ContextWithBody[CreateCourse]) (uuid.UUID, error) {
+func (s *Server) CreateCourse(c fuego.ContextWithBody[CreateCourseData]) (uuid.UUID, error) {
 	token := c.Value(middleware.TokenKey).(jwt.Token)
 	sub, _ := token.Subject()
 	userID, err := uuid.Parse(sub)
@@ -25,7 +25,7 @@ func (s *Server) CreateCourse(c fuego.ContextWithBody[CreateCourse]) (uuid.UUID,
 	if err != nil {
 		return uuid.Nil, err
 	}
-	course := domain.CreateCourse{}
+	course := domain.CreateCourseData{}
 	copier.Copy(&course, raw)
 
 	id, err := s.Course.Create(c.Context(), userID, course)
@@ -93,7 +93,7 @@ func (s *Server) UpdateCourse(c fuego.ContextWithBody[UpdateCourse]) (any, error
 	if err != nil {
 		return nil, err
 	}
-	course := domain.UpdateCourse{}
+	course := domain.UpdateCourseData{}
 	copier.Copy(&course, raw)
 
 	err = s.Course.Update(c.Context(), id, userID, course)

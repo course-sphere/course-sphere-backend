@@ -14,7 +14,7 @@ type Course struct {
 	Price      float32   `json:"price"`
 }
 
-type CreateCourse struct {
+type CreateCourseData struct {
 	Thumbnail string   `json:"thumbnail"`
 	Title     string   `json:"title"`
 	Tags      []string `json:"tags"`
