@@ -26,7 +26,7 @@ func (s *Server) CreateCourse(c fuego.ContextWithBody[CreateCourseData]) (uuid.U
 		return uuid.Nil, err
 	}
 	course := domain.CreateCourseData{}
-	copier.Copy(&course, raw)
+	copier.CopyWithOption(&course, raw, copier.Option{DeepCopy: true})
 
 	id, err := s.Course.Create(c.Context(), userID, course)
 	if err != nil {
@@ -56,10 +56,10 @@ func (s *Server) GetCourse(c fuego.ContextNoBody) (*Course, error) {
 		}
 	}
 
-	course := Course{}
-	copier.Copy(&course, raw)
+	var course Course
+	copier.CopyWithOption(&course, raw, copier.Option{DeepCopy: true})
 
-	instructor, err := s.UserClient.Get(c.Context(), raw.ID)
+	instructor, err := s.UserClient.Get(c.Context(), raw.InstructorID)
 	if err != nil {
 		return nil, fuego.InternalServerError{
 			Err: err,
