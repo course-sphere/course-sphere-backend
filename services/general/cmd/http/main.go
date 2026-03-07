@@ -45,11 +45,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	repo := repo.NewMemory()
+	repo, err := repo.NewDatabase(cfg.DatabaseURL)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	course := usecase.Course{
-		CourseRepo:   repo.Course,
-		MaterialRepo: repo.Material,
+		CourseRepo: &repo.Course,
 	}
 
 	authClient := external.HTTPAuthClient{ProxyURL: cfg.ProxyURL}
