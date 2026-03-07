@@ -14,6 +14,8 @@ const (
 
 type Course struct {
 	ID                 uuid.UUID
+	InstructorID       uuid.UUID
+	Title              string
 	Subtitle           *string
 	Description        string
 	Categories         []string
@@ -22,9 +24,9 @@ type Course struct {
 	PromoVideoURL      *string
 	Price              float32
 	Prerequisites      []uuid.UUID
-	Requirements       *[]string
+	Requirements       []string
 	LearningObjectives []string
-	TargetAudiences    *[]string
+	TargetAudiences    []string
 }
 
 type CreateCourseData struct {
