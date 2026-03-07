@@ -3,12 +3,12 @@ module github.com/course-sphere/course-sphere-backend/services/general
 go 1.25.7
 
 require (
-	github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260306061803-d855409ce3d0
+	github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260306073109-ffc8adac2c3b
 	github.com/go-fuego/fuego v0.19.1-0.20260216133348-6131472aff93
 	github.com/jackc/pgx/v5 v5.8.0
 	github.com/jinzhu/copier v0.4.0
 	github.com/lestrrat-go/jwx/v3 v3.0.13
-	github.com/moznion/go-optional v0.13.0
+	github.com/vgarvardt/pgx-google-uuid/v5 v5.6.0
 )
 
 require (
@@ -38,7 +38,6 @@ require (
 	github.com/swaggo/files/v2 v2.0.2 // indirect
 	github.com/swaggo/swag v1.16.6 // indirect
 	github.com/valyala/fastjson v1.6.7 // indirect
-	github.com/vgarvardt/pgx-google-uuid/v5 v5.6.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/mod v0.32.0 // indirect
 	golang.org/x/sync v0.19.0 // indirect

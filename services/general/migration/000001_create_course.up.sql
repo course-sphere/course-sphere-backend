@@ -23,9 +23,9 @@ CREATE TABLE IF NOT EXISTS course.courses(
     thumbnail_url text,
     promo_video_url text,
     price real NOT NULL,
-    requirements text NOT NULL,
+    requirements text,
     learning_objectives text NOT NULL,
-    target_audiences text NOT NULL
+    target_audiences text
 );
 
 CREATE TABLE IF NOT EXISTS course.course_categories(
