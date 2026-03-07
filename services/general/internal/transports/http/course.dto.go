@@ -1,34 +1,38 @@
 package http
 
-import (
-	"github.com/google/uuid"
-	"github.com/moznion/go-optional"
+import "github.com/google/uuid"
+
+type CourseLevel string
+
+const (
+	Beginner     CourseLevel = "beginner"
+	Intermediate CourseLevel = "intermediate"
+	Advanced     CourseLevel = "advanced"
 )
 
 type Course struct {
-	Id         uuid.UUID `json:"id"`
-	Thumbnail  string    `json:"thumbnail"`
-	Title      string    `json:"title"`
-	Tags       []string  `json:"tags,omitempty"`
-	Instructor string    `json:"instructor"`
-	Price      float32   `json:"price"`
+	ID                 uuid.UUID   `json:"id"`
+	Instructor         string      `json:"instructor"`
+	Title              string      `json:"title"`
+	Subtitle           *string     `json:"subtitle,omitempty"`
+	Description        string      `json:"description"`
+	Categories         []string    `json:"categories,omitempty"`
+	Level              CourseLevel `json:"level"`
+	ThumbnailURL       *string     `json:"thumbnail_url,omitempty"`
+	PromoVideoURL      *string     `json:"promo_video_url,omitempty"`
+	Price              float32     `json:"price"`
+	Prerequisites      []uuid.UUID `json:"prerequisites,omitempty"`
+	Requirements       []string    `json:"requirements,omitempty"`
+	LearningObjectives []string    `json:"learning_objectives,omitempty"`
+	TargetAudiences    []string    `json:"target_audiences,omitempty"`
 }
 
 type CreateCourseData struct {
-	Thumbnail string   `json:"thumbnail"`
-	Title     string   `json:"title"`
-	Tags      []string `json:"tags"`
-	Price     float32  `json:"price"`
-}
-
-type UpdateCourse struct {
-	Thumbnail optional.Option[string]   `json:"thumbnail,omitempty"`
-	Title     optional.Option[string]   `json:"title,omitempty"`
-	Tags      optional.Option[[]string] `json:"tags,omitempty"`
-	Price     optional.Option[float32]  `json:"price,omitempty"`
-}
-
-type CourseProgress struct {
-	Progress float32 `json:"progress"`
-	IsPassed bool    `json:"isPassed"`
+	Title              string      `json:"title"`
+	Description        string      `json:"description"`
+	Categories         []string    `json:"categories,omitempty"`
+	Level              CourseLevel `json:"level"`
+	Price              float32     `json:"price"`
+	Prerequisites      []uuid.UUID `json:"prerequisites,omitempty"`
+	LearningObjectives []string    `json:"learning_objectives,omitempty"`
 }

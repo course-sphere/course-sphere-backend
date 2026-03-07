@@ -26,17 +26,6 @@ func (s *Server) RegisterRoutes(f *fuego.Server) {
 	)
 	fuego.Post(course, "/", s.CreateCourse)
 	fuego.Get(course, "/{id}", s.GetCourse)
-	fuego.Patch(course, "/{id}", s.UpdateCourse)
-	fuego.Delete(course, "/{id}", s.UpdateCourse)
-	fuego.Post(course, "/{id}/material", s.CreateMaterial)
-	fuego.Get(course, "/{id}/material", s.GetMaterials)
-
-	material := fuego.Group(f, "/material",
-		option.Middleware(tokenMiddleware),
-		option.Security(openapi3.SecurityRequirement{"bearerAuth": []string{}}),
-	)
-	fuego.Patch(material, "/{id}", s.UpdateMaterial)
-	fuego.Delete(material, "/{id}", s.DeleteMaterial)
 }
 
 func (s *Server) OpenAPI(specURL string) http.Handler {
