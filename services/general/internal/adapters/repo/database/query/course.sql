@@ -23,31 +23,29 @@ SELECT
     title,
     subtitle,
     description,
-    (
-        SELECT ARRAY(
-            SELECT name from course.categories
-            WHERE id IN (
-                SELECT category_id
-                FROM course.course_categories c
-                WHERE c.course_id = @id
-            )
-        )
-    ) as categories,
     level,
     thumbnail_url,
     promo_video_url,
     price,
-    (
-        SELECT ARRAY(
-            SELECT other_id from course.course_prerequisites
-            WHERE course_id = @id
-        )
-    ) as prerequisites,
     requirements,
     learning_objectives,
     target_audiences
 FROM course.courses
 WHERE id = @id;
+
+-- name: GetCourseCategories :many
+SELECT name
+FROM course.categories
+WHERE id IN (
+    SELECT category_id
+    FROM course.course_categories c
+    WHERE c.course_id = @id
+);
+
+-- name: GetCoursePrerequisites :many
+SELECT other_id
+FROM course.course_prerequisites
+WHERE course_id = @id;
 
 -- name: AddCourseCategory :exec
 INSERT INTO course.course_categories(course_id, category_id) VALUES (

@@ -91,26 +91,10 @@ SELECT
     title,
     subtitle,
     description,
-    (
-        SELECT ARRAY(
-            SELECT name from course.categories
-            WHERE id IN (
-                SELECT category_id
-                FROM course.course_categories c
-                WHERE c.course_id = $1
-            )
-        )
-    ) as categories,
     level,
     thumbnail_url,
     promo_video_url,
     price,
-    (
-        SELECT ARRAY(
-            SELECT other_id from course.course_prerequisites
-            WHERE course_id = $1
-        )
-    ) as prerequisites,
     requirements,
     learning_objectives,
     target_audiences
@@ -118,41 +102,78 @@ FROM course.courses
 WHERE id = $1
 `
 
-type GetCourseRow struct {
-	ID                 uuid.UUID
-	InstructorID       uuid.UUID
-	Title              string
-	Subtitle           *string
-	Description        string
-	Categories         interface{}
-	Level              CourseLevel
-	ThumbnailUrl       *string
-	PromoVideoUrl      *string
-	Price              float32
-	Prerequisites      interface{}
-	Requirements       string
-	LearningObjectives string
-	TargetAudiences    string
-}
-
-func (q *Queries) GetCourse(ctx context.Context, id uuid.UUID) (GetCourseRow, error) {
+func (q *Queries) GetCourse(ctx context.Context, id uuid.UUID) (CourseCourse, error) {
 	row := q.db.QueryRow(ctx, getCourse, id)
-	var i GetCourseRow
+	var i CourseCourse
 	err := row.Scan(
 		&i.ID,
 		&i.InstructorID,
 		&i.Title,
 		&i.Subtitle,
 		&i.Description,
-		&i.Categories,
 		&i.Level,
 		&i.ThumbnailUrl,
 		&i.PromoVideoUrl,
 		&i.Price,
-		&i.Prerequisites,
 		&i.Requirements,
 		&i.LearningObjectives,
 		&i.TargetAudiences,
 	)
 	return i, err
+}
+
+const getCourseCategories = `-- name: GetCourseCategories :many
+SELECT name
+FROM course.categories
+WHERE id IN (
+    SELECT category_id
+    FROM course.course_categories c
+    WHERE c.course_id = $1
+)
+`
+
+func (q *Queries) GetCourseCategories(ctx context.Context, id uuid.UUID) ([]string, error) {
+	rows, err := q.db.Query(ctx, getCourseCategories, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []string
+	for rows.Next() {
+		var name string
+		if err := rows.Scan(&name); err != nil {
+			return nil, err
+		}
+		items = append(items, name)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getCoursePrerequisites = `-- name: GetCoursePrerequisites :many
+SELECT other_id
+FROM course.course_prerequisites
+WHERE course_id = $1
+`
+
+func (q *Queries) GetCoursePrerequisites(ctx context.Context, id uuid.UUID) ([]uuid.UUID, error) {
+	rows, err := q.db.Query(ctx, getCoursePrerequisites, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []uuid.UUID
+	for rows.Next() {
+		var other_id uuid.UUID
+		if err := rows.Scan(&other_id); err != nil {
+			return nil, err
+		}
+		items = append(items, other_id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

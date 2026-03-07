@@ -31,7 +31,7 @@ func (db *CourseDatabase) Create(ctx context.Context, instructorID uuid.UUID, da
 	inner := database.New(db.Pool).WithTx(tx)
 
 	var params database.CreateCourseParams
-	copier.Copy(&params, &data)
+	copier.CopyWithOption(&params, &data, copier.Option{DeepCopy: true})
 	params.InstructorID = instructorID
 	params.LearningObjectives = strings.Join(data.LearningObjectives, delimeter)
 	id, err := inner.CreateCourse(ctx, params)
@@ -72,9 +72,29 @@ func (db *CourseDatabase) Get(ctx context.Context, id uuid.UUID) (*domain.Course
 
 	var course domain.Course
 	copier.Copy(&course, &raw)
-	course.Requirements = strings.Split(raw.Requirements, delimeter)
+
+	course.Requirements = make([]string, 0)
+	if raw.Requirements != nil {
+		course.Requirements = strings.Split(*raw.Requirements, delimeter)
+	}
 	course.LearningObjectives = strings.Split(raw.LearningObjectives, delimeter)
-	course.TargetAudiences = strings.Split(raw.TargetAudiences, delimeter)
+
+	course.TargetAudiences = make([]string, 0)
+	if raw.TargetAudiences != nil {
+		course.TargetAudiences = strings.Split(*raw.TargetAudiences, delimeter)
+	}
+
+	categories, err := inner.GetCourseCategories(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	course.Categories = categories
+
+	prerequisites, err := inner.GetCoursePrerequisites(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	course.Prerequisites = prerequisites
 
 	return &course, nil
 }

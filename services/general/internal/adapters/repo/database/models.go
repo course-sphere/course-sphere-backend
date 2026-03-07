@@ -69,9 +69,9 @@ type CourseCourse struct {
 	ThumbnailUrl       *string
 	PromoVideoUrl      *string
 	Price              float32
-	Requirements       string
+	Requirements       *string
 	LearningObjectives string
-	TargetAudiences    string
+	TargetAudiences    *string
 }
 
 type CourseCourseCategory struct {
