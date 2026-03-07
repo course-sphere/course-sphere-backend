@@ -20,11 +20,11 @@ func (s *Server) RegisterRoutes(f *fuego.Server) {
 	jwks := s.AuthClient.MustGetJwks(ctx)
 	tokenMiddleware := middleware.RequireToken(jwks)
 
-	course := fuego.Group(f, "/course",
+	course := fuego.Group(f, "/course")
+	fuego.Post(course, "/", s.CreateCourse, 
 		option.Middleware(tokenMiddleware),
 		option.Security(openapi3.SecurityRequirement{"bearerAuth": []string{}}),
 	)
-	fuego.Post(course, "/", s.CreateCourse)
 	fuego.Get(course, "/{id}", s.GetCourse)
 }
 
