@@ -19,24 +19,15 @@ func (s *Server) RegisterRoutes(f *fuego.Server) {
 
 	jwks := s.AuthClient.MustGetJwks(ctx)
 	tokenMiddleware := middleware.RequireToken(jwks)
-
-	course := fuego.Group(f, "/course",
+	authOptions := []fuego.RouteOption{
 		option.Middleware(tokenMiddleware),
 		option.Security(openapi3.SecurityRequirement{"bearerAuth": []string{}}),
-	)
-	fuego.Post(course, "/", s.CreateCourse)
+	}
+
+	course := fuego.Group(f, "/course")
+	fuego.Post(course, "/", s.CreateCourse, authOptions...)
 	fuego.Get(course, "/{id}", s.GetCourse)
-	fuego.Patch(course, "/{id}", s.UpdateCourse)
-	fuego.Delete(course, "/{id}", s.UpdateCourse)
-	fuego.Post(course, "/{id}/material", s.CreateMaterial)
-	fuego.Get(course, "/{id}/material", s.GetMaterials)
-
-	material := fuego.Group(f, "/material",
-		option.Middleware(tokenMiddleware),
-		option.Security(openapi3.SecurityRequirement{"bearerAuth": []string{}}),
-	)
-	fuego.Patch(material, "/{id}", s.UpdateMaterial)
-	fuego.Delete(material, "/{id}", s.DeleteMaterial)
+	fuego.Patch(course, "/{id}", s.UpdateCourse, authOptions...)
 }
 
 func (s *Server) OpenAPI(specURL string) http.Handler {
