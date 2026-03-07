@@ -65,7 +65,7 @@ func (s *Server) GetCourse(c fuego.ContextNoBody) (*Course, error) {
 			Err: err,
 		}
 	}
-	course.Instructor = instructor.Name
+	course.Instructor = *instructor
 
 	return &course, nil
 }
@@ -88,7 +88,7 @@ func (s *Server) GetAllCourses(c fuego.ContextNoBody) ([]Course, error) {
 				Err: err,
 			}
 		}
-		courses[i].Instructor = instructor.Name
+		courses[i].Instructor = *instructor
 	}
 
 	return courses, nil
