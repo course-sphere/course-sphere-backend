@@ -40,9 +40,16 @@ type CreateCourseData struct {
 }
 
 type UpdateCourseData struct {
-	Subtitle        *string
-	ThumbnailURL    *string
-	PromoVideoURL   *string
-	Requirements    *[]string
-	TargetAudiences *[]string
+	Title              *string
+	Subtitle           *string
+	Description        *string
+	Categories         *[]string
+	Level              *CourseLevel
+	ThumbnailURL       *string
+	PromoVideoURL      *string
+	Price              *float32
+	Prerequisites      *[]uuid.UUID
+	Requirements       *[]string
+	LearningObjectives *[]string
+	TargetAudiences    *[]string
 }

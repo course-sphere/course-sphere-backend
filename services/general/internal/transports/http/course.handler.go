@@ -13,7 +13,7 @@ import (
 func (s *Server) CreateCourse(c fuego.ContextWithBody[CreateCourseData]) (uuid.UUID, error) {
 	token := c.Value(middleware.TokenKey).(jwt.Token)
 	sub, _ := token.Subject()
-	userID, err := uuid.Parse(sub)
+	instructorID, err := uuid.Parse(sub)
 	if err != nil {
 		return uuid.Nil, fuego.UnauthorizedError{
 			Err:    err,
@@ -25,10 +25,10 @@ func (s *Server) CreateCourse(c fuego.ContextWithBody[CreateCourseData]) (uuid.U
 	if err != nil {
 		return uuid.Nil, err
 	}
-	course := domain.CreateCourseData{}
-	copier.CopyWithOption(&course, raw, copier.Option{DeepCopy: true})
+	data := domain.CreateCourseData{}
+	copier.CopyWithOption(&data, raw, copier.Option{DeepCopy: true})
 
-	id, err := s.Course.Create(c.Context(), userID, course)
+	id, err := s.Course.Create(c.Context(), instructorID, data)
 	if err != nil {
 		return uuid.Nil, fuego.BadRequestError{
 			Err:    err,
@@ -68,4 +68,40 @@ func (s *Server) GetCourse(c fuego.ContextNoBody) (*Course, error) {
 	course.Instructor = instructor.Name
 
 	return &course, nil
+}
+
+func (s *Server) UpdateCourse(c fuego.ContextWithBody[UpdateCourseData]) (any, error) {
+	ctx := c.Context()
+
+	token := c.Value(middleware.TokenKey).(jwt.Token)
+	sub, _ := token.Subject()
+	instructorID, err := uuid.Parse(sub)
+	if err != nil {
+		return uuid.Nil, fuego.UnauthorizedError{
+			Err:    err,
+			Detail: "Invalid token",
+		}
+	}
+
+	id, err := uuid.Parse(c.PathParam("id"))
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "ID must be UUIDv4",
+		}
+	}
+
+	raw, err := c.Body()
+	if err != nil {
+		return uuid.Nil, err
+	}
+	data := domain.UpdateCourseData{}
+	copier.CopyWithOption(&data, raw, copier.Option{DeepCopy: true})
+
+	err = s.Course.Update(ctx, id, instructorID, data)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
 }
