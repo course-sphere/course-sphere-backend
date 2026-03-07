@@ -13,6 +13,13 @@ CREATE TYPE general.level AS ENUM (
     'advanced'
 );
 
+CREATE TYPE general.status AS ENUM (
+    'draft',
+    'ai-approved',
+    'approved',
+    'removed'
+);
+
 CREATE TABLE IF NOT EXISTS general.courses(
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     instructor_id uuid NOT NULL,
@@ -25,7 +32,8 @@ CREATE TABLE IF NOT EXISTS general.courses(
     price real NOT NULL,
     requirements text,
     learning_objectives text NOT NULL,
-    target_audiences text
+    target_audiences text,
+    status general.status NOT NULL DEFAULT 'draft'::general.status
 );
 
 CREATE TABLE IF NOT EXISTS general.course_categories(

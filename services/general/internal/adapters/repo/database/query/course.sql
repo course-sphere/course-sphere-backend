@@ -38,7 +38,8 @@ SELECT
     price,
     requirements,
     learning_objectives,
-    target_audiences
+    target_audiences,
+    status
 FROM general.courses
 WHERE id = @id;
 
@@ -68,7 +69,8 @@ SET
     price = COALESCE(sqlc.narg('price'), price),
     requirements = COALESCE(sqlc.narg('requirements'), requirements),
     learning_objectives = COALESCE(sqlc.narg('learning_objectives'), learning_objectives),
-    target_audiences = COALESCE(sqlc.narg('target_audiences'), target_audiences)
+    target_audiences = COALESCE(sqlc.narg('target_audiences'), target_audiences),
+    status = COALESCE(sqlc.narg('status'), status)
 WHERE id = @id AND instructor_id = @instructor_id;
 
 -- name: DeleteCourseCategories :exec
