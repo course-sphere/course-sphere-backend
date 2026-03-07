@@ -104,6 +104,32 @@ func (q *Queries) DeleteCoursePrerequisites(ctx context.Context, id uuid.UUID) e
 	return err
 }
 
+const getAllCourses = `-- name: GetAllCourses :many
+SELECT id
+FROM general.courses
+WHERE status = 'draft'
+`
+
+func (q *Queries) GetAllCourses(ctx context.Context) ([]uuid.UUID, error) {
+	rows, err := q.db.Query(ctx, getAllCourses)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []uuid.UUID
+	for rows.Next() {
+		var id uuid.UUID
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getCourse = `-- name: GetCourse :one
 SELECT 
     id,

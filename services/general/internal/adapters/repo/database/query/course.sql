@@ -25,6 +25,11 @@ INSERT INTO general.course_categories(course_id, category_id) VALUES (
 -- name: AddCoursePrerequisite :exec
 INSERT INTO general.course_prerequisites(course_id, other_id) VALUES (@id, @other_id);
 
+-- name: GetAllCourses :many
+SELECT id
+FROM general.courses
+WHERE status = 'draft';
+
 -- name: GetCourse :one
 SELECT 
     id,
