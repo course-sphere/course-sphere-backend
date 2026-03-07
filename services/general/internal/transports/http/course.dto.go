@@ -2,7 +2,6 @@ package http
 
 import "github.com/google/uuid"
 
-// CourseLevel represents the difficulty level of a course.
 type CourseLevel string
 
 const (
@@ -11,21 +10,31 @@ const (
 	Advanced     CourseLevel = "advanced"
 )
 
+type CourseStatus string
+
+const (
+	Draft      CourseStatus = "draft"
+	AIApproved CourseStatus = "ai-approved"
+	Approved   CourseStatus = "approved"
+	Removed    CourseStatus = "removed"
+)
+
 type Course struct {
-	ID                 uuid.UUID   `json:"id" format:"uuid" description:"Unique identifier of the course" example:"550e8400-e29b-41d4-a716-446655440000"`
-	Instructor         string      `json:"instructor" description:"Instructor name or identifier"`
-	Title              string      `json:"title" description:"Course title" example:"Introduction to Calculus"`
-	Subtitle           *string     `json:"subtitle,omitempty" description:"Optional subtitle for the course" example:"Limits, derivatives and applications"`
-	Description        string      `json:"description" description:"Detailed description of the course"`
-	Categories         []string    `json:"categories,omitempty" description:"Course categories"`
-	Level              CourseLevel `json:"level" description:"Difficulty level of the course" enums:"beginner,intermediate,advanced" example:"beginner"`
-	ThumbnailURL       *string     `json:"thumbnail_url,omitempty" format:"uri" description:"URL to the course thumbnail image"`
-	PromoVideoURL      *string     `json:"promo_video_url,omitempty" format:"uri" description:"URL to the promotional video"`
-	Price              float32     `json:"price" description:"Course price in USD" example:"49.99"`
-	Prerequisites      []uuid.UUID `json:"prerequisites,omitempty" format:"uuid" description:"IDs of prerequisite courses"`
-	Requirements       []string    `json:"requirements,omitempty" description:"Requirements students should meet before taking the course"`
-	LearningObjectives []string    `json:"learning_objectives,omitempty" description:"Skills or knowledge students will gain"`
-	TargetAudiences    []string    `json:"target_audiences,omitempty" description:"Intended audience for the course"`
+	ID                 uuid.UUID    `json:"id" format:"uuid" description:"Unique identifier of the course" example:"550e8400-e29b-41d4-a716-446655440000"`
+	Instructor         string       `json:"instructor" description:"Instructor name or identifier"`
+	Title              string       `json:"title" description:"Course title" example:"Introduction to Calculus"`
+	Subtitle           *string      `json:"subtitle,omitempty" description:"Optional subtitle for the course" example:"Limits, derivatives and applications"`
+	Description        string       `json:"description" description:"Detailed description of the course"`
+	Categories         []string     `json:"categories,omitempty" description:"Course categories"`
+	Level              CourseLevel  `json:"level" description:"Difficulty level of the course" enums:"beginner,intermediate,advanced" example:"beginner"`
+	ThumbnailURL       *string      `json:"thumbnail_url,omitempty" format:"uri" description:"URL to the course thumbnail image"`
+	PromoVideoURL      *string      `json:"promo_video_url,omitempty" format:"uri" description:"URL to the promotional video"`
+	Price              float32      `json:"price" description:"Course price in USD" example:"49.99"`
+	Prerequisites      []uuid.UUID  `json:"prerequisites,omitempty" format:"uuid" description:"IDs of prerequisite courses"`
+	Requirements       []string     `json:"requirements,omitempty" description:"Requirements students should meet before taking the course"`
+	LearningObjectives []string     `json:"learning_objectives,omitempty" description:"Skills or knowledge students will gain"`
+	TargetAudiences    []string     `json:"target_audiences,omitempty" description:"Intended audience for the course"`
+	Status             CourseStatus `json:"status" description:"Status of the course" enums:"draft,ai-approved,approved,removed" example:"draft"`
 }
 
 type CreateCourseData struct {
@@ -51,4 +60,5 @@ type UpdateCourseData struct {
 	Requirements       *[]string    `json:"requirements,omitempty" description:"Updated requirements"`
 	LearningObjectives *[]string    `json:"learning_objectives,omitempty" description:"Updated learning objectives"`
 	TargetAudiences    *[]string    `json:"target_audiences,omitempty" description:"Updated target audiences"`
+	Status             CourseStatus `json:"status,omitempty" description:"Status of the course" enums:"draft,ai-approved,approved,removed" example:"draft"`
 }
