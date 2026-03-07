@@ -12,9 +12,9 @@ import (
 )
 
 const addCourseCategory = `-- name: AddCourseCategory :exec
-INSERT INTO course.course_categories(course_id, category_id) VALUES (
+INSERT INTO general.course_categories(course_id, category_id) VALUES (
     $1,
-    (SELECT id FROM course.categories WHERE name = $2)
+    (SELECT id FROM general.categories WHERE name = $2)
 )
 `
 
@@ -29,7 +29,7 @@ func (q *Queries) AddCourseCategory(ctx context.Context, arg AddCourseCategoryPa
 }
 
 const addCoursePrerequisite = `-- name: AddCoursePrerequisite :exec
-INSERT INTO course.course_prerequisites(course_id, other_id) VALUES ($1, $2)
+INSERT INTO general.course_prerequisites(course_id, other_id) VALUES ($1, $2)
 `
 
 type AddCoursePrerequisiteParams struct {
@@ -43,7 +43,7 @@ func (q *Queries) AddCoursePrerequisite(ctx context.Context, arg AddCoursePrereq
 }
 
 const createCourse = `-- name: CreateCourse :one
-INSERT INTO course.courses(
+INSERT INTO general.courses(
     instructor_id,
     title,
     description,
@@ -65,7 +65,7 @@ type CreateCourseParams struct {
 	InstructorID       uuid.UUID
 	Title              string
 	Description        string
-	Level              CourseLevel
+	Level              GeneralLevel
 	Price              float32
 	LearningObjectives string
 }
@@ -84,6 +84,26 @@ func (q *Queries) CreateCourse(ctx context.Context, arg CreateCourseParams) (uui
 	return id, err
 }
 
+const deleteCourseCategories = `-- name: DeleteCourseCategories :exec
+DELETE FROM general.course_categories
+WHERE course_id = $1
+`
+
+func (q *Queries) DeleteCourseCategories(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteCourseCategories, id)
+	return err
+}
+
+const deleteCoursePrerequisites = `-- name: DeleteCoursePrerequisites :exec
+DELETE FROM general.course_prerequisites
+WHERE course_id = $1
+`
+
+func (q *Queries) DeleteCoursePrerequisites(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.Exec(ctx, deleteCoursePrerequisites, id)
+	return err
+}
+
 const getCourse = `-- name: GetCourse :one
 SELECT 
     id,
@@ -98,13 +118,13 @@ SELECT
     requirements,
     learning_objectives,
     target_audiences
-FROM course.courses
+FROM general.courses
 WHERE id = $1
 `
 
-func (q *Queries) GetCourse(ctx context.Context, id uuid.UUID) (CourseCourse, error) {
+func (q *Queries) GetCourse(ctx context.Context, id uuid.UUID) (GeneralCourse, error) {
 	row := q.db.QueryRow(ctx, getCourse, id)
-	var i CourseCourse
+	var i GeneralCourse
 	err := row.Scan(
 		&i.ID,
 		&i.InstructorID,
@@ -124,10 +144,10 @@ func (q *Queries) GetCourse(ctx context.Context, id uuid.UUID) (CourseCourse, er
 
 const getCourseCategories = `-- name: GetCourseCategories :many
 SELECT name
-FROM course.categories
+FROM general.categories
 WHERE id IN (
     SELECT category_id
-    FROM course.course_categories c
+    FROM general.course_categories c
     WHERE c.course_id = $1
 )
 `
@@ -154,7 +174,7 @@ func (q *Queries) GetCourseCategories(ctx context.Context, id uuid.UUID) ([]stri
 
 const getCoursePrerequisites = `-- name: GetCoursePrerequisites :many
 SELECT other_id
-FROM course.course_prerequisites
+FROM general.course_prerequisites
 WHERE course_id = $1
 `
 
@@ -176,4 +196,53 @@ func (q *Queries) GetCoursePrerequisites(ctx context.Context, id uuid.UUID) ([]u
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateCourse = `-- name: UpdateCourse :exec
+UPDATE general.courses
+SET
+    title = COALESCE($1, title),
+    subtitle = COALESCE($2, subtitle),
+    description = COALESCE($3, description),
+    level = COALESCE($4, level),
+    thumbnail_url = COALESCE($5, thumbnail_url),
+    promo_video_url = COALESCE($6, promo_video_url),
+    price = COALESCE($7, price),
+    requirements = COALESCE($8, requirements),
+    learning_objectives = COALESCE($9, learning_objectives),
+    target_audiences = COALESCE($10, target_audiences)
+WHERE id = $11 AND instructor_id = $12
+`
+
+type UpdateCourseParams struct {
+	Title              *string
+	Subtitle           *string
+	Description        *string
+	Level              NullGeneralLevel
+	ThumbnailUrl       *string
+	PromoVideoUrl      *string
+	Price              *float32
+	Requirements       *string
+	LearningObjectives *string
+	TargetAudiences    *string
+	ID                 uuid.UUID
+	InstructorID       uuid.UUID
+}
+
+func (q *Queries) UpdateCourse(ctx context.Context, arg UpdateCourseParams) error {
+	_, err := q.db.Exec(ctx, updateCourse,
+		arg.Title,
+		arg.Subtitle,
+		arg.Description,
+		arg.Level,
+		arg.ThumbnailUrl,
+		arg.PromoVideoUrl,
+		arg.Price,
+		arg.Requirements,
+		arg.LearningObjectives,
+		arg.TargetAudiences,
+		arg.ID,
+		arg.InstructorID,
+	)
+	return err
 }

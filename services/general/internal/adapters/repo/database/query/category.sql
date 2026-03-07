@@ -1,3 +1,3 @@
 -- name: CreateCategory :exec
-INSERT INTO course.categories(name) VALUES(@category)
+INSERT INTO general.categories(name) VALUES(@category)
 ON CONFLICT DO NOTHING;

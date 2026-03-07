@@ -1,25 +1,25 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE SCHEMA IF NOT EXISTS course;
+CREATE SCHEMA IF NOT EXISTS general;
 
-CREATE TABLE IF NOT EXISTS course.categories(
+CREATE TABLE IF NOT EXISTS general.categories(
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     name text UNIQUE NOT NULL
 );
 
-CREATE TYPE course.level AS ENUM (
+CREATE TYPE general.level AS ENUM (
     'beginner',
     'intermediate',
     'advanced'
 );
 
-CREATE TABLE IF NOT EXISTS course.courses(
+CREATE TABLE IF NOT EXISTS general.courses(
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     instructor_id uuid NOT NULL,
     title text UNIQUE NOT NULL,
     subtitle text,
     description text NOT NULL,
-    level course.level NOT NULL,
+    level general.level NOT NULL,
     thumbnail_url text,
     promo_video_url text,
     price real NOT NULL,
@@ -28,14 +28,14 @@ CREATE TABLE IF NOT EXISTS course.courses(
     target_audiences text
 );
 
-CREATE TABLE IF NOT EXISTS course.course_categories(
+CREATE TABLE IF NOT EXISTS general.course_categories(
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    course_id uuid NOT NULL REFERENCES course.courses(id),
-    category_id uuid NOT NULL REFERENCES course.categories(id)
+    course_id uuid NOT NULL REFERENCES general.courses(id),
+    category_id uuid NOT NULL REFERENCES general.categories(id)
 );
 
-CREATE TABLE IF NOT EXISTS course.course_prerequisites(
+CREATE TABLE IF NOT EXISTS general.course_prerequisites(
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    course_id uuid NOT NULL REFERENCES course.courses(id),
-    other_id uuid NOT NULL REFERENCES course.courses(id)
+    course_id uuid NOT NULL REFERENCES general.courses(id),
+    other_id uuid NOT NULL REFERENCES general.courses(id)
 );

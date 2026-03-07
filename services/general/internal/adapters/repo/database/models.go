@@ -11,61 +11,61 @@ import (
 	"github.com/google/uuid"
 )
 
-type CourseLevel string
+type GeneralLevel string
 
 const (
-	CourseLevelBeginner     CourseLevel = "beginner"
-	CourseLevelIntermediate CourseLevel = "intermediate"
-	CourseLevelAdvanced     CourseLevel = "advanced"
+	GeneralLevelBeginner     GeneralLevel = "beginner"
+	GeneralLevelIntermediate GeneralLevel = "intermediate"
+	GeneralLevelAdvanced     GeneralLevel = "advanced"
 )
 
-func (e *CourseLevel) Scan(src interface{}) error {
+func (e *GeneralLevel) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
-		*e = CourseLevel(s)
+		*e = GeneralLevel(s)
 	case string:
-		*e = CourseLevel(s)
+		*e = GeneralLevel(s)
 	default:
-		return fmt.Errorf("unsupported scan type for CourseLevel: %T", src)
+		return fmt.Errorf("unsupported scan type for GeneralLevel: %T", src)
 	}
 	return nil
 }
 
-type NullCourseLevel struct {
-	CourseLevel CourseLevel
-	Valid       bool // Valid is true if CourseLevel is not NULL
+type NullGeneralLevel struct {
+	GeneralLevel GeneralLevel
+	Valid        bool // Valid is true if GeneralLevel is not NULL
 }
 
 // Scan implements the Scanner interface.
-func (ns *NullCourseLevel) Scan(value interface{}) error {
+func (ns *NullGeneralLevel) Scan(value interface{}) error {
 	if value == nil {
-		ns.CourseLevel, ns.Valid = "", false
+		ns.GeneralLevel, ns.Valid = "", false
 		return nil
 	}
 	ns.Valid = true
-	return ns.CourseLevel.Scan(value)
+	return ns.GeneralLevel.Scan(value)
 }
 
 // Value implements the driver Valuer interface.
-func (ns NullCourseLevel) Value() (driver.Value, error) {
+func (ns NullGeneralLevel) Value() (driver.Value, error) {
 	if !ns.Valid {
 		return nil, nil
 	}
-	return string(ns.CourseLevel), nil
+	return string(ns.GeneralLevel), nil
 }
 
-type CourseCategory struct {
+type GeneralCategory struct {
 	ID   uuid.UUID
 	Name string
 }
 
-type CourseCourse struct {
+type GeneralCourse struct {
 	ID                 uuid.UUID
 	InstructorID       uuid.UUID
 	Title              string
 	Subtitle           *string
 	Description        string
-	Level              CourseLevel
+	Level              GeneralLevel
 	ThumbnailUrl       *string
 	PromoVideoUrl      *string
 	Price              float32
@@ -74,13 +74,13 @@ type CourseCourse struct {
 	TargetAudiences    *string
 }
 
-type CourseCourseCategory struct {
+type GeneralCourseCategory struct {
 	ID         uuid.UUID
 	CourseID   uuid.UUID
 	CategoryID uuid.UUID
 }
 
-type CourseCoursePrerequisite struct {
+type GeneralCoursePrerequisite struct {
 	ID       uuid.UUID
 	CourseID uuid.UUID
 	OtherID  uuid.UUID

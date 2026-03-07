@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS course.course_categories;
-DROP TABLE IF EXISTS course.course_prerequisites;
-DROP TABLE IF EXISTS course.courses;
-DROP TYPE course.level;
-DROP TABLE IF EXISTS course.categories;
+DROP TABLE IF EXISTS general.course_categories;
+DROP TABLE IF EXISTS general.course_prerequisites;
+DROP TABLE IF EXISTS general.courses;
+DROP TYPE general.level;
+DROP TABLE IF EXISTS general.categories;
 
-DROP SCHEMA IF EXISTS course.categories;
+DROP SCHEMA IF EXISTS general;

@@ -10,7 +10,7 @@ import (
 )
 
 const createCategory = `-- name: CreateCategory :exec
-INSERT INTO course.categories(name) VALUES($1)
+INSERT INTO general.categories(name) VALUES($1)
 ON CONFLICT DO NOTHING
 `
 
