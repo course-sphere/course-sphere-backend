@@ -25,6 +25,7 @@ func (s *Server) RegisterRoutes(f *fuego.Server) {
 	}
 
 	course := fuego.Group(f, "/course")
+	fuego.Get(course, "/", s.GetAllCourses)
 	fuego.Post(course, "/", s.CreateCourse, authOptions...)
 	fuego.Get(course, "/{id}", s.GetCourse)
 	fuego.Patch(course, "/{id}", s.UpdateCourse, authOptions...)

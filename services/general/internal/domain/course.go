@@ -12,6 +12,15 @@ const (
 	Advanced     CourseLevel = "advanced"
 )
 
+type CourseStatus string
+
+const (
+	Draft      CourseStatus = "draft"
+	AIApproved CourseStatus = "ai-approved"
+	Approved   CourseStatus = "approved"
+	Removed    CourseStatus = "removed"
+)
+
 type Course struct {
 	ID                 uuid.UUID
 	InstructorID       uuid.UUID
@@ -27,6 +36,7 @@ type Course struct {
 	Requirements       []string
 	LearningObjectives []string
 	TargetAudiences    []string
+	Status             CourseStatus
 }
 
 type CreateCourseData struct {
@@ -52,4 +62,5 @@ type UpdateCourseData struct {
 	Requirements       *[]string
 	LearningObjectives *[]string
 	TargetAudiences    *[]string
+	Status             *CourseStatus
 }

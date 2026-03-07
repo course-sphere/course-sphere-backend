@@ -25,6 +25,11 @@ INSERT INTO general.course_categories(course_id, category_id) VALUES (
 -- name: AddCoursePrerequisite :exec
 INSERT INTO general.course_prerequisites(course_id, other_id) VALUES (@id, @other_id);
 
+-- name: GetAllCourses :many
+SELECT id
+FROM general.courses
+WHERE status = 'draft';
+
 -- name: GetCourse :one
 SELECT 
     id,
@@ -38,7 +43,8 @@ SELECT
     price,
     requirements,
     learning_objectives,
-    target_audiences
+    target_audiences,
+    status
 FROM general.courses
 WHERE id = @id;
 
@@ -68,7 +74,8 @@ SET
     price = COALESCE(sqlc.narg('price'), price),
     requirements = COALESCE(sqlc.narg('requirements'), requirements),
     learning_objectives = COALESCE(sqlc.narg('learning_objectives'), learning_objectives),
-    target_audiences = COALESCE(sqlc.narg('target_audiences'), target_audiences)
+    target_audiences = COALESCE(sqlc.narg('target_audiences'), target_audiences),
+    status = COALESCE(sqlc.narg('status'), status)
 WHERE id = @id AND instructor_id = @instructor_id;
 
 -- name: DeleteCourseCategories :exec

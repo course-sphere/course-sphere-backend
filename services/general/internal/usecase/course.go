@@ -30,6 +30,10 @@ func (u *Course) Get(ctx context.Context, id uuid.UUID) (*domain.Course, error) 
 	return u.CourseRepo.Get(ctx, id)
 }
 
+func (u *Course) GetAll(ctx context.Context) ([]domain.Course, error) {
+	return u.CourseRepo.GetAll(ctx)
+}
+
 func (u *Course) Update(ctx context.Context, id uuid.UUID, instructorID uuid.UUID, data domain.UpdateCourseData) error {
 	return u.CourseRepo.Update(ctx, id, instructorID, data)
 }

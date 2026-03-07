@@ -70,6 +70,30 @@ func (s *Server) GetCourse(c fuego.ContextNoBody) (*Course, error) {
 	return &course, nil
 }
 
+func (s *Server) GetAllCourses(c fuego.ContextNoBody) ([]Course, error) {
+	raw, err := s.Course.GetAll(c.Context())
+	if err != nil {
+		return nil, fuego.InternalServerError{
+			Err: err,
+		}
+	}
+
+	var courses []Course
+	copier.CopyWithOption(&courses, &raw, copier.Option{DeepCopy: true})
+
+	for i := range courses {
+		instructor, err := s.UserClient.Get(c.Context(), raw[i].InstructorID)
+		if err != nil {
+			return nil, fuego.InternalServerError{
+				Err: err,
+			}
+		}
+		courses[i].Instructor = instructor.Name
+	}
+
+	return courses, nil
+}
+
 func (s *Server) UpdateCourse(c fuego.ContextWithBody[UpdateCourseData]) (any, error) {
 	ctx := c.Context()
 
