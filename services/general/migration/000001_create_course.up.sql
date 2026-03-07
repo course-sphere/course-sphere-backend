@@ -15,6 +15,7 @@ CREATE TYPE course.level AS ENUM (
 
 CREATE TABLE IF NOT EXISTS course.courses(
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    instructor_id uuid NOT NULL,
     title text UNIQUE NOT NULL,
     subtitle text,
     description text NOT NULL,
