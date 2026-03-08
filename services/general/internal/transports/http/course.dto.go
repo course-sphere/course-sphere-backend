@@ -39,6 +39,9 @@ type Course struct {
 	LearningObjectives []string          `json:"learning_objectives,omitempty" description:"Skills or knowledge students will gain"`
 	TargetAudiences    []string          `json:"target_audiences,omitempty" description:"Intended audience for the course"`
 	Status             CourseStatus      `json:"status" description:"Status of the course" enums:"draft,ai-approved,approved,removed" example:"draft"`
+
+	Total         int32
+	TotalRequired int32
 }
 
 type CreateCourseData struct {

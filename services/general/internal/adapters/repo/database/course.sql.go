@@ -144,14 +144,34 @@ SELECT
     requirements,
     learning_objectives,
     target_audiences,
-    status
+    status,
+    (SELECT COUNT(id) FROM general.materials m WHERE m.course_id = $1) as total,
+    (SELECT COUNT(id) FROM general.materials m WHERE m.course_id = $1 AND is_required = true) as total_required
 FROM general.courses
 WHERE id = $1
 `
 
-func (q *Queries) GetCourse(ctx context.Context, id uuid.UUID) (GeneralCourse, error) {
+type GetCourseRow struct {
+	ID                 uuid.UUID
+	InstructorID       uuid.UUID
+	Title              string
+	Subtitle           *string
+	Description        string
+	Level              GeneralLevel
+	ThumbnailUrl       *string
+	PromoVideoUrl      *string
+	Price              float32
+	Requirements       *string
+	LearningObjectives string
+	TargetAudiences    *string
+	Status             GeneralStatus
+	Total              int64
+	TotalRequired      int64
+}
+
+func (q *Queries) GetCourse(ctx context.Context, id uuid.UUID) (GetCourseRow, error) {
 	row := q.db.QueryRow(ctx, getCourse, id)
-	var i GeneralCourse
+	var i GetCourseRow
 	err := row.Scan(
 		&i.ID,
 		&i.InstructorID,
@@ -166,6 +186,8 @@ func (q *Queries) GetCourse(ctx context.Context, id uuid.UUID) (GeneralCourse, e
 		&i.LearningObjectives,
 		&i.TargetAudiences,
 		&i.Status,
+		&i.Total,
+		&i.TotalRequired,
 	)
 	return i, err
 }
