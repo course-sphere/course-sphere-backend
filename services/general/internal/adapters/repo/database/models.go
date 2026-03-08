@@ -7,9 +7,9 @@ package database
 import (
 	"database/sql/driver"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type GeneralLevel string
@@ -195,7 +195,7 @@ type GeneralMaterialAttempt struct {
 	MaterialID uuid.UUID
 	StudentID  uuid.UUID
 	Score      *int32
-	CreatedAt  pgtype.Timestamptz
+	CreatedAt  time.Time
 }
 
 type GeneralQuestion struct {

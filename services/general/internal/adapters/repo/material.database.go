@@ -21,12 +21,20 @@ var _ ports.MaterialRepository = &MaterialDatabase{}
 func (db *MaterialDatabase) Create(ctx context.Context, courseID uuid.UUID, data domain.CreateMaterialData) (uuid.UUID, error) {
 	inner := database.New(db.Pool)
 
-	params := database.CreateMaterialParams{
-		CourseID: courseID,
-	}
+	params := database.CreateMaterialParams{CourseID: courseID}
 	copier.Copy(&params, &data)
 
 	return inner.CreateMaterial(ctx, params)
+}
+
+func (db *MaterialDatabase) CreateAttempt(ctx context.Context, id uuid.UUID, studentID uuid.UUID, score *int32) (uuid.UUID, error) {
+	inner := database.New(db.Pool)
+
+	return inner.CreateMaterialAttempt(ctx, database.CreateMaterialAttemptParams{
+		MaterialID: id,
+		StudentID:  studentID,
+		Score:      score,
+	})
 }
 
 func (db *MaterialDatabase) GetByCourse(ctx context.Context, courseID uuid.UUID) ([]domain.Material, error) {
@@ -47,6 +55,22 @@ func (db *MaterialDatabase) GetPosition(ctx context.Context, id uuid.UUID) (floa
 	inner := database.New(db.Pool)
 
 	return inner.GetMaterialPosition(ctx, id)
+}
+
+func (db *MaterialDatabase) GetAttempts(ctx context.Context, id uuid.UUID, studentID uuid.UUID) ([]domain.MaterialAttempt, error) {
+	inner := database.New(db.Pool)
+
+	raw, err := inner.GetMaterialAttempts(ctx, database.GetMaterialAttemptsParams{
+		MaterialID: id,
+		StudentID:  studentID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	var attempts []domain.MaterialAttempt
+	copier.Copy(&attempts, &raw)
+
+	return attempts, nil
 }
 
 func (db *MaterialDatabase) Update(ctx context.Context, id uuid.UUID, data domain.UpdateMaterialData) error {
