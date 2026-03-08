@@ -30,7 +30,7 @@ func (db *MaterialDatabase) Create(ctx context.Context, courseID uuid.UUID, data
 func (db *MaterialDatabase) CreateAttempt(ctx context.Context, id uuid.UUID, studentID uuid.UUID, score *int32) (uuid.UUID, error) {
 	inner := database.New(db.Pool)
 
-	return inner.CreateMaterialAttempt(ctx, database.CreateMaterialAttemptParams{
+	return inner.CreateAttempt(ctx, database.CreateAttemptParams{
 		MaterialID: id,
 		StudentID:  studentID,
 		Score:      score,
@@ -57,17 +57,17 @@ func (db *MaterialDatabase) GetPosition(ctx context.Context, id uuid.UUID) (floa
 	return inner.GetMaterialPosition(ctx, id)
 }
 
-func (db *MaterialDatabase) GetAttempts(ctx context.Context, id uuid.UUID, studentID uuid.UUID) ([]domain.MaterialAttempt, error) {
+func (db *MaterialDatabase) GetAttempts(ctx context.Context, id uuid.UUID, studentID uuid.UUID) ([]domain.Attempt, error) {
 	inner := database.New(db.Pool)
 
-	raw, err := inner.GetMaterialAttempts(ctx, database.GetMaterialAttemptsParams{
+	raw, err := inner.GetAttemptsByMaterial(ctx, database.GetAttemptsByMaterialParams{
 		MaterialID: id,
 		StudentID:  studentID,
 	})
 	if err != nil {
 		return nil, err
 	}
-	var attempts []domain.MaterialAttempt
+	var attempts []domain.Attempt
 	copier.Copy(&attempts, &raw)
 
 	return attempts, nil
