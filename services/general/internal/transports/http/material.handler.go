@@ -1,11 +1,85 @@
 package http
 
 import (
-	"github.com/course-sphere/course-sphere-backend/services/general/internal/domain"
 	"github.com/go-fuego/fuego"
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
+	"github.com/lestrrat-go/jwx/v3/jwt"
+
+	"github.com/course-sphere/course-sphere-backend/services/general/internal/domain"
+	"github.com/course-sphere/course-sphere-backend/shared/transports/http/middleware"
 )
+
+func (s *Server) CreateAttempt(c fuego.ContextWithBody[CreateAttemptData]) (uuid.UUID, error) {
+	ctx := c.Context()
+
+	token := c.Value(middleware.TokenKey).(jwt.Token)
+	sub, _ := token.Subject()
+	studentID, err := uuid.Parse(sub)
+	if err != nil {
+		return uuid.Nil, fuego.UnauthorizedError{
+			Err:    err,
+			Detail: "Invalid token",
+		}
+	}
+
+	id, err := uuid.Parse(c.PathParam("id"))
+	if err != nil {
+		return uuid.Nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "ID must be UUIDv4",
+		}
+	}
+
+	body, err := c.Body()
+	if err != nil {
+		return uuid.Nil, err
+	}
+
+	attemptID, err := s.Attempt.Create(ctx, id, studentID, body.Score)
+	if err != nil {
+		return uuid.Nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "Invalid attempt",
+		}
+	}
+
+	return attemptID, nil
+}
+
+func (s *Server) GetMaterialAttempts(c fuego.ContextNoBody) ([]Attempt, error) {
+	ctx := c.Context()
+
+	token := c.Value(middleware.TokenKey).(jwt.Token)
+	sub, _ := token.Subject()
+	studentID, err := uuid.Parse(sub)
+	if err != nil {
+		return nil, fuego.UnauthorizedError{
+			Err:    err,
+			Detail: "Invalid token",
+		}
+	}
+
+	id, err := uuid.Parse(c.PathParam("id"))
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "ID must be UUIDv4",
+		}
+	}
+
+	raw, err := s.Attempt.GetByMaterial(ctx, id, studentID)
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "Failed to get attempts",
+		}
+	}
+	var attempts []Attempt
+	copier.Copy(&attempts, &raw)
+
+	return attempts, nil
+}
 
 func (s *Server) MoveMaterial(c fuego.ContextWithBody[MoveMaterialData]) (any, error) {
 	ctx := c.Context()

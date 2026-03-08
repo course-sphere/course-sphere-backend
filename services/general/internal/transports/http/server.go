@@ -18,6 +18,7 @@ type Server struct {
 	Course   usecase.Course
 	Material usecase.Material
 	Question usecase.Question
+	Attempt  usecase.Attempt
 
 	AuthClient ports.AuthClient
 	UserClient ports.UserClient
