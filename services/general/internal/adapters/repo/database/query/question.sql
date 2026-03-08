@@ -25,6 +25,9 @@ SELECT answer FROM general.question_possible_answers WHERE question_id = @questi
 -- name: GetQuestionCriteria :many
 SELECT * FROM general.question_criteria WHERE question_id = @question_id;
 
+-- name: GetQuestionPosition :one
+SELECT position FROM general.questions WHERE id = @id;
+
 -- name: UpdateQuestion :exec
 UPDATE general.questions
 SET

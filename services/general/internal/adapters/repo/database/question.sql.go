@@ -98,6 +98,17 @@ func (q *Queries) GetQuestionCriteria(ctx context.Context, questionID uuid.UUID)
 	return items, nil
 }
 
+const getQuestionPosition = `-- name: GetQuestionPosition :one
+SELECT position FROM general.questions WHERE id = $1
+`
+
+func (q *Queries) GetQuestionPosition(ctx context.Context, id uuid.UUID) (float64, error) {
+	row := q.db.QueryRow(ctx, getQuestionPosition, id)
+	var position float64
+	err := row.Scan(&position)
+	return position, err
+}
+
 const getQuestionPossibleAnswers = `-- name: GetQuestionPossibleAnswers :many
 SELECT answer FROM general.question_possible_answers WHERE question_id = $1
 `

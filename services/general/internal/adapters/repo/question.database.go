@@ -89,6 +89,12 @@ func (db *QuestionDatabase) GetByMaterial(ctx context.Context, materialID uuid.U
 	return questions, nil
 }
 
+func (db *QuestionDatabase) GetPosition(ctx context.Context, id uuid.UUID) (float64, error) {
+	inner := database.New(db.Pool)
+
+	return inner.GetQuestionPosition(ctx, id)
+}
+
 func (db *QuestionDatabase) Update(ctx context.Context, id uuid.UUID, data domain.UpdateQuestionData) error {
 	inner := database.New(db.Pool)
 
