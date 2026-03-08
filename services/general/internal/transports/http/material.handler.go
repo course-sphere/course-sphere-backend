@@ -50,3 +50,53 @@ func (s *Server) UpdateMaterial(c fuego.ContextWithBody[UpdateMaterialData]) (an
 
 	return nil, err
 }
+
+func (s *Server) CreateQuestion(c fuego.ContextWithBody[CreateQuestionData]) (uuid.UUID, error) {
+	ctx := c.Context()
+
+	materialID, err := uuid.Parse(c.PathParam("id"))
+	if err != nil {
+		return uuid.Nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "ID must be UUIDv4",
+		}
+	}
+
+	raw, err := c.Body()
+	if err != nil {
+		return uuid.Nil, err
+	}
+	var data domain.CreateQuestionData
+	copier.Copy(&data, &raw)
+
+	id, err := s.Question.Create(ctx, materialID, data)
+	if err != nil {
+		return uuid.Nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "Invalid question creation data",
+		}
+	}
+
+	return id, nil
+}
+
+func (s *Server) GetQuestionsByCourse(c fuego.ContextNoBody) ([]Question, error) {
+	ctx := c.Context()
+
+	materialID, err := uuid.Parse(c.PathParam("id"))
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "ID must be UUIDv4",
+		}
+	}
+
+	raw, err := s.Question.GetByMaterial(ctx, materialID)
+	if err != nil {
+		return nil, err
+	}
+	var questions []Question
+	copier.Copy(&questions, &raw)
+
+	return questions, nil
+}
