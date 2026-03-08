@@ -28,7 +28,7 @@ INSERT INTO general.course_prerequisites(course_id, other_id) VALUES (@id, @othe
 -- name: GetAllCourses :many
 SELECT id
 FROM general.courses
-WHERE status = 'draft';
+WHERE status = 'approved';
 
 -- name: GetCourse :one
 SELECT 
