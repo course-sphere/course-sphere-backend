@@ -9,7 +9,6 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createMaterial = `-- name: CreateMaterial :one
@@ -112,7 +111,7 @@ WHERE id = $7
 `
 
 type UpdateMaterialParams struct {
-	Position      pgtype.Numeric
+	Position      *float64
 	Lesson        *string
 	Title         *string
 	RequiredScore *int32

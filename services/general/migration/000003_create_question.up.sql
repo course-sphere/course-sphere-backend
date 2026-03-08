@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS general.questions(
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     material_id uuid NOT NULL REFERENCES general.materials(id) ON DELETE CASCADE,
-    position numeric NOT NULL,
+    position double precision NOT NULL,
     question text NOT NULL,
     
     UNIQUE (material_id, position)

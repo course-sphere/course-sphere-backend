@@ -9,7 +9,6 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type GeneralLevel string
@@ -180,7 +179,7 @@ type GeneralCoursePrerequisite struct {
 type GeneralMaterial struct {
 	ID            uuid.UUID
 	CourseID      uuid.UUID
-	Position      pgtype.Numeric
+	Position      float64
 	Kind          GeneralMaterialKind
 	Lesson        string
 	Title         string
@@ -193,7 +192,7 @@ type GeneralMaterial struct {
 type GeneralQuestion struct {
 	ID         uuid.UUID
 	MaterialID uuid.UUID
-	Position   pgtype.Numeric
+	Position   float64
 	Question   string
 }
 
