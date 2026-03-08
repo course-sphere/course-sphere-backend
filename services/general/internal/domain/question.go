@@ -10,7 +10,7 @@ type QuestionCriterion struct {
 type Question struct {
 	ID              uuid.UUID
 	Question        string
-	Position        int64
+	Position        float64
 	PossibleAnswers []string
 	Criteria        []QuestionCriterion
 }
@@ -23,7 +23,7 @@ type CreateQuestionData struct {
 
 type UpdateQuestionData struct {
 	Question        *string
-	Position        *int64
+	Position        *float64
 	PossibleAnswers *[]string
 	Criteria        *[]QuestionCriterion
 }

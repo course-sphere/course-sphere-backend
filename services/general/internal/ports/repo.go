@@ -25,5 +25,6 @@ type MaterialRepository interface {
 type QuestionRepository interface {
 	Create(ctx context.Context, materialID uuid.UUID, data domain.CreateQuestionData) (uuid.UUID, error)
 	GetByMaterial(ctx context.Context, materialID uuid.UUID) ([]domain.Question, error)
+	GetPosition(ctx context.Context, id uuid.UUID) (float64, error)
 	Update(ctx context.Context, id uuid.UUID, data domain.UpdateQuestionData) error
 }

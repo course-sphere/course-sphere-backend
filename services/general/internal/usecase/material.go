@@ -11,28 +11,28 @@ import (
 )
 
 type Material struct {
-	MaterialRepo ports.MaterialRepository
+	Repo ports.MaterialRepository
 }
 
 func (u *Material) Create(ctx context.Context, courseID uuid.UUID, data domain.CreateMaterialData) (uuid.UUID, error) {
-	return u.MaterialRepo.Create(ctx, courseID, data)
+	return u.Repo.Create(ctx, courseID, data)
 }
 
 func (u *Material) GetByCourse(ctx context.Context, courseID uuid.UUID) ([]domain.Material, error) {
-	return u.MaterialRepo.GetByCourse(ctx, courseID)
+	return u.Repo.GetByCourse(ctx, courseID)
 }
 
 func (u *Material) Move(ctx context.Context, id uuid.UUID, prevID *uuid.UUID, nextID *uuid.UUID) error {
-	position, err := util.Midpoint(ctx, id, prevID, nextID, u.MaterialRepo.GetPosition)
+	position, err := util.Midpoint(ctx, id, prevID, nextID, u.Repo.GetPosition)
 	if err != nil {
 		return err
 	}
 
-	return u.MaterialRepo.Update(ctx, id, domain.UpdateMaterialData{
+	return u.Repo.Update(ctx, id, domain.UpdateMaterialData{
 		Position: &position,
 	})
 }
 
 func (u *Material) Update(ctx context.Context, id uuid.UUID, data domain.UpdateMaterialData) error {
-	return u.MaterialRepo.Update(ctx, id, data)
+	return u.Repo.Update(ctx, id, data)
 }
