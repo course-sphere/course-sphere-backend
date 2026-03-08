@@ -130,7 +130,7 @@ func (s *Server) UpdateCourse(c fuego.ContextWithBody[UpdateCourseData]) (any, e
 	return nil, nil
 }
 
-func (s *Server) CreateMaterial(c fuego.ContextWithBody[CreateCourseData]) (uuid.UUID, error) {
+func (s *Server) CreateMaterial(c fuego.ContextWithBody[CreateMaterialData]) (uuid.UUID, error) {
 	ctx := c.Context()
 
 	courseID, err := uuid.Parse(c.PathParam("id"))
