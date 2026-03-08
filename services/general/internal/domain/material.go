@@ -1,6 +1,10 @@
 package domain
 
-import "github.com/google/uuid"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type MaterialKind string
 
@@ -22,6 +26,14 @@ type Material struct {
 	RequiredScore *int32
 	RequiredPeers *int32
 	IsRequired    bool
+}
+
+type MaterialAttempt struct {
+	ID         uuid.UUID
+	MaterialID uuid.UUID
+	StudentID  uuid.UUID
+	Score      *int32
+	CreatedAt  time.Time
 }
 
 type CreateMaterialData struct {
