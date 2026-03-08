@@ -12,6 +12,7 @@ type Database struct {
 	Course   CourseDatabase
 	Material MaterialDatabase
 	Question QuestionDatabase
+	Attempt  AttemptDatabase
 }
 
 func NewPool(databaseURL string) (*pgxpool.Pool, error) {
@@ -44,5 +45,6 @@ func NewDatabase(databaseURL string) (*Database, error) {
 		Course:   CourseDatabase{Pool: pool},
 		Material: MaterialDatabase{Pool: pool},
 		Question: QuestionDatabase{Pool: pool},
+		Attempt:  AttemptDatabase{Pool: pool},
 	}, nil
 }

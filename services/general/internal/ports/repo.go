@@ -28,3 +28,8 @@ type QuestionRepository interface {
 	GetPosition(ctx context.Context, id uuid.UUID) (float64, error)
 	Update(ctx context.Context, id uuid.UUID, data domain.UpdateQuestionData) error
 }
+
+type AttemptRepository interface {
+	Create(ctx context.Context, materialID uuid.UUID, studentID uuid.UUID, score *int32) (uuid.UUID, error)
+	GetByMaterial(ctx context.Context, materialID uuid.UUID, studentID uuid.UUID) ([]domain.Attempt, error)
+}
