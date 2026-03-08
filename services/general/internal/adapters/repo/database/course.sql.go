@@ -107,7 +107,7 @@ func (q *Queries) DeleteCoursePrerequisites(ctx context.Context, id uuid.UUID) e
 const getAllCourses = `-- name: GetAllCourses :many
 SELECT id
 FROM general.courses
-WHERE status = 'draft'
+WHERE status = 'approved'
 `
 
 func (q *Queries) GetAllCourses(ctx context.Context) ([]uuid.UUID, error) {

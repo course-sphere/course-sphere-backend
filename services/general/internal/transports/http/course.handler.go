@@ -119,7 +119,7 @@ func (s *Server) UpdateCourse(c fuego.ContextWithBody[UpdateCourseData]) (any, e
 	if err != nil {
 		return uuid.Nil, err
 	}
-	data := domain.UpdateCourseData{}
+	var data domain.UpdateCourseData
 	copier.CopyWithOption(&data, raw, copier.Option{DeepCopy: true})
 
 	err = s.Course.Update(ctx, id, instructorID, data)
@@ -128,4 +128,54 @@ func (s *Server) UpdateCourse(c fuego.ContextWithBody[UpdateCourseData]) (any, e
 	}
 
 	return nil, nil
+}
+
+func (s *Server) CreateMaterial(c fuego.ContextWithBody[CreateCourseData]) (uuid.UUID, error) {
+	ctx := c.Context()
+
+	courseID, err := uuid.Parse(c.PathParam("id"))
+	if err != nil {
+		return uuid.Nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "ID must be UUIDv4",
+		}
+	}
+
+	raw, err := c.Body()
+	if err != nil {
+		return uuid.Nil, err
+	}
+	var data domain.CreateMaterialData
+	copier.Copy(&data, &raw)
+
+	id, err := s.Material.Create(ctx, courseID, data)
+	if err != nil {
+		return uuid.Nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "Invalid material creation data",
+		}
+	}
+
+	return id, nil
+}
+
+func (s *Server) GetMaterialsByCourse(c fuego.ContextNoBody) ([]Material, error) {
+	ctx := c.Context()
+
+	courseID, err := uuid.Parse(c.PathParam("id"))
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "ID must be UUIDv4",
+		}
+	}
+
+	raw, err := s.Material.GetByCourse(ctx, courseID)
+	if err != nil {
+		return nil, err
+	}
+	var materials []Material
+	copier.Copy(&materials, &raw)
+
+	return materials, nil
 }

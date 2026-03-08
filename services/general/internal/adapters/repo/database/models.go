@@ -54,6 +54,51 @@ func (ns NullGeneralLevel) Value() (driver.Value, error) {
 	return string(ns.GeneralLevel), nil
 }
 
+type GeneralMaterialKind string
+
+const (
+	GeneralMaterialKindText       GeneralMaterialKind = "text"
+	GeneralMaterialKindFile       GeneralMaterialKind = "file"
+	GeneralMaterialKindVideo      GeneralMaterialKind = "video"
+	GeneralMaterialKindQuiz       GeneralMaterialKind = "quiz"
+	GeneralMaterialKindAssignment GeneralMaterialKind = "assignment"
+)
+
+func (e *GeneralMaterialKind) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = GeneralMaterialKind(s)
+	case string:
+		*e = GeneralMaterialKind(s)
+	default:
+		return fmt.Errorf("unsupported scan type for GeneralMaterialKind: %T", src)
+	}
+	return nil
+}
+
+type NullGeneralMaterialKind struct {
+	GeneralMaterialKind GeneralMaterialKind
+	Valid               bool // Valid is true if GeneralMaterialKind is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullGeneralMaterialKind) Scan(value interface{}) error {
+	if value == nil {
+		ns.GeneralMaterialKind, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.GeneralMaterialKind.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullGeneralMaterialKind) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.GeneralMaterialKind), nil
+}
+
 type GeneralStatus string
 
 const (
@@ -129,4 +174,37 @@ type GeneralCoursePrerequisite struct {
 	ID       uuid.UUID
 	CourseID uuid.UUID
 	OtherID  uuid.UUID
+}
+
+type GeneralMaterial struct {
+	ID            uuid.UUID
+	CourseID      uuid.UUID
+	Position      float64
+	Kind          GeneralMaterialKind
+	Lesson        string
+	Title         string
+	Content       *string
+	RequiredScore *int32
+	RequiredPeers *int32
+	IsRequired    bool
+}
+
+type GeneralQuestion struct {
+	ID         uuid.UUID
+	MaterialID uuid.UUID
+	Position   float64
+	Question   string
+}
+
+type GeneralQuestionCriterium struct {
+	ID         uuid.UUID
+	QuestionID uuid.UUID
+	Criterion  string
+	Score      int32
+}
+
+type GeneralQuestionPossibleAnswer struct {
+	ID         uuid.UUID
+	QuestionID uuid.UUID
+	Answer     string
 }

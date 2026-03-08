@@ -15,7 +15,9 @@ import (
 type Server struct {
 	Config *config.Config
 
-	Course usecase.Course
+	Course   usecase.Course
+	Material usecase.Material
+	Question usecase.Question
 
 	AuthClient ports.AuthClient
 	UserClient ports.UserClient

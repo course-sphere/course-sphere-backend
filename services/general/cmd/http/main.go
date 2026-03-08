@@ -50,9 +50,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	course := usecase.Course{
-		CourseRepo: &repo.Course,
-	}
+	course := usecase.Course{Repo: &repo.Course}
+	material := usecase.Material{Repo: &repo.Material}
+	question := usecase.Question{Repo: &repo.Question}
 
 	authClient := external.HTTPAuthClient{ProxyURL: cfg.ProxyURL}
 	userClient := external.HTTPUserClient{ProxyURL: cfg.ProxyURL}
@@ -60,10 +60,12 @@ func main() {
 	s := server.Server{
 		Config: &cfg,
 
+		Course:   course,
+		Material: material,
+		Question: question,
+
 		AuthClient: &authClient,
 		UserClient: &userClient,
-
-		Course: course,
 	}
 	server := s.Build()
 
