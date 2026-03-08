@@ -17,8 +17,10 @@ type CourseRepository interface {
 
 type MaterialRepository interface {
 	Create(ctx context.Context, courseID uuid.UUID, data domain.CreateMaterialData) (uuid.UUID, error)
+	CreateAttempt(ctx context.Context, id uuid.UUID, studentID uuid.UUID, score *int32) (uuid.UUID, error)
 	GetByCourse(ctx context.Context, courseID uuid.UUID) ([]domain.Material, error)
 	GetPosition(ctx context.Context, id uuid.UUID) (float64, error)
+	GetAttempts(ctx context.Context, id uuid.UUID) ([]domain.MaterialAttempt, error)
 	Update(ctx context.Context, id uuid.UUID, data domain.UpdateMaterialData) error
 }
 
