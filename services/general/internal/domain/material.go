@@ -26,6 +26,7 @@ type Material struct {
 }
 
 type CreateMaterialData struct {
+	CourseID      uuid.UUID
 	Kind          MaterialKind
 	Lesson        string
 	Title         string
