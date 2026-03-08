@@ -63,6 +63,62 @@ func (q *Queries) CreateMaterial(ctx context.Context, arg CreateMaterialParams) 
 	return id, err
 }
 
+const createMaterialAttempt = `-- name: CreateMaterialAttempt :one
+INSERT INTO general.material_attempts(material_id, student_id, score)
+VALUES ($1, $2, $3)
+RETURNING id
+`
+
+type CreateMaterialAttemptParams struct {
+	MaterialID uuid.UUID
+	StudentID  uuid.UUID
+	Score      *int32
+}
+
+func (q *Queries) CreateMaterialAttempt(ctx context.Context, arg CreateMaterialAttemptParams) (uuid.UUID, error) {
+	row := q.db.QueryRow(ctx, createMaterialAttempt, arg.MaterialID, arg.StudentID, arg.Score)
+	var id uuid.UUID
+	err := row.Scan(&id)
+	return id, err
+}
+
+const getMaterialAttempts = `-- name: GetMaterialAttempts :many
+SELECT id, material_id, student_id, score, created_at
+FROM general.material_attempts
+WHERE material_id = $1 AND student_id = $2
+`
+
+type GetMaterialAttemptsParams struct {
+	MaterialID uuid.UUID
+	StudentID  uuid.UUID
+}
+
+func (q *Queries) GetMaterialAttempts(ctx context.Context, arg GetMaterialAttemptsParams) ([]GeneralMaterialAttempt, error) {
+	rows, err := q.db.Query(ctx, getMaterialAttempts, arg.MaterialID, arg.StudentID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GeneralMaterialAttempt
+	for rows.Next() {
+		var i GeneralMaterialAttempt
+		if err := rows.Scan(
+			&i.ID,
+			&i.MaterialID,
+			&i.StudentID,
+			&i.Score,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMaterialPosition = `-- name: GetMaterialPosition :one
 SELECT position FROM general.materials WHERE id = $1
 `

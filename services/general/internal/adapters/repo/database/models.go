@@ -9,6 +9,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type GeneralLevel string
@@ -187,6 +188,14 @@ type GeneralMaterial struct {
 	RequiredScore *int32
 	RequiredPeers *int32
 	IsRequired    bool
+}
+
+type GeneralMaterialAttempt struct {
+	ID         uuid.UUID
+	MaterialID uuid.UUID
+	StudentID  uuid.UUID
+	Score      *int32
+	CreatedAt  pgtype.Timestamptz
 }
 
 type GeneralQuestion struct {

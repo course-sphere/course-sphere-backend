@@ -22,11 +22,21 @@ INSERT INTO general.materials(
 )
 RETURNING id;
 
+-- name: CreateMaterialAttempt :one
+INSERT INTO general.material_attempts(material_id, student_id, score)
+VALUES (@material_id, @student_id, @score)
+RETURNING id;
+
 -- name: GetMaterialsByCourse :many
 SELECT * FROM general.materials WHERE course_id = @course_id;
 
 -- name: GetMaterialPosition :one
 SELECT position FROM general.materials WHERE id = @id;
+
+-- name: GetMaterialAttempts :many
+SELECT *
+FROM general.material_attempts
+WHERE material_id = @material_id AND student_id = @student_id;
 
 -- name: UpdateMaterial :exec
 UPDATE general.materials
