@@ -20,7 +20,7 @@ RETURNING id;
 SELECT * FROM general.questions WHERE material_id = @material_id;
 
 -- name: GetQuestionPossibleAnswers :many
-SELECT * FROM general.question_possible_answers WHERE question_id = @question_id;
+SELECT answer FROM general.question_possible_answers WHERE question_id = @question_id;
 
 -- name: GetQuestionCriteria :many
 SELECT * FROM general.question_criteria WHERE question_id = @question_id;

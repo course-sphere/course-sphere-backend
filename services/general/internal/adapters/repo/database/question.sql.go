@@ -9,7 +9,6 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createQuestion = `-- name: CreateQuestion :one
@@ -100,22 +99,22 @@ func (q *Queries) GetQuestionCriteria(ctx context.Context, questionID uuid.UUID)
 }
 
 const getQuestionPossibleAnswers = `-- name: GetQuestionPossibleAnswers :many
-SELECT id, question_id, answer FROM general.question_possible_answers WHERE question_id = $1
+SELECT answer FROM general.question_possible_answers WHERE question_id = $1
 `
 
-func (q *Queries) GetQuestionPossibleAnswers(ctx context.Context, questionID uuid.UUID) ([]GeneralQuestionPossibleAnswer, error) {
+func (q *Queries) GetQuestionPossibleAnswers(ctx context.Context, questionID uuid.UUID) ([]string, error) {
 	rows, err := q.db.Query(ctx, getQuestionPossibleAnswers, questionID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GeneralQuestionPossibleAnswer
+	var items []string
 	for rows.Next() {
-		var i GeneralQuestionPossibleAnswer
-		if err := rows.Scan(&i.ID, &i.QuestionID, &i.Answer); err != nil {
+		var answer string
+		if err := rows.Scan(&answer); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, answer)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -162,7 +161,7 @@ WHERE id = $3
 
 type UpdateQuestionParams struct {
 	Question *string
-	Position pgtype.Numeric
+	Position *float64
 	ID       uuid.UUID
 }
 
