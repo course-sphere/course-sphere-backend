@@ -25,6 +25,9 @@ RETURNING id;
 -- name: GetMaterialsByCourse :many
 SELECT * FROM general.materials WHERE course_id = @course_id;
 
+-- name: GetMaterialPosition :one
+SELECT position FROM general.materials WHERE id = @id;
+
 -- name: UpdateMaterial :exec
 UPDATE general.materials
 SET
