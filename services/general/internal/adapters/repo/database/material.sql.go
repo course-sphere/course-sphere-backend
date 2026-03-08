@@ -64,12 +64,12 @@ func (q *Queries) CreateMaterial(ctx context.Context, arg CreateMaterialParams) 
 	return id, err
 }
 
-const getMaterialByCourse = `-- name: GetMaterialByCourse :many
+const getMaterialsByCourse = `-- name: GetMaterialsByCourse :many
 SELECT id, course_id, position, kind, lesson, title, content, required_score, required_peers, is_required FROM general.materials WHERE course_id = $1
 `
 
-func (q *Queries) GetMaterialByCourse(ctx context.Context, courseID uuid.UUID) ([]GeneralMaterial, error) {
-	rows, err := q.db.Query(ctx, getMaterialByCourse, courseID)
+func (q *Queries) GetMaterialsByCourse(ctx context.Context, courseID uuid.UUID) ([]GeneralMaterial, error) {
+	rows, err := q.db.Query(ctx, getMaterialsByCourse, courseID)
 	if err != nil {
 		return nil, err
 	}
