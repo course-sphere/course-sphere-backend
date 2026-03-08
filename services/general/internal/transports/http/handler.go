@@ -35,6 +35,12 @@ func (s *Server) RegisterRoutes(f *fuego.Server) {
 	material := fuego.Group(f, "/material")
 	fuego.Post(material, "/{id}/move", s.MoveMaterial, authOptions...)
 	fuego.Patch(material, "/{id}", s.UpdateMaterial, authOptions...)
+	fuego.Post(material, "/{id}/question", s.CreateQuestion, authOptions...)
+	fuego.Get(material, "/{id}/question", s.GetQuestionsByCourse)
+
+	question := fuego.Group(f, "/question")
+	fuego.Post(question, "/{id}/move", s.MoveQuestion, authOptions...)
+	fuego.Patch(question, "/{id}", s.UpdateQuestion, authOptions...)
 }
 
 func (s *Server) OpenAPI(specURL string) http.Handler {
