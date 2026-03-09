@@ -44,7 +44,9 @@ SELECT
     requirements,
     learning_objectives,
     target_audiences,
-    status
+    status,
+    (SELECT COUNT(id) FROM general.materials m WHERE m.course_id = @id) as total,
+    (SELECT COUNT(id) FROM general.materials m WHERE m.course_id = @id AND is_required = true) as total_required
 FROM general.courses
 WHERE id = @id;
 

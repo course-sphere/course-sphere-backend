@@ -94,6 +94,40 @@ func (s *Server) GetAllCourses(c fuego.ContextNoBody) ([]Course, error) {
 	return courses, nil
 }
 
+func (s *Server) GetCourseProgress(c fuego.ContextNoBody) ([]CourseProgress, error) {
+	ctx := c.Context()
+
+	token := c.Value(middleware.TokenKey).(jwt.Token)
+	sub, _ := token.Subject()
+	studentID, err := uuid.Parse(sub)
+	if err != nil {
+		return nil, fuego.UnauthorizedError{
+			Err:    err,
+			Detail: "Invalid token",
+		}
+	}
+
+	id, err := uuid.Parse(c.PathParam("id"))
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "ID must be UUIDv4",
+		}
+	}
+
+	raw, err := s.Course.GetProgress(ctx, id, studentID)
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "No progress for this course",
+		}
+	}
+	var progress []CourseProgress
+	copier.CopyWithOption(&progress, &raw, copier.Option{DeepCopy: true})
+
+	return progress, nil
+}
+
 func (s *Server) UpdateCourse(c fuego.ContextWithBody[UpdateCourseData]) (any, error) {
 	ctx := c.Context()
 

@@ -37,6 +37,14 @@ type Course struct {
 	LearningObjectives []string
 	TargetAudiences    []string
 	Status             CourseStatus
+
+	Total         int32
+	TotalRequired int32
+}
+
+type CourseProgress struct {
+	CompletedMaterials []uuid.UUID
+	IsCompleted        bool
 }
 
 type CreateCourseData struct {
