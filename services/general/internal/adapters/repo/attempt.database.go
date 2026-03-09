@@ -18,13 +18,12 @@ type AttemptDatabase struct {
 
 var _ ports.AttemptRepository = &AttemptDatabase{}
 
-func (db *AttemptDatabase) Create(ctx context.Context, materialID uuid.UUID, studentID uuid.UUID, score *int32) (uuid.UUID, error) {
+func (db *AttemptDatabase) Create(ctx context.Context, materialID uuid.UUID, studentID uuid.UUID) (uuid.UUID, error) {
 	inner := database.New(db.Pool)
 
 	return inner.CreateAttempt(ctx, database.CreateAttemptParams{
 		MaterialID: materialID,
 		StudentID:  studentID,
-		Score:      score,
 	})
 }
 

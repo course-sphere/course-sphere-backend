@@ -10,7 +10,7 @@ import (
 	"github.com/course-sphere/course-sphere-backend/shared/transports/http/middleware"
 )
 
-func (s *Server) CreateAttempt(c fuego.ContextWithBody[CreateAttemptData]) (uuid.UUID, error) {
+func (s *Server) CreateAttempt(c fuego.ContextNoBody) (uuid.UUID, error) {
 	ctx := c.Context()
 
 	token := c.Value(middleware.TokenKey).(jwt.Token)
@@ -31,12 +31,7 @@ func (s *Server) CreateAttempt(c fuego.ContextWithBody[CreateAttemptData]) (uuid
 		}
 	}
 
-	body, err := c.Body()
-	if err != nil {
-		return uuid.Nil, err
-	}
-
-	attemptID, err := s.Attempt.Create(ctx, id, studentID, body.Score)
+	attemptID, err := s.Attempt.Create(ctx, id, studentID)
 	if err != nil {
 		return uuid.Nil, fuego.BadRequestError{
 			Err:    err,

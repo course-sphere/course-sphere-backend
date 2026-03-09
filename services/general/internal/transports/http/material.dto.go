@@ -48,10 +48,6 @@ type CreateMaterialData struct {
 	IsRequired    bool         `json:"is_required" description:"Whether completing this material is required" example:"false"`
 }
 
-type CreateAttemptData struct {
-	Score *int32 `json:"score,omitempty" description:"Score submitted for the attempt" example:"85"`
-}
-
 type MoveMaterialData struct {
 	PrevID *uuid.UUID `json:"prev_id,omitempty" format:"uuid" description:"UUID of the previous material (nil to place at beginning)"`
 	NextID *uuid.UUID `json:"next_id,omitempty" format:"uuid" description:"UUID of the next material (nil to place at end)"`

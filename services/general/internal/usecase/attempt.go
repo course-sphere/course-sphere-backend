@@ -13,8 +13,8 @@ type Attempt struct {
 	Repo ports.AttemptRepository
 }
 
-func (u *Attempt) Create(ctx context.Context, materialID uuid.UUID, studentID uuid.UUID, score *int32) (uuid.UUID, error) {
-	return u.Repo.Create(ctx, materialID, studentID, score)
+func (u *Attempt) Create(ctx context.Context, materialID uuid.UUID, studentID uuid.UUID) (uuid.UUID, error) {
+	return u.Repo.Create(ctx, materialID, studentID)
 }
 
 func (u *Attempt) GetByMaterial(ctx context.Context, materialID uuid.UUID, studentID uuid.UUID) ([]domain.Attempt, error) {
