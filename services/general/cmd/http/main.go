@@ -50,7 +50,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	course := usecase.Course{Repo: &repo.Course}
+	course := usecase.Course{
+		Repo:         &repo.Course,
+		MaterialRepo: &repo.Material,
+		AttemptRepo:  &repo.Attempt,
+	}
 	material := usecase.Material{Repo: &repo.Material}
 	question := usecase.Question{Repo: &repo.Question}
 	attempt := usecase.Attempt{Repo: &repo.Attempt}
