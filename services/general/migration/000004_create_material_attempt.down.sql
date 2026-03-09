@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS general.material_attempts;
+DROP TABLE IF EXISTS general.attempts;
