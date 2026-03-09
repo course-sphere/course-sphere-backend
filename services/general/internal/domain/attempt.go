@@ -20,7 +20,7 @@ type AttemptDetail struct {
 	Answer     string
 }
 
-type CreateAttemptData struct {
+type CreateAttemptDetailData struct {
 	QuestionID uuid.UUID
 	Answer     string
 }

@@ -27,14 +27,27 @@ func (db *AttemptDatabase) Create(ctx context.Context, materialID uuid.UUID, stu
 	})
 }
 
-func (db *AttemptDatabase) CreateDetail(ctx context.Context, id uuid.UUID, questionID uuid.UUID, answer string) error {
-	inner := database.New(db.Pool)
+func (db *AttemptDatabase) CreateDetails(ctx context.Context, id uuid.UUID, data []domain.CreateAttemptDetailData) error {
+	tx, err := db.Pool.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
 
-	return inner.CreateAttemptDetail(ctx, database.CreateAttemptDetailParams{
-		ID:         id,
-		QuestionID: questionID,
-		Answer:     answer,
-	})
+	inner := database.New(db.Pool).WithTx(tx)
+
+	for _, attempt := range data {
+		err := inner.CreateAttemptDetail(ctx, database.CreateAttemptDetailParams{
+			ID:         id,
+			QuestionID: attempt.QuestionID,
+			Answer:     attempt.Answer,
+		})
+		if err != nil {
+			return err
+		}
+	}
+
+	return tx.Commit(ctx)
 }
 
 func (db *AttemptDatabase) GetByMaterial(ctx context.Context, materialID uuid.UUID, studentID uuid.UUID) ([]domain.Attempt, error) {

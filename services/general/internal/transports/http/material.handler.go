@@ -42,7 +42,7 @@ func (s *Server) CreateAttempt(c fuego.ContextNoBody) (uuid.UUID, error) {
 	return attemptID, nil
 }
 
-func (s *Server) GetMaterialAttempts(c fuego.ContextNoBody) ([]Attempt, error) {
+func (s *Server) GetAttempts(c fuego.ContextNoBody) ([]Attempt, error) {
 	ctx := c.Context()
 
 	token := c.Value(middleware.TokenKey).(jwt.Token)
