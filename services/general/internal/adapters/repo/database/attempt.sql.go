@@ -12,27 +12,68 @@ import (
 )
 
 const createAttempt = `-- name: CreateAttempt :one
-INSERT INTO general.material_attempts(material_id, student_id, score)
-VALUES ($1, $2, $3)
+INSERT INTO general.attempts(material_id, student_id)
+VALUES($1, $2)
 RETURNING id
 `
 
 type CreateAttemptParams struct {
 	MaterialID uuid.UUID
 	StudentID  uuid.UUID
-	Score      *int32
 }
 
 func (q *Queries) CreateAttempt(ctx context.Context, arg CreateAttemptParams) (uuid.UUID, error) {
-	row := q.db.QueryRow(ctx, createAttempt, arg.MaterialID, arg.StudentID, arg.Score)
+	row := q.db.QueryRow(ctx, createAttempt, arg.MaterialID, arg.StudentID)
 	var id uuid.UUID
 	err := row.Scan(&id)
 	return id, err
 }
 
+const createAttemptDetail = `-- name: CreateAttemptDetail :exec
+INSERT INTO general.attempt_details(attempt_id, question_id, answer)
+VALUES($1, $2, $3)
+`
+
+type CreateAttemptDetailParams struct {
+	ID         uuid.UUID
+	QuestionID uuid.UUID
+	Answer     string
+}
+
+func (q *Queries) CreateAttemptDetail(ctx context.Context, arg CreateAttemptDetailParams) error {
+	_, err := q.db.Exec(ctx, createAttemptDetail, arg.ID, arg.QuestionID, arg.Answer)
+	return err
+}
+
+const getAttemptDetails = `-- name: GetAttemptDetails :many
+SELECT attempt_id, question_id, answer
+FROM general.attempt_details
+WHERE attempt_id = $1
+`
+
+func (q *Queries) GetAttemptDetails(ctx context.Context, id uuid.UUID) ([]GeneralAttemptDetail, error) {
+	rows, err := q.db.Query(ctx, getAttemptDetails, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GeneralAttemptDetail
+	for rows.Next() {
+		var i GeneralAttemptDetail
+		if err := rows.Scan(&i.AttemptID, &i.QuestionID, &i.Answer); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAttemptsByMaterial = `-- name: GetAttemptsByMaterial :many
 SELECT id, material_id, student_id, score, created_at
-FROM general.material_attempts
+FROM general.attempts
 WHERE material_id = $1 AND student_id = $2
 `
 
@@ -41,15 +82,15 @@ type GetAttemptsByMaterialParams struct {
 	StudentID  uuid.UUID
 }
 
-func (q *Queries) GetAttemptsByMaterial(ctx context.Context, arg GetAttemptsByMaterialParams) ([]GeneralMaterialAttempt, error) {
+func (q *Queries) GetAttemptsByMaterial(ctx context.Context, arg GetAttemptsByMaterialParams) ([]GeneralAttempt, error) {
 	rows, err := q.db.Query(ctx, getAttemptsByMaterial, arg.MaterialID, arg.StudentID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GeneralMaterialAttempt
+	var items []GeneralAttempt
 	for rows.Next() {
-		var i GeneralMaterialAttempt
+		var i GeneralAttempt
 		if err := rows.Scan(
 			&i.ID,
 			&i.MaterialID,
@@ -65,4 +106,20 @@ func (q *Queries) GetAttemptsByMaterial(ctx context.Context, arg GetAttemptsByMa
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateAttempt = `-- name: UpdateAttempt :exec
+UPDATE general.attempts
+SET score = $1
+WHERE id = $2
+`
+
+type UpdateAttemptParams struct {
+	Score *int32
+	ID    uuid.UUID
+}
+
+func (q *Queries) UpdateAttempt(ctx context.Context, arg UpdateAttemptParams) error {
+	_, err := q.db.Exec(ctx, updateAttempt, arg.Score, arg.ID)
+	return err
 }

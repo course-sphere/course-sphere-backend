@@ -144,6 +144,20 @@ func (ns NullGeneralStatus) Value() (driver.Value, error) {
 	return string(ns.GeneralStatus), nil
 }
 
+type GeneralAttempt struct {
+	ID         uuid.UUID
+	MaterialID uuid.UUID
+	StudentID  uuid.UUID
+	Score      *int32
+	CreatedAt  time.Time
+}
+
+type GeneralAttemptDetail struct {
+	AttemptID  uuid.UUID
+	QuestionID uuid.UUID
+	Answer     string
+}
+
 type GeneralCategory struct {
 	ID   uuid.UUID
 	Name string
@@ -188,14 +202,6 @@ type GeneralMaterial struct {
 	RequiredScore *int32
 	RequiredPeers *int32
 	IsRequired    bool
-}
-
-type GeneralMaterialAttempt struct {
-	ID         uuid.UUID
-	MaterialID uuid.UUID
-	StudentID  uuid.UUID
-	Score      *int32
-	CreatedAt  time.Time
 }
 
 type GeneralQuestion struct {
