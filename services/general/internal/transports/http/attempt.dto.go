@@ -17,12 +17,12 @@ type Attempt struct {
 }
 
 type AttemptDetail struct {
-	AttemptID  uuid.UUID
-	QuestionID uuid.UUID
-	Answer     string
+	AttemptID  uuid.UUID `json:"attempt_id" format:"uuid" description:"ID of the attempt" example:"550e8400-e29b-41d4-a716-446655440000"`
+	QuestionID uuid.UUID `json:"question_id" format:"uuid" description:"ID of the question" example:"3fa85f64-5717-4562-b3fc-2c963f66afa6"`
+	Answer     string    `json:"answer" description:"Submitted answer text" example:"B"`
 }
 
 type CreateAttemptDetailData struct {
-	QuestionID uuid.UUID
-	Answer     string
+	QuestionID uuid.UUID `json:"question_id" format:"uuid" description:"ID of the question" example:"3fa85f64-5717-4562-b3fc-2c963f66afa6"`
+	Answer     string    `json:"answer" description:"Answer text submitted by the student" example:"B"`
 }
