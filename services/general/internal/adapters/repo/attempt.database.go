@@ -27,6 +27,16 @@ func (db *AttemptDatabase) Create(ctx context.Context, materialID uuid.UUID, stu
 	})
 }
 
+func (db *AttemptDatabase) CreateDetail(ctx context.Context, id uuid.UUID, questionID uuid.UUID, answer string) error {
+	inner := database.New(db.Pool)
+
+	return inner.CreateAttemptDetail(ctx, database.CreateAttemptDetailParams{
+		ID:         id,
+		QuestionID: questionID,
+		Answer:     answer,
+	})
+}
+
 func (db *AttemptDatabase) GetByMaterial(ctx context.Context, materialID uuid.UUID, studentID uuid.UUID) ([]domain.Attempt, error) {
 	inner := database.New(db.Pool)
 
@@ -41,4 +51,26 @@ func (db *AttemptDatabase) GetByMaterial(ctx context.Context, materialID uuid.UU
 	copier.Copy(&attempts, &raw)
 
 	return attempts, nil
+}
+
+func (db *AttemptDatabase) GetDetails(ctx context.Context, id uuid.UUID) ([]domain.AttemptDetail, error) {
+	inner := database.New(db.Pool)
+
+	raw, err := inner.GetAttemptDetails(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	var details []domain.AttemptDetail
+	copier.Copy(&details, &raw)
+
+	return details, nil
+}
+
+func (db *AttemptDatabase) Update(ctx context.Context, id uuid.UUID, score int32) error {
+	inner := database.New(db.Pool)
+
+	return inner.UpdateAttempt(ctx, database.UpdateAttemptParams{
+		ID:    id,
+		Score: &score,
+	})
 }

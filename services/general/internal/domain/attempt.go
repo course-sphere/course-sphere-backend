@@ -13,3 +13,14 @@ type Attempt struct {
 	Score      *int32
 	CreatedAt  time.Time
 }
+
+type AttemptDetail struct {
+	AttemptID  uuid.UUID
+	QuestionID uuid.UUID
+	Answer     string
+}
+
+type CreateAttemptData struct {
+	QuestionID uuid.UUID
+	Answer     string
+}
