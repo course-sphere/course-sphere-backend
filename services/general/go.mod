@@ -3,7 +3,7 @@ module github.com/course-sphere/course-sphere-backend/services/general
 go 1.25.7
 
 require (
-	github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260306073109-ffc8adac2c3b
+	github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260310172717-8687acea90b6
 	github.com/go-fuego/fuego v0.19.1-0.20260216133348-6131472aff93
 	github.com/jackc/pgx/v5 v5.8.0
 	github.com/jinzhu/copier v0.4.0
