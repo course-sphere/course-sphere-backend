@@ -7,6 +7,7 @@ type Role string
 const (
 	Student    Role = "student"
 	Instructor Role = "instructor"
+	Reviewer   Role = "reviewer"
 	Admin      Role = "admin"
 )
 
