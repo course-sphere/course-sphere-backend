@@ -4,6 +4,8 @@ github.com/caarlos0/env/v11 v11.3.1 h1:cArPWC15hWmEt+gWk7YBi7lEXTXCvpaSdCiZE2X5m
 github.com/caarlos0/env/v11 v11.3.1/go.mod h1:qupehSf/Y0TUTsxKywqRt/vJjN5nz6vauiYEUUr8P4U=
 github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260306073109-ffc8adac2c3b h1:p3MX6iLQcEAJyyFjgUeuu6s0pNExJ+P8FNl+GmPvYBQ=
 github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260306073109-ffc8adac2c3b/go.mod h1:GPxN1dLmErDL7pqOjdPSfe5Y+FF8plJvkVW83kKzeS4=
+github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260310172717-8687acea90b6 h1:Hd7R7TEEAMBp/Y435c8XkSIJyharIzlQjSbyCiDhphY=
+github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260310172717-8687acea90b6/go.mod h1:GPxN1dLmErDL7pqOjdPSfe5Y+FF8plJvkVW83kKzeS4=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=
