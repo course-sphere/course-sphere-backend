@@ -33,6 +33,11 @@ SELECT id
 FROM general.courses
 WHERE status = 'approved';
 
+-- name: GetEnrolledCourses :many
+SELECT id
+FROM general.courses
+WHERE status = 'approved' AND id IN (SELECT course_id FROM general.enrolls WHERE student_id = @student_id);
+
 -- name: GetCourse :one
 SELECT 
     id,
