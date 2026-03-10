@@ -60,3 +60,30 @@ func (s *Server) GetAttemptDetails(c fuego.ContextNoBody) ([]AttemptDetail, erro
 
 	return details, nil
 }
+
+func (s *Server) UpdateAttempt(c fuego.ContextWithBody[UpdateAttemptData]) (any, error) {
+	ctx := c.Context()
+
+	id, err := uuid.Parse(c.PathParam("id"))
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "ID must be UUIDv4",
+		}
+	}
+
+	body, err := c.Body()
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.Attempt.Update(ctx, id, body.Score)
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "Invalid score",
+		}
+	}
+
+	return nil, nil
+}
