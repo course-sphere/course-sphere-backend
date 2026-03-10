@@ -1,4 +1,4 @@
-export type Role = "student" | "instructor" | "admin";
+export type Role = "student" | "instructor" | "reviewer" | "admin";
 
 export type User = {
     email: string;
