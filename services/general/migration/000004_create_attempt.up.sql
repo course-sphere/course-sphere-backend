@@ -4,4 +4,4 @@ CREATE TABLE IF NOT EXISTS general.attempts(
     student_id uuid NOT NULL,
     score int,
     created_at timestamptz NOT NULL DEFAULT now()
-)
+);

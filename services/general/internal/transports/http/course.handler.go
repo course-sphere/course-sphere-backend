@@ -39,6 +39,38 @@ func (s *Server) CreateCourse(c fuego.ContextWithBody[CreateCourseData]) (uuid.U
 	return id, nil
 }
 
+func (s *Server) EnrollCourse(c fuego.ContextNoBody) (any, error) {
+	ctx := c.Context()
+
+	token := c.Value(middleware.TokenKey).(jwt.Token)
+	sub, _ := token.Subject()
+	studentID, err := uuid.Parse(sub)
+	if err != nil {
+		return uuid.Nil, fuego.UnauthorizedError{
+			Err:    err,
+			Detail: "Invalid token",
+		}
+	}
+
+	id, err := uuid.Parse(c.PathParam("id"))
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "ID must be UUIDv4",
+		}
+	}
+
+	err = s.Course.Enroll(ctx, id, studentID)
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "Failed to enroll",
+		}
+	}
+
+	return nil, nil
+}
+
 func (s *Server) GetCourse(c fuego.ContextNoBody) (*Course, error) {
 	id, err := uuid.Parse(c.PathParam("id"))
 	if err != nil {
