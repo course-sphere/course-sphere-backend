@@ -191,6 +191,12 @@ type GeneralCoursePrerequisite struct {
 	OtherID  uuid.UUID
 }
 
+type GeneralEnroll struct {
+	CourseID  uuid.UUID
+	StudentID uuid.UUID
+	CreatedAt time.Time
+}
+
 type GeneralMaterial struct {
 	ID            uuid.UUID
 	CourseID      uuid.UUID

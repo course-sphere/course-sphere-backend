@@ -104,6 +104,20 @@ func (q *Queries) DeleteCoursePrerequisites(ctx context.Context, id uuid.UUID) e
 	return err
 }
 
+const enrollCourse = `-- name: EnrollCourse :exec
+INSERT INTO general.enrolls(course_id, student_id) VALUES($1, $2)
+`
+
+type EnrollCourseParams struct {
+	ID        uuid.UUID
+	StudentID uuid.UUID
+}
+
+func (q *Queries) EnrollCourse(ctx context.Context, arg EnrollCourseParams) error {
+	_, err := q.db.Exec(ctx, enrollCourse, arg.ID, arg.StudentID)
+	return err
+}
+
 const getAllCourses = `-- name: GetAllCourses :many
 SELECT id
 FROM general.courses

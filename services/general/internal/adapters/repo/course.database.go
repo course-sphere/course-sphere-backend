@@ -72,6 +72,15 @@ func (db *CourseDatabase) Create(ctx context.Context, instructorID uuid.UUID, da
 	return id, nil
 }
 
+func (db *CourseDatabase) Enroll(ctx context.Context, id uuid.UUID, studentID uuid.UUID) error {
+	inner := database.New(db.Pool)
+
+	return inner.EnrollCourse(ctx, database.EnrollCourseParams{
+		ID:        id,
+		StudentID: studentID,
+	})
+}
+
 func (db *CourseDatabase) Get(ctx context.Context, id uuid.UUID) (*domain.Course, error) {
 	inner := database.New(db.Pool)
 
