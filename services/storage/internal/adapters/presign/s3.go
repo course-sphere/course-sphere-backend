@@ -40,7 +40,10 @@ func NewS3PresignClient(
 
 	presigner := s3.NewPresignClient(s3Client)
 
-	return &S3PresignClient{inner: presigner}, nil
+	return &S3PresignClient{
+		inner:  presigner,
+		bucket: bucket,
+	}, nil
 }
 
 func (p *S3PresignClient) Create(ctx context.Context, data domain.CreatePresignedRequestData) (*domain.PresignedRequest, error) {
