@@ -48,6 +48,7 @@ func (s *Server) RegisterRoutes(f *fuego.Server) {
 	attempt := fuego.Group(f, "/attempt")
 	fuego.Post(attempt, "/{id}", s.CreateAttemptDetails, authOptions...)
 	fuego.Get(attempt, "/{id}", s.GetAttemptDetails, authOptions...)
+	fuego.Patch(attempt, "/{id}", s.UpdateAttempt, authOptions...)
 }
 
 func (s *Server) OpenAPI(specURL string) http.Handler {

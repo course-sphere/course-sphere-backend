@@ -26,3 +26,7 @@ type CreateAttemptDetailData struct {
 	QuestionID uuid.UUID `json:"question_id" format:"uuid" description:"ID of the question" example:"3fa85f64-5717-4562-b3fc-2c963f66afa6"`
 	Answer     string    `json:"answer" description:"Answer text submitted by the student" example:"B"`
 }
+
+type UpdateAttemptData struct {
+	Score int32 `json:"score"`
+}
