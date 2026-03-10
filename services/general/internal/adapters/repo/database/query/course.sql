@@ -26,7 +26,7 @@ INSERT INTO general.course_categories(course_id, category_id) VALUES (
 INSERT INTO general.course_prerequisites(course_id, other_id) VALUES (@id, @other_id);
 
 -- name: EnrollCourse :exec
-INSERT INTO general.enrolls(course_id, student_id) VALUES(@id, @user_id);
+INSERT INTO general.enrolls(course_id, student_id) VALUES(@id, @student_id);
 
 -- name: GetAllCourses :many
 SELECT id
