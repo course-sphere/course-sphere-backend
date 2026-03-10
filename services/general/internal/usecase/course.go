@@ -30,6 +30,10 @@ func (u *Course) Create(ctx context.Context, instructorID uuid.UUID, data domain
 	return u.Repo.Create(ctx, instructorID, data)
 }
 
+func (u *Course) Enroll(ctx context.Context, id uuid.UUID, studentID uuid.UUID) error {
+	return u.Repo.Enroll(ctx, id, studentID)
+}
+
 func (u *Course) Get(ctx context.Context, id uuid.UUID) (*domain.Course, error) {
 	return u.Repo.Get(ctx, id)
 }

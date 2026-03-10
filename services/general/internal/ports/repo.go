@@ -10,7 +10,7 @@ import (
 
 type CourseRepository interface {
 	Create(ctx context.Context, instructorID uuid.UUID, data domain.CreateCourseData) (uuid.UUID, error)
-	Enroll(ctx context.Context, id uuid.UUID, studentID uuid.UUID)
+	Enroll(ctx context.Context, id uuid.UUID, studentID uuid.UUID) error
 	Get(ctx context.Context, id uuid.UUID) (*domain.Course, error)
 	GetAll(ctx context.Context) ([]domain.Course, error)
 	Update(ctx context.Context, id uuid.UUID, instructorID uuid.UUID, data domain.UpdateCourseData) error
