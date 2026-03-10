@@ -262,6 +262,32 @@ func (q *Queries) GetCoursePrerequisites(ctx context.Context, id uuid.UUID) ([]u
 	return items, nil
 }
 
+const getEnrolledCourses = `-- name: GetEnrolledCourses :many
+SELECT id
+FROM general.courses
+WHERE status = 'approved' AND id IN (SELECT course_id FROM general.enrolls WHERE student_id = $1)
+`
+
+func (q *Queries) GetEnrolledCourses(ctx context.Context, studentID uuid.UUID) ([]uuid.UUID, error) {
+	rows, err := q.db.Query(ctx, getEnrolledCourses, studentID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []uuid.UUID
+	for rows.Next() {
+		var id uuid.UUID
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		items = append(items, id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateCourse = `-- name: UpdateCourse :exec
 UPDATE general.courses
 SET

@@ -139,6 +139,27 @@ func (db *CourseDatabase) GetAll(ctx context.Context) ([]domain.Course, error) {
 	return courses, nil
 }
 
+func (db *CourseDatabase) GetEnrolled(ctx context.Context, studentID uuid.UUID) ([]domain.Course, error) {
+	inner := database.New(db.Pool)
+
+	ids, err := inner.GetEnrolledCourses(ctx, studentID)
+	if err != nil {
+		return nil, err
+	}
+
+	courses := make([]domain.Course, 0)
+	for _, id := range ids {
+		course, err := db.Get(ctx, id)
+		if err != nil {
+			return nil, err
+		}
+
+		courses = append(courses, *course)
+	}
+
+	return courses, nil
+}
+
 func (db *CourseDatabase) Update(ctx context.Context, id uuid.UUID, instructorID uuid.UUID, data domain.UpdateCourseData) error {
 	tx, err := db.Pool.Begin(ctx)
 	if err != nil {

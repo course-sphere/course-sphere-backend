@@ -42,6 +42,10 @@ func (u *Course) GetAll(ctx context.Context) ([]domain.Course, error) {
 	return u.Repo.GetAll(ctx)
 }
 
+func (u *Course) GetEnrolled(ctx context.Context, studentid uuid.UUID) ([]domain.Course, error) {
+	return u.Repo.GetEnrolled(ctx, studentid)
+}
+
 // TODO: optimize
 func (u *Course) GetProgress(ctx context.Context, id uuid.UUID, studentID uuid.UUID) (*domain.CourseProgress, error) {
 	course, err := u.Get(ctx, id)
