@@ -61,17 +61,17 @@ type CreateCourseData struct {
 }
 
 type UpdateCourseData struct {
-	Title              *string      `json:"title,omitempty" description:"Updated course title"`
-	Subtitle           *string      `json:"subtitle,omitempty" description:"Updated course subtitle"`
-	Description        *string      `json:"description,omitempty" description:"Updated course description"`
-	Categories         *[]string    `json:"categories,omitempty" description:"Updated course categories"`
-	Level              *CourseLevel `json:"level,omitempty" enums:"beginner,intermediate,advanced" description:"Updated course level"`
-	ThumbnailURL       *string      `json:"thumbnail_url,omitempty" format:"uri" description:"Updated thumbnail URL"`
-	PromoVideoURL      *string      `json:"promo_video_url,omitempty" format:"uri" description:"Updated promotional video URL"`
-	Price              *float32     `json:"price,omitempty" description:"Updated course price"`
-	Prerequisites      *[]uuid.UUID `json:"prerequisites,omitempty" format:"uuid" description:"Updated prerequisite courses"`
-	Requirements       *[]string    `json:"requirements,omitempty" description:"Updated requirements"`
-	LearningObjectives *[]string    `json:"learning_objectives,omitempty" description:"Updated learning objectives"`
-	TargetAudiences    *[]string    `json:"target_audiences,omitempty" description:"Updated target audiences"`
-	Status             CourseStatus `json:"status,omitempty" description:"Status of the course" enums:"draft,need-review,ai-approved,approved,removed" example:"draft"`
+	Title              *string       `json:"title,omitempty" description:"Updated course title"`
+	Subtitle           *string       `json:"subtitle,omitempty" description:"Updated course subtitle"`
+	Description        *string       `json:"description,omitempty" description:"Updated course description"`
+	Categories         *[]string     `json:"categories,omitempty" description:"Updated course categories"`
+	Level              *CourseLevel  `json:"level,omitempty" enums:"beginner,intermediate,advanced" description:"Updated course level"`
+	ThumbnailURL       *string       `json:"thumbnail_url,omitempty" format:"uri" description:"Updated thumbnail URL"`
+	PromoVideoURL      *string       `json:"promo_video_url,omitempty" format:"uri" description:"Updated promotional video URL"`
+	Price              *float32      `json:"price,omitempty" description:"Updated course price"`
+	Prerequisites      *[]uuid.UUID  `json:"prerequisites,omitempty" format:"uuid" description:"Updated prerequisite courses"`
+	Requirements       *[]string     `json:"requirements,omitempty" description:"Updated requirements"`
+	LearningObjectives *[]string     `json:"learning_objectives,omitempty" description:"Updated learning objectives"`
+	TargetAudiences    *[]string     `json:"target_audiences,omitempty" description:"Updated target audiences"`
+	Status             *CourseStatus `json:"status,omitempty" description:"Status of the course" enums:"draft,need-review,ai-approved,approved,removed" example:"draft"`
 }
