@@ -25,3 +25,21 @@ sql:
             go_type:
               import: "time"
               type: "Time"
+          - db_type: "general.status"
+            nullable: false
+            go_type:
+              type: "string"
+          - db_type: "general.status"
+            nullable: true
+            go_type:
+              type: "string"
+              pointer: true
+          - db_type: "general.level"
+            nullable: false
+            go_type:
+              type: "string"
+          - db_type: "general.level"
+            nullable: true
+            go_type:
+              type: "string"
+              pointer: true

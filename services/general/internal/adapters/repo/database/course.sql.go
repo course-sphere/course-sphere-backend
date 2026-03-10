@@ -65,7 +65,7 @@ type CreateCourseParams struct {
 	InstructorID       uuid.UUID
 	Title              string
 	Description        string
-	Level              GeneralLevel
+	Level              string
 	Price              float32
 	LearningObjectives string
 }
@@ -171,14 +171,14 @@ type GetCourseRow struct {
 	Title              string
 	Subtitle           *string
 	Description        string
-	Level              GeneralLevel
+	Level              string
 	ThumbnailUrl       *string
 	PromoVideoUrl      *string
 	Price              float32
 	Requirements       *string
 	LearningObjectives string
 	TargetAudiences    *string
-	Status             GeneralStatus
+	Status             string
 	Total              int64
 	TotalRequired      int64
 }
@@ -309,14 +309,14 @@ type UpdateCourseParams struct {
 	Title              *string
 	Subtitle           *string
 	Description        *string
-	Level              NullGeneralLevel
+	Level              *string
 	ThumbnailUrl       *string
 	PromoVideoUrl      *string
 	Price              *float32
 	Requirements       *string
 	LearningObjectives *string
 	TargetAudiences    *string
-	Status             NullGeneralStatus
+	Status             *string
 	ID                 uuid.UUID
 	InstructorID       uuid.UUID
 }

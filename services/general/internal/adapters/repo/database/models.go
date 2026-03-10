@@ -170,14 +170,14 @@ type GeneralCourse struct {
 	Title              string
 	Subtitle           *string
 	Description        string
-	Level              GeneralLevel
+	Level              string
 	ThumbnailUrl       *string
 	PromoVideoUrl      *string
 	Price              float32
 	Requirements       *string
 	LearningObjectives string
 	TargetAudiences    *string
-	Status             GeneralStatus
+	Status             string
 }
 
 type GeneralCourseCategory struct {
