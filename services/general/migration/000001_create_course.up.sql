@@ -15,6 +15,7 @@ CREATE TYPE general.level AS ENUM (
 
 CREATE TYPE general.status AS ENUM (
     'draft',
+    'need-review',
     'ai-approved',
     'approved',
     'removed'

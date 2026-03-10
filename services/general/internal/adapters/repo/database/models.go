@@ -104,6 +104,7 @@ type GeneralStatus string
 
 const (
 	GeneralStatusDraft      GeneralStatus = "draft"
+	GeneralStatusNeedReview GeneralStatus = "need-review"
 	GeneralStatusAiApproved GeneralStatus = "ai-approved"
 	GeneralStatusApproved   GeneralStatus = "approved"
 	GeneralStatusRemoved    GeneralStatus = "removed"

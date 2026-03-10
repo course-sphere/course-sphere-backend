@@ -109,12 +109,12 @@ INSERT INTO general.enrolls(course_id, student_id) VALUES($1, $2)
 `
 
 type EnrollCourseParams struct {
-	ID        uuid.UUID
-	StudentID uuid.UUID
+	ID     uuid.UUID
+	UserID uuid.UUID
 }
 
 func (q *Queries) EnrollCourse(ctx context.Context, arg EnrollCourseParams) error {
-	_, err := q.db.Exec(ctx, enrollCourse, arg.ID, arg.StudentID)
+	_, err := q.db.Exec(ctx, enrollCourse, arg.ID, arg.UserID)
 	return err
 }
 
