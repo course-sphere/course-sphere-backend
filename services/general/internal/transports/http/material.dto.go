@@ -16,7 +16,7 @@ type Material struct {
 	ID            uuid.UUID    `json:"id" format:"uuid" description:"Unique material identifier (UUID v4)" example:"550e8400-e29b-41d4-a716-446655440000"`
 	Position      float64      `json:"position" description:"Position/order of the material within the lesson (can be fractional)" example:"1.0"`
 	Kind          MaterialKind `json:"kind" description:"Material type" enums:"text,file,video,quiz,assignment" example:"text"`
-	Lesson        uuid.UUID    `json:"lesson" format:"uuid" description:"ID of the lesson this material belongs to (UUID)" example:"3fa85f64-5717-4562-b3fc-2c963f66afa6"`
+	Lesson        string       `json:"lesson" description:"Name of the lesson this material belongs to" example:"Limits and Continuity"`
 	Title         string       `json:"title" description:"Material title" example:"Introduction to limits"`
 	Content       *string      `json:"content,omitempty" description:"Text content of the material (if applicable)" example:"This is the lesson content..."`
 	RequiredScore *int32       `json:"required_score,omitempty" description:"Minimum score required (if applicable)" example:"70"`
@@ -26,7 +26,7 @@ type Material struct {
 
 type CreateMaterialData struct {
 	Kind          MaterialKind `json:"kind" description:"Material type" enums:"text,file,video,quiz,assignment" example:"text"`
-	Lesson        uuid.UUID    `json:"lesson" format:"uuid" description:"Lesson ID the material will belong to (UUID)" example:"3fa85f64-5717-4562-b3fc-2c963f66afa6"`
+	Lesson        string       `json:"lesson" description:"Name of the lesson the material will belong to" example:"Limits and Continuity"`
 	Title         string       `json:"title" description:"Material title" example:"Introduction to limits"`
 	Content       *string      `json:"content,omitempty" description:"Text content of the material (if applicable)"`
 	RequiredScore *int32       `json:"required_score,omitempty" description:"Minimum score required (if applicable)" example:"70"`
@@ -41,7 +41,7 @@ type MoveMaterialData struct {
 
 type UpdateMaterialData struct {
 	Position      *float64   `json:"position,omitempty" description:"Updated position/order" example:"2.5"`
-	Lesson        *uuid.UUID `json:"lesson,omitempty" format:"uuid" description:"Updated lesson ID (UUID)"`
+	Lesson        *string    `json:"lesson,omitempty" description:"Updated lesson name" example:"Limits and Continuity"`
 	Title         *string    `json:"title,omitempty" description:"Updated title"`
 	Content       *string    `json:"content,omitempty" description:"Updated content"`
 	RequiredScore *int32     `json:"required_score,omitempty" description:"Updated minimum score required" example:"75"`
