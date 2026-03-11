@@ -30,8 +30,7 @@ INSERT INTO general.enrolls(course_id, student_id) VALUES(@id, @student_id);
 
 -- name: GetAllCourses :many
 SELECT id
-FROM general.courses
-WHERE status = 'approved';
+FROM general.courses;
 
 -- name: GetEnrolledCourses :many
 SELECT id
