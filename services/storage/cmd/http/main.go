@@ -13,6 +13,7 @@ import (
 	"github.com/go-fuego/fuego"
 
 	"github.com/course-sphere/course-sphere-backend/services/storage/internal/adapters/presign"
+	"github.com/course-sphere/course-sphere-backend/services/storage/internal/adapters/storage"
 	"github.com/course-sphere/course-sphere-backend/services/storage/internal/config"
 	server "github.com/course-sphere/course-sphere-backend/services/storage/internal/transports/http"
 	"github.com/course-sphere/course-sphere-backend/services/storage/internal/usecase"
@@ -50,11 +51,16 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	presign := usecase.Presign{Presigner: presigner}
+
+	storage, err := storage.NewS3Storage(ctx, cfg.S3Endpoint, cfg.S3Bucket)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	s := server.Server{
 		Config:  &cfg,
-		Presign: presign,
+		Presign: usecase.Presign{Presigner: presigner},
+		Storage: usecase.Storage{Inner: storage},
 	}
 	server := s.Build()
 

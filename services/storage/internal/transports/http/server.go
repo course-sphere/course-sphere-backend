@@ -14,6 +14,7 @@ import (
 type Server struct {
 	Config  *config.Config
 	Presign usecase.Presign
+	Storage usecase.Storage
 }
 
 func (s *Server) Build() *fuego.Server {
