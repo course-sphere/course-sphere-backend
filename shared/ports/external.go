@@ -15,3 +15,7 @@ type AuthClient interface {
 type UserClient interface {
 	Get(ctx context.Context, id uuid.UUID) (*domain.User, error)
 }
+
+type GeneralClient interface {
+	GetEnrolledCourses(ctx context.Context, token string) ([]uuid.UUID, error)
+}
