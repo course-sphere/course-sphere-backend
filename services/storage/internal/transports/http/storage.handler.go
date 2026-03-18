@@ -47,7 +47,7 @@ func (s *Server) Get(c fuego.ContextNoBody) (any, error) {
 
 	key := c.PathParam("key")
 
-	file, err := s.Storage.Get(ctx, key)
+	file, err := s.Storage.Get(ctx, key, c.Header("Authorization"))
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Err:    err,

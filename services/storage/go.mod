@@ -8,7 +8,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.97.0
 	github.com/aws/smithy-go v1.24.2
 	github.com/caarlos0/env/v11 v11.4.0
-	github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260306061803-d855409ce3d0
+	github.com/course-sphere/course-sphere-backend/shared v0.0.0-20260318034119-d1323ec43a7d
 	github.com/getkin/kin-openapi v0.133.0
 	github.com/go-fuego/fuego v0.19.1-0.20260312234550-004e61530228
 	github.com/jinzhu/copier v0.4.0

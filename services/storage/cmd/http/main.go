@@ -17,6 +17,7 @@ import (
 	"github.com/course-sphere/course-sphere-backend/services/storage/internal/config"
 	server "github.com/course-sphere/course-sphere-backend/services/storage/internal/transports/http"
 	"github.com/course-sphere/course-sphere-backend/services/storage/internal/usecase"
+	"github.com/course-sphere/course-sphere-backend/shared/adapters/external"
 )
 
 func gracefulShutdown(apiServer *fuego.Server, done chan bool) {
@@ -57,10 +58,12 @@ func main() {
 		log.Fatal(err)
 	}
 
+	general := &external.HTTPGeneralClient{ProxyURL: cfg.ProxyURL}
+
 	s := server.Server{
 		Config:  &cfg,
 		Presign: usecase.Presign{Presigner: presigner},
-		Storage: usecase.Storage{Inner: storage},
+		Storage: usecase.Storage{Inner: storage, GeneralClient: general},
 	}
 	server := s.Build()
 
