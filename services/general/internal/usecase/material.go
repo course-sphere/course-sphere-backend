@@ -18,6 +18,10 @@ func (u *Material) Create(ctx context.Context, courseID uuid.UUID, data domain.C
 	return u.Repo.Create(ctx, courseID, data)
 }
 
+func (u *Material) Get(ctx context.Context, id uuid.UUID) (*domain.Material, error) {
+	return u.Repo.Get(ctx, id)
+}
+
 func (u *Material) GetByCourse(ctx context.Context, courseID uuid.UUID) ([]domain.Material, error) {
 	return u.Repo.GetByCourse(ctx, courseID)
 }

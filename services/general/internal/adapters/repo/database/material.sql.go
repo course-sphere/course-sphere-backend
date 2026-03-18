@@ -63,6 +63,28 @@ func (q *Queries) CreateMaterial(ctx context.Context, arg CreateMaterialParams) 
 	return id, err
 }
 
+const getMaterial = `-- name: GetMaterial :one
+SELECT id, course_id, position, kind, lesson, title, content, required_score, required_peers, is_required FROM general.materials WHERE id = $1
+`
+
+func (q *Queries) GetMaterial(ctx context.Context, id uuid.UUID) (GeneralMaterial, error) {
+	row := q.db.QueryRow(ctx, getMaterial, id)
+	var i GeneralMaterial
+	err := row.Scan(
+		&i.ID,
+		&i.CourseID,
+		&i.Position,
+		&i.Kind,
+		&i.Lesson,
+		&i.Title,
+		&i.Content,
+		&i.RequiredScore,
+		&i.RequiredPeers,
+		&i.IsRequired,
+	)
+	return i, err
+}
+
 const getMaterialPosition = `-- name: GetMaterialPosition :one
 SELECT position FROM general.materials WHERE id = $1
 `

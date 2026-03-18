@@ -19,6 +19,7 @@ type CourseRepository interface {
 
 type MaterialRepository interface {
 	Create(ctx context.Context, courseID uuid.UUID, data domain.CreateMaterialData) (uuid.UUID, error)
+	Get(ctx context.Context, id uuid.UUID) (*domain.Material, error)
 	GetByCourse(ctx context.Context, courseID uuid.UUID) ([]domain.Material, error)
 	GetPosition(ctx context.Context, id uuid.UUID) (float64, error)
 	Update(ctx context.Context, id uuid.UUID, data domain.UpdateMaterialData) error
