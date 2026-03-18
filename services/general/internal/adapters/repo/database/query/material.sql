@@ -22,6 +22,9 @@ INSERT INTO general.materials(
 )
 RETURNING id;
 
+-- name: GetMaterial :one
+SELECT * FROM general.materials WHERE id = @id;
+
 -- name: GetMaterialsByCourse :many
 SELECT * FROM general.materials WHERE course_id = @course_id;
 

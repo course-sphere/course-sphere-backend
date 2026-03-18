@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jinzhu/copier"
 
@@ -25,6 +26,23 @@ func (db *MaterialDatabase) Create(ctx context.Context, courseID uuid.UUID, data
 	copier.Copy(&params, &data)
 
 	return inner.CreateMaterial(ctx, params)
+}
+
+func (db *MaterialDatabase) Get(ctx context.Context, id uuid.UUID) (*domain.Material, error) {
+	inner := database.New(db.Pool)
+
+	raw, err := inner.GetMaterial(ctx, id)
+	if err == pgx.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	var material domain.Material
+	copier.Copy(&material, &raw)
+
+	return &material, nil
 }
 
 func (db *MaterialDatabase) GetByCourse(ctx context.Context, courseID uuid.UUID) ([]domain.Material, error) {

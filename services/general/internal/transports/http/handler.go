@@ -36,6 +36,7 @@ func (s *Server) RegisterRoutes(f *fuego.Server) {
 	fuego.Get(course, "/{id}/progress", s.GetCourseProgress, authOptions...)
 
 	material := fuego.Group(f, "/material")
+	fuego.Get(material, "/{id}", s.GetMaterial, option.Hide())
 	fuego.Post(material, "/{id}/move", s.MoveMaterial, authOptions...)
 	fuego.Patch(material, "/{id}", s.UpdateMaterial, authOptions...)
 	fuego.Post(material, "/{id}/question", s.CreateQuestion, authOptions...)

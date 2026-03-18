@@ -42,6 +42,27 @@ func (s *Server) CreateAttempt(c fuego.ContextNoBody) (uuid.UUID, error) {
 	return attemptID, nil
 }
 
+func (s *Server) GetMaterial(c fuego.ContextNoBody) (*Material, error) {
+	ctx := c.Context()
+
+	id, err := uuid.Parse(c.PathParam("id"))
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "ID must be UUIDv4",
+		}
+	}
+
+	raw, err := s.Material.Get(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	var material Material
+	copier.Copy(&material, &raw)
+
+	return &material, nil
+}
+
 func (s *Server) GetAttempts(c fuego.ContextNoBody) ([]Attempt, error) {
 	ctx := c.Context()
 
