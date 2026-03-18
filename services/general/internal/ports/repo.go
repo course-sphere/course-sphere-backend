@@ -13,7 +13,7 @@ type CourseRepository interface {
 	Enroll(ctx context.Context, id uuid.UUID, studentID uuid.UUID) error
 	Get(ctx context.Context, id uuid.UUID) (*domain.Course, error)
 	GetAll(ctx context.Context) ([]domain.Course, error)
-	GetEnrolled(ctx context.Context, studentID uuid.UUID) ([]domain.Course, error)
+	GetEnrolled(ctx context.Context, studentID uuid.UUID) ([]uuid.UUID, error)
 	Update(ctx context.Context, id uuid.UUID, instructorID uuid.UUID, data domain.UpdateCourseData) error
 }
 

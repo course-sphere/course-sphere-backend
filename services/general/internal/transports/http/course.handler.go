@@ -126,7 +126,7 @@ func (s *Server) GetAllCourses(c fuego.ContextNoBody) ([]Course, error) {
 	return courses, nil
 }
 
-func (s *Server) GetEnrolledCourses(c fuego.ContextNoBody) ([]Course, error) {
+func (s *Server) GetEnrolledCourses(c fuego.ContextNoBody) ([]uuid.UUID, error) {
 	token := c.Value(middleware.TokenKey).(jwt.Token)
 	sub, _ := token.Subject()
 	studentID, err := uuid.Parse(sub)
@@ -137,27 +137,14 @@ func (s *Server) GetEnrolledCourses(c fuego.ContextNoBody) ([]Course, error) {
 		}
 	}
 
-	raw, err := s.Course.GetEnrolled(c.Context(), studentID)
+	ids, err := s.Course.GetEnrolled(c.Context(), studentID)
 	if err != nil {
 		return nil, fuego.InternalServerError{
 			Err: err,
 		}
 	}
 
-	var courses []Course
-	copier.CopyWithOption(&courses, &raw, copier.Option{DeepCopy: true})
-
-	for i := range courses {
-		instructor, err := s.UserClient.Get(c.Context(), raw[i].InstructorID)
-		if err != nil {
-			return nil, fuego.InternalServerError{
-				Err: err,
-			}
-		}
-		courses[i].Instructor = *instructor
-	}
-
-	return courses, nil
+	return ids, nil
 }
 
 func (s *Server) GetCourseProgress(c fuego.ContextNoBody) ([]CourseProgress, error) {
