@@ -18,7 +18,7 @@ type CourseStatus string
 
 const (
 	Draft      CourseStatus = "draft"
-	NeedReview CourseStatus = "need-review"
+	Reviewing  CourseStatus = "reviewing"
 	AIApproved CourseStatus = "ai-approved"
 	Approved   CourseStatus = "approved"
 	Removed    CourseStatus = "removed"
@@ -39,7 +39,7 @@ type Course struct {
 	Requirements       []string          `json:"requirements,omitempty" description:"Requirements students should meet before taking the course"`
 	LearningObjectives []string          `json:"learning_objectives,omitempty" description:"Skills or knowledge students will gain"`
 	TargetAudiences    []string          `json:"target_audiences,omitempty" description:"Intended audience for the course"`
-	Status             CourseStatus      `json:"status" description:"Status of the course" enums:"draft,need-review,ai-approved,approved,removed" example:"draft"`
+	Status             CourseStatus      `json:"status" description:"Status of the course" enums:"draft,reviewing,ai-approved,approved,removed" example:"draft"`
 
 	Total         int32 `json:"total" description:"Total number of learners enrolled" example:"120"`
 	TotalRequired int32 `json:"total_required" description:"Total number of required materials/steps" example:"10"`
@@ -73,5 +73,5 @@ type UpdateCourseData struct {
 	Requirements       *[]string     `json:"requirements,omitempty" description:"Updated requirements"`
 	LearningObjectives *[]string     `json:"learning_objectives,omitempty" description:"Updated learning objectives"`
 	TargetAudiences    *[]string     `json:"target_audiences,omitempty" description:"Updated target audiences"`
-	Status             *CourseStatus `json:"status,omitempty" description:"Status of the course" enums:"draft,need-review,ai-approved,approved,removed" example:"draft"`
+	Status             *CourseStatus `json:"status,omitempty" description:"Status of the course" enums:"draft,reviewing,ai-approved,approved,removed" example:"draft"`
 }

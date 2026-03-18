@@ -16,7 +16,7 @@ type CourseStatus string
 
 const (
 	Draft      CourseStatus = "draft"
-	NeedReview CourseStatus = "need-review"
+	Reviewing  CourseStatus = "reviewing"
 	AIApproved CourseStatus = "ai-approved"
 	Approved   CourseStatus = "approved"
 	Removed    CourseStatus = "removed"
