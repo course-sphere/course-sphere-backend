@@ -42,7 +42,7 @@ func (u *Course) GetAll(ctx context.Context) ([]domain.Course, error) {
 	return u.Repo.GetAll(ctx)
 }
 
-func (u *Course) GetEnrolled(ctx context.Context, studentid uuid.UUID) ([]domain.Course, error) {
+func (u *Course) GetEnrolled(ctx context.Context, studentid uuid.UUID) ([]uuid.UUID, error) {
 	return u.Repo.GetEnrolled(ctx, studentid)
 }
 
