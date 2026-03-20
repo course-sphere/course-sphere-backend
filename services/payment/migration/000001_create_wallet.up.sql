@@ -12,5 +12,6 @@ CREATE TABLE IF NOT EXISTS payment.histories(
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     wallet_id uuid NOT NULL REFERENCES payment.wallets(id),
     amount bigint NOT NULL,
-    detail text NOT NULL
+    detail text NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now()
 );
