@@ -5,7 +5,7 @@ CREATE SCHEMA IF NOT EXISTS payment;
 CREATE TABLE IF NOT EXISTS payment.wallets(
     id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id uuid UNIQUE NOT NULL,
-    amount bigint NOT NULL DEFAULT 0
+    balance bigint NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS payment.histories(
