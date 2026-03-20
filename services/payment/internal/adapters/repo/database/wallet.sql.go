@@ -22,45 +22,29 @@ func (q *Queries) CreateWallet(ctx context.Context, userID uuid.UUID) error {
 	return err
 }
 
-const depositWallet = `-- name: DepositWallet :exec
-UPDATE payment.wallets
-SET amount = amount + $1
-WHERE user_id = $2
-`
-
-type DepositWalletParams struct {
-	DepositAmount int64
-	UserID        uuid.UUID
-}
-
-func (q *Queries) DepositWallet(ctx context.Context, arg DepositWalletParams) error {
-	_, err := q.db.Exec(ctx, depositWallet, arg.DepositAmount, arg.UserID)
-	return err
-}
-
 const getWallet = `-- name: GetWallet :one
-SELECT amount FROM payment.wallets WHERE user_id = $1
+SELECT id, user_id, balance FROM payment.wallets WHERE user_id = $1
 `
 
-func (q *Queries) GetWallet(ctx context.Context, userID uuid.UUID) (int64, error) {
+func (q *Queries) GetWallet(ctx context.Context, userID uuid.UUID) (PaymentWallet, error) {
 	row := q.db.QueryRow(ctx, getWallet, userID)
-	var amount int64
-	err := row.Scan(&amount)
-	return amount, err
+	var i PaymentWallet
+	err := row.Scan(&i.ID, &i.UserID, &i.Balance)
+	return i, err
 }
 
-const withdrawWallet = `-- name: WithdrawWallet :exec
+const updateWalletBalance = `-- name: UpdateWalletBalance :exec
 UPDATE payment.wallets
-SET amount = amount - $1
-WHERE user_id = $2
+SET balance = balance + $1
+WHERE id = $2
 `
 
-type WithdrawWalletParams struct {
-	WithdrawAmount int64
-	UserID         uuid.UUID
+type UpdateWalletBalanceParams struct {
+	Amount int64
+	ID     uuid.UUID
 }
 
-func (q *Queries) WithdrawWallet(ctx context.Context, arg WithdrawWalletParams) error {
-	_, err := q.db.Exec(ctx, withdrawWallet, arg.WithdrawAmount, arg.UserID)
+func (q *Queries) UpdateWalletBalance(ctx context.Context, arg UpdateWalletBalanceParams) error {
+	_, err := q.db.Exec(ctx, updateWalletBalance, arg.Amount, arg.ID)
 	return err
 }

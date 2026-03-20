@@ -6,17 +6,19 @@ package database
 
 import (
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type PaymentHistory struct {
-	ID       uuid.UUID
-	WalletID uuid.UUID
-	Amount   int64
-	Detail   string
+	ID        uuid.UUID
+	WalletID  uuid.UUID
+	Amount    int64
+	Detail    string
+	CreatedAt pgtype.Timestamptz
 }
 
 type PaymentWallet struct {
-	ID     uuid.UUID
-	UserID uuid.UUID
-	Amount int64
+	ID      uuid.UUID
+	UserID  uuid.UUID
+	Balance int64
 }
