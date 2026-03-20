@@ -8,12 +8,16 @@ import (
 
 	"github.com/course-sphere/course-sphere-backend/services/payment/internal/config"
 	"github.com/course-sphere/course-sphere-backend/services/payment/internal/usecase"
+	"github.com/course-sphere/course-sphere-backend/shared/ports"
 	"github.com/course-sphere/course-sphere-backend/shared/transports/http/middleware"
 )
 
 type Server struct {
 	Config *config.Config
+
 	Wallet usecase.Wallet
+
+	AuthClient ports.AuthClient
 }
 
 func (s *Server) Build() *fuego.Server {
@@ -32,6 +36,15 @@ func (s *Server) Build() *fuego.Server {
 				},
 			}),
 		),
+		fuego.WithSecurity(openapi3.SecuritySchemes{
+			"bearerAuth": &openapi3.SecuritySchemeRef{
+				Value: openapi3.NewSecurityScheme().
+					WithType("http").
+					WithScheme("bearer").
+					WithBearerFormat("JWT").
+					WithDescription("Enter your JWT token in the format: Bearer <token>"),
+			},
+		}),
 	)
 	s.RegisterRoutes(f)
 

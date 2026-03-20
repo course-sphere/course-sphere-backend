@@ -16,6 +16,7 @@ import (
 	"github.com/course-sphere/course-sphere-backend/services/payment/internal/config"
 	server "github.com/course-sphere/course-sphere-backend/services/payment/internal/transports/http"
 	"github.com/course-sphere/course-sphere-backend/services/payment/internal/usecase"
+	"github.com/course-sphere/course-sphere-backend/shared/adapters/external"
 )
 
 func gracefulShutdown(apiServer *fuego.Server, done chan bool) {
@@ -54,9 +55,13 @@ func main() {
 		HistoryRepo: &repo.History,
 	}
 
+	authClient := external.HTTPAuthClient{ProxyURL: cfg.ProxyURL}
+
 	s := server.Server{
 		Config: &cfg,
 		Wallet: wallet,
+
+		AuthClient: &authClient,
 	}
 	server := s.Build()
 

@@ -1,15 +1,31 @@
 package http
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-fuego/fuego"
+	"github.com/go-fuego/fuego/option"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
+
+	"github.com/course-sphere/course-sphere-backend/shared/transports/http/middleware"
 )
 
 func (s *Server) RegisterRoutes(f *fuego.Server) {
+	ctx := context.Background()
+
 	fuego.Get(f, "/", s.Ping)
+
+	jwks := s.AuthClient.MustGetJwks(ctx)
+	tokenMiddleware := middleware.RequireToken(jwks)
+	authOptions := []fuego.RouteOption{
+		option.Middleware(tokenMiddleware),
+		option.Security(openapi3.SecurityRequirement{"bearerAuth": []string{}}),
+	}
+
+	fuego.Get(f, "/histories", s.GetWalletHistories, authOptions...)
 }
 
 func (s *Server) OpenAPI(specURL string) http.Handler {
