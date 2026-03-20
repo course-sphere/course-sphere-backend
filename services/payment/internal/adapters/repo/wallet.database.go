@@ -38,11 +38,31 @@ func (db *WalletDatabase) GetByUser(ctx context.Context, userID uuid.UUID) (*dom
 	return &wallet, nil
 }
 
-func (db *WalletDatabase) Update(ctx context.Context, id uuid.UUID, amount int64) error {
-	inner := database.New(db.Pool)
+func (db *WalletDatabase) Update(ctx context.Context, id uuid.UUID, amount int64, detail string) error {
+	tx, err := db.Pool.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
 
-	return inner.UpdateWallet(ctx, database.UpdateWalletParams{
+	inner := database.New(db.Pool).WithTx(tx)
+
+	err = inner.CreateHistory(ctx, database.CreateHistoryParams{
+		WalletID: id,
+		Amount:   amount,
+		Detail:   detail,
+	})
+	if err != nil {
+		return err
+	}
+
+	err = inner.UpdateWallet(ctx, database.UpdateWalletParams{
 		ID:     id,
 		Amount: amount,
 	})
+	if err != nil {
+		return err
+	}
+
+	return tx.Commit(ctx)
 }

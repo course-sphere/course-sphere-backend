@@ -12,8 +12,3 @@ type History struct {
 	Detail    string
 	CreatedAt time.Time
 }
-
-type CreateHistoryData struct {
-	Amount int64
-	Detail string
-}
