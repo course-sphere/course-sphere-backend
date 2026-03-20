@@ -14,6 +14,5 @@ type WalletRepository interface {
 }
 
 type HistoryRepository interface {
-	Create(ctx context.Context, walletID uuid.UUID, data domain.CreateHistoryData) error
 	GetByWallet(ctx context.Context, walletID uuid.UUID) ([]domain.History, error)
 }
