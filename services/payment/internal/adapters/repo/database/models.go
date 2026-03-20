@@ -8,7 +8,15 @@ import (
 	"github.com/google/uuid"
 )
 
+type PaymentHistory struct {
+	ID       uuid.UUID
+	WalletID uuid.UUID
+	Amount   int64
+	Detail   string
+}
+
 type PaymentWallet struct {
+	ID     uuid.UUID
 	UserID uuid.UUID
 	Amount int64
 }
