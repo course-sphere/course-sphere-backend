@@ -16,6 +16,10 @@ handle /storage/* {
     reverse_proxy :3001
 }
 
-handle {
+handle /payment/* {
     reverse_proxy :3002
+}
+
+handle {
+    reverse_proxy :3003
 }
