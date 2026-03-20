@@ -10,7 +10,7 @@ import (
 type WalletRepository interface {
 	Create(ctx context.Context, userID uuid.UUID) error
 	GetByUser(ctx context.Context, userID uuid.UUID) (*domain.Wallet, error)
-	Update(ctx context.Context, id uuid.UUID, amount int64) error
+	Update(ctx context.Context, id uuid.UUID, amount int64, detail string) error
 }
 
 type HistoryRepository interface {

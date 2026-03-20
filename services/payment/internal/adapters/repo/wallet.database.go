@@ -16,7 +16,7 @@ type WalletDatabase struct {
 	Pool *pgxpool.Pool
 }
 
-var _ ports.WalletRepository = &CourseDatabase{}
+var _ ports.WalletRepository = &WalletDatabase{}
 
 func (db *WalletDatabase) Create(ctx context.Context, userID uuid.UUID) error {
 	inner := database.New(db.Pool)
@@ -38,7 +38,7 @@ func (db *WalletDatabase) GetByUser(ctx context.Context, userID uuid.UUID) (*dom
 	return &wallet, nil
 }
 
-func (db *WalletDatabase) UpdateBalance(ctx context.Context, id uuid.UUID, amount int64) error {
+func (db *WalletDatabase) Update(ctx context.Context, id uuid.UUID, amount int64) error {
 	inner := database.New(db.Pool)
 
 	return inner.UpdateWallet(ctx, database.UpdateWalletParams{
