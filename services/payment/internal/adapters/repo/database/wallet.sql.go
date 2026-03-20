@@ -22,29 +22,29 @@ func (q *Queries) CreateWallet(ctx context.Context, userID uuid.UUID) error {
 	return err
 }
 
-const getWallet = `-- name: GetWallet :one
+const getWalletByUser = `-- name: GetWalletByUser :one
 SELECT id, user_id, balance FROM payment.wallets WHERE user_id = $1
 `
 
-func (q *Queries) GetWallet(ctx context.Context, userID uuid.UUID) (PaymentWallet, error) {
-	row := q.db.QueryRow(ctx, getWallet, userID)
+func (q *Queries) GetWalletByUser(ctx context.Context, userID uuid.UUID) (PaymentWallet, error) {
+	row := q.db.QueryRow(ctx, getWalletByUser, userID)
 	var i PaymentWallet
 	err := row.Scan(&i.ID, &i.UserID, &i.Balance)
 	return i, err
 }
 
-const updateWalletBalance = `-- name: UpdateWalletBalance :exec
+const updateWallet = `-- name: UpdateWallet :exec
 UPDATE payment.wallets
 SET balance = balance + $1
 WHERE id = $2
 `
 
-type UpdateWalletBalanceParams struct {
+type UpdateWalletParams struct {
 	Amount int64
 	ID     uuid.UUID
 }
 
-func (q *Queries) UpdateWalletBalance(ctx context.Context, arg UpdateWalletBalanceParams) error {
-	_, err := q.db.Exec(ctx, updateWalletBalance, arg.Amount, arg.ID)
+func (q *Queries) UpdateWallet(ctx context.Context, arg UpdateWalletParams) error {
+	_, err := q.db.Exec(ctx, updateWallet, arg.Amount, arg.ID)
 	return err
 }
