@@ -5,6 +5,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-fuego/fuego"
+	"github.com/payOSHQ/payos-lib-golang/v2"
 
 	"github.com/course-sphere/course-sphere-backend/services/payment/internal/config"
 	"github.com/course-sphere/course-sphere-backend/services/payment/internal/usecase"
@@ -17,7 +18,8 @@ type Server struct {
 
 	Wallet usecase.Wallet
 
-	AuthClient ports.AuthClient
+	AuthClient  ports.AuthClient
+	PayOSClient *payos.PayOS
 }
 
 func (s *Server) Build() *fuego.Server {

@@ -11,6 +11,7 @@ import (
 
 	"github.com/caarlos0/env/v11"
 	"github.com/go-fuego/fuego"
+	"github.com/payOSHQ/payos-lib-golang/v2"
 
 	"github.com/course-sphere/course-sphere-backend/services/payment/internal/adapters/repo"
 	"github.com/course-sphere/course-sphere-backend/services/payment/internal/config"
@@ -57,11 +58,22 @@ func main() {
 
 	authClient := external.HTTPAuthClient{ProxyURL: cfg.ProxyURL}
 
+	payOSClient, err := payos.NewPayOS(&payos.PayOSOptions{
+		ClientId:    cfg.PayOSClientID,
+		ApiKey:      cfg.PayOSApiKey,
+		ChecksumKey: cfg.PayOSChecksumKey,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	s := server.Server{
 		Config: &cfg,
+
 		Wallet: wallet,
 
-		AuthClient: &authClient,
+		AuthClient:  &authClient,
+		PayOSClient: payOSClient,
 	}
 	server := s.Build()
 
