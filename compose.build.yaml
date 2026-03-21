@@ -5,14 +5,20 @@ services:
       context: services/account
       dockerfile: Dockerfile
 
-  general-service:
-    image: ${REGISTRY}/general-service:latest
-    build:
-      context: services/general
-      dockerfile: cmd/http/Dockerfile
-
   storage-service:
     image: ${REGISTRY}/storage-service:latest
     build:
       context: services/storage
+      dockerfile: cmd/http/Dockerfile
+
+  payment-service:
+    image: ${REGISTRY}/payment-service:latest
+    build:
+      context: services/payment
+      dockerfile: cmd/http/Dockerfile
+
+  general-service:
+    image: ${REGISTRY}/general-service:latest
+    build:
+      context: services/general
       dockerfile: cmd/http/Dockerfile

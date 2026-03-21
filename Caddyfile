@@ -20,6 +20,10 @@ handle /storage/* {
     reverse_proxy storage-service:3000
 }
 
+handle /payment/* {
+    reverse_proxy payment-service:3000
+}
+
 handle {
     reverse_proxy general-service:3000
 }
