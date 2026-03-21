@@ -230,3 +230,21 @@ type GeneralQuestionPossibleAnswer struct {
 	QuestionID uuid.UUID
 	Answer     string
 }
+
+type GeneralRoadmap struct {
+	ID          uuid.UUID
+	AuthorID    uuid.UUID
+	Position    float64
+	Title       string
+	Description string
+}
+
+type GeneralRoadmapCourse struct {
+	RoadmapID uuid.UUID
+	CourseID  uuid.UUID
+}
+
+type GeneralStudentRoadmap struct {
+	StudentID uuid.UUID
+	RoadmapID uuid.UUID
+}
