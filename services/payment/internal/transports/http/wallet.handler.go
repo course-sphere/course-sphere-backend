@@ -153,7 +153,7 @@ func (s *Server) PaymentCallback(c fuego.Context[PaymentCallbackData, PaymentCal
 
 	walletID := cache[body.OrderCode]
 
-	err = s.Wallet.Update(ctx, walletID, body.Amount, body.Description)
+	err = s.Wallet.Deposit(ctx, walletID, body.Amount, body.Description)
 
 	return nil, err
 }

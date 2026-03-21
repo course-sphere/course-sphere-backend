@@ -2,10 +2,15 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/course-sphere/course-sphere-backend/services/payment/internal/domain"
 	"github.com/course-sphere/course-sphere-backend/services/payment/internal/ports"
 	"github.com/google/uuid"
+)
+
+var (
+	InvalidAmountErr error = fmt.Errorf("Invalid amount")
 )
 
 type Wallet struct {
@@ -22,7 +27,19 @@ func (u *Wallet) GetByUser(ctx context.Context, userID uuid.UUID) (*domain.Walle
 	return u.WalletRepo.GetByUser(ctx, userID)
 }
 
-func (u *Wallet) Update(ctx context.Context, id uuid.UUID, amount int64, detail string) error {
+func (u *Wallet) Deposit(ctx context.Context, id uuid.UUID, amount int64, detail string) error {
+	if amount <= 0 {
+		return InvalidAmountErr
+	}
+
+	return u.WalletRepo.Update(ctx, id, amount, detail)
+}
+
+func (u *Wallet) Withdraw(ctx context.Context, id uuid.UUID, amount int64, detail string) error {
+	if amount >= 0 {
+		return InvalidAmountErr
+	}
+
 	return u.WalletRepo.Update(ctx, id, amount, detail)
 }
 
