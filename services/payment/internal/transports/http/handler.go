@@ -25,8 +25,11 @@ func (s *Server) RegisterRoutes(f *fuego.Server) {
 		option.Security(openapi3.SecurityRequirement{"bearerAuth": []string{}}),
 	}
 
-	fuego.Get(f, "/wallet", s.GetWalletByUser, authOptions...)
-	fuego.Get(f, "/wallet/histories", s.GetWalletHistories, authOptions...)
+	fuego.Post(f, "/", s.CreatePaymentLink, authOptions...)
+
+	wallet := fuego.Group(f, "/wallet")
+	fuego.Get(wallet, "/", s.GetWalletByUser, authOptions...)
+	fuego.Get(wallet, "/histories", s.GetWalletHistories, authOptions...)
 }
 
 func (s *Server) OpenAPI(specURL string) http.Handler {
