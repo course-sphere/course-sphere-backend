@@ -47,5 +47,5 @@ type RoadmapRepository interface {
 	GetAll(ctx context.Context) ([]uuid.UUID, error)
 	GetByStudent(ctx context.Context, studentID uuid.UUID) ([]uuid.UUID, error)
 	Get(ctx context.Context, id uuid.UUID) (*domain.Roadmap, error)
-	Update(ctx context.Context, id uuid.UUID, data domain.UpdateMaterialData) error
+	Update(ctx context.Context, id uuid.UUID, data domain.UpdateRoadmapData) error
 }

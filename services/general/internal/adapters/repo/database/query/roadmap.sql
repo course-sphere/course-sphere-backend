@@ -8,7 +8,7 @@ INSERT INTO general.roadmaps(
     @author_id,
     @title,
     @description,
-    COALESCE((SELECT MAX(position) FROM general.materials WHERE course_id = @course_id), 0) + 1000
+    COALESCE((SELECT MAX(position) FROM general.roadmaps), 0) + 1000
 )
 RETURNING id;
 
@@ -33,6 +33,9 @@ WHERE id IN (
 
 -- name: GetRoadmap :one
 SELECT * FROM general.roadmaps WHERE id = @id;
+
+-- name: GetRoadmapCourse :many
+SELECT course_id FROM general.roadmap_courses WHERE roadmap_id = @id;
 
 -- name: UpdateRoadmap :exec
 UPDATE general.roadmaps

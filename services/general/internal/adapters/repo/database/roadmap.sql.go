@@ -51,7 +51,7 @@ INSERT INTO general.roadmaps(
     $1,
     $2,
     $3,
-    COALESCE((SELECT MAX(position) FROM general.materials WHERE course_id = $4), 0) + 1000
+    COALESCE((SELECT MAX(position) FROM general.roadmaps), 0) + 1000
 )
 RETURNING id
 `
@@ -60,16 +60,10 @@ type CreateRoadmapParams struct {
 	AuthorID    uuid.UUID
 	Title       string
 	Description string
-	CourseID    uuid.UUID
 }
 
 func (q *Queries) CreateRoadmap(ctx context.Context, arg CreateRoadmapParams) (uuid.UUID, error) {
-	row := q.db.QueryRow(ctx, createRoadmap,
-		arg.AuthorID,
-		arg.Title,
-		arg.Description,
-		arg.CourseID,
-	)
+	row := q.db.QueryRow(ctx, createRoadmap, arg.AuthorID, arg.Title, arg.Description)
 	var id uuid.UUID
 	err := row.Scan(&id)
 	return id, err
@@ -114,6 +108,30 @@ func (q *Queries) GetRoadmap(ctx context.Context, id uuid.UUID) (GeneralRoadmap,
 		&i.Description,
 	)
 	return i, err
+}
+
+const getRoadmapCourse = `-- name: GetRoadmapCourse :many
+SELECT course_id FROM general.roadmap_courses WHERE roadmap_id = $1
+`
+
+func (q *Queries) GetRoadmapCourse(ctx context.Context, id uuid.UUID) ([]uuid.UUID, error) {
+	rows, err := q.db.Query(ctx, getRoadmapCourse, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []uuid.UUID
+	for rows.Next() {
+		var course_id uuid.UUID
+		if err := rows.Scan(&course_id); err != nil {
+			return nil, err
+		}
+		items = append(items, course_id)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getRoadmapsByStudent = `-- name: GetRoadmapsByStudent :many
