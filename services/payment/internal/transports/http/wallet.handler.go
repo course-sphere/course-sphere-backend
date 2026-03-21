@@ -9,6 +9,31 @@ import (
 	"github.com/course-sphere/course-sphere-backend/shared/transports/http/middleware"
 )
 
+func (s *Server) GetWalletByUser(c fuego.ContextNoBody) (*Wallet, error) {
+	ctx := c.Context()
+
+	token := c.Value(middleware.TokenKey).(jwt.Token)
+	sub, _ := token.Subject()
+	userID, err := uuid.Parse(sub)
+	if err != nil {
+		return nil, fuego.UnauthorizedError{
+			Err:    err,
+			Detail: "Invalid token",
+		}
+	}
+
+	raw, err := s.Wallet.GetByUser(ctx, userID)
+	if err != nil {
+		return nil, fuego.InternalServerError{
+			Err: err,
+		}
+	}
+	var wallet Wallet
+	copier.Copy(&wallet, raw)
+
+	return &wallet, nil
+}
+
 func (s *Server) GetWalletHistories(c fuego.ContextNoBody) ([]History, error) {
 	ctx := c.Context()
 
