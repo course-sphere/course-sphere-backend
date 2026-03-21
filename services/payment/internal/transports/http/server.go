@@ -19,6 +19,7 @@ type Server struct {
 	Wallet usecase.Wallet
 
 	AuthClient  ports.AuthClient
+
 	PayOSClient *payos.PayOS
 }
 

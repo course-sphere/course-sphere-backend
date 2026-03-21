@@ -115,8 +115,7 @@ func (s *Server) CreatePaymentLink(c fuego.ContextWithBody[CreatePaymentLinkData
 		OrderCode:   orderCode,
 		Amount:      int(body.Amount),
 		Description: "Payment",
-		CancelUrl:   fmt.Sprintf("%s/payment/callback/cancel", s.Config.ApiURL),
-		ReturnUrl:   fmt.Sprintf("%s/payment/callback/return", s.Config.ApiURL),
+		ReturnUrl:   fmt.Sprintf("%s/payment/callback", s.Config.ApiURL),
 	}
 	payment, err := s.PayOSClient.PaymentRequests.Create(ctx, paymentRequest)
 	if err != nil {
@@ -127,4 +126,34 @@ func (s *Server) CreatePaymentLink(c fuego.ContextWithBody[CreatePaymentLinkData
 	}
 
 	return payment.CheckoutUrl, nil
+}
+
+func (s *Server) PaymentCallback(c fuego.Context[PaymentCallbackData, PaymentCallbackStatus]) (any, error) {
+	ctx := c.Context()
+
+	status, err := c.Params()
+	if err != nil {
+		return nil, err
+	}
+	if !status.Success {
+		return nil, fuego.BadRequestError{
+			Detail: "Failed to process payment",
+		}
+	}
+
+	body, err := c.Body()
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = s.PayOSClient.Webhooks.VerifyData(ctx, body)
+	if err != nil {
+		return nil, err
+	}
+
+	walletID := cache[body.OrderCode]
+
+	err = s.Wallet.Update(ctx, walletID, body.Amount, body.Description)
+
+	return nil, err
 }
