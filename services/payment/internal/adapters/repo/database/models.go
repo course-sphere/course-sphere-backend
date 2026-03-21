@@ -10,11 +10,11 @@ import (
 )
 
 type PaymentHistory struct {
-	ID        uuid.UUID
-	WalletID  uuid.UUID
-	Amount    int64
-	Detail    string
-	CreatedAt pgtype.Timestamptz
+	ID          uuid.UUID
+	WalletID    uuid.UUID
+	Amount      int64
+	Description string
+	CreatedAt   pgtype.Timestamptz
 }
 
 type PaymentWallet struct {

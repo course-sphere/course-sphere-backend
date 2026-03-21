@@ -157,3 +157,40 @@ func (s *Server) PaymentCallback(c fuego.Context[PaymentCallbackData, PaymentCal
 
 	return nil, err
 }
+
+func (s *Server) Withdraw(c fuego.ContextWithBody[WithdrawData]) (any, error) {
+
+	ctx := c.Context()
+
+	token := c.Value(middleware.TokenKey).(jwt.Token)
+	sub, _ := token.Subject()
+	userID, err := uuid.Parse(sub)
+	if err != nil {
+		return nil, fuego.UnauthorizedError{
+			Err:    err,
+			Detail: "Invalid token",
+		}
+	}
+
+	wallet, err := s.Wallet.GetByUser(ctx, userID)
+	if err != nil {
+		return nil, fuego.InternalServerError{
+			Err: err,
+		}
+	}
+
+	body, err := c.Body()
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.Wallet.Withdraw(ctx, wallet.ID, body.Amount, body.Description)
+	if err != nil {
+		return nil, fuego.BadRequestError{
+			Err:    err,
+			Detail: "Not enough balance",
+		}
+	}
+
+	return nil, nil
+}

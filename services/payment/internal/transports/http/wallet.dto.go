@@ -32,3 +32,8 @@ type PaymentCallbackData struct {
 	Amount      int64  `json:"amount"`
 	Description string `json:"description"`
 }
+
+type WithdrawData struct {
+	Amount int64 `json:"amount"`
+	Description string `json:"description"`
+}

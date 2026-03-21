@@ -36,11 +36,11 @@ func (u *Wallet) Deposit(ctx context.Context, id uuid.UUID, amount int64, detail
 }
 
 func (u *Wallet) Withdraw(ctx context.Context, id uuid.UUID, amount int64, detail string) error {
-	if amount >= 0 {
+	if amount <= 0 {
 		return InvalidAmountErr
 	}
 
-	return u.WalletRepo.Update(ctx, id, amount, detail)
+	return u.WalletRepo.Update(ctx, id, -amount, detail)
 }
 
 func (u *Wallet) GetHistories(ctx context.Context, id uuid.UUID) ([]domain.History, error) {

@@ -13,8 +13,8 @@ type Wallet struct {
 }
 
 type History struct {
-	ID        uuid.UUID
-	Amount    int64
-	Detail    string
-	CreatedAt time.Time
+	ID          uuid.UUID
+	Amount      int64
+	Description string
+	CreatedAt   time.Time
 }

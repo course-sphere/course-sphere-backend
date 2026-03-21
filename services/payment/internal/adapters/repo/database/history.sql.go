@@ -12,23 +12,23 @@ import (
 )
 
 const createHistory = `-- name: CreateHistory :exec
-INSERT INTO payment.histories(wallet_id, amount, detail)
+INSERT INTO payment.histories(wallet_id, amount, description)
 VALUES($1, $2, $3)
 `
 
 type CreateHistoryParams struct {
-	WalletID uuid.UUID
-	Amount   int64
-	Detail   string
+	WalletID    uuid.UUID
+	Amount      int64
+	Description string
 }
 
 func (q *Queries) CreateHistory(ctx context.Context, arg CreateHistoryParams) error {
-	_, err := q.db.Exec(ctx, createHistory, arg.WalletID, arg.Amount, arg.Detail)
+	_, err := q.db.Exec(ctx, createHistory, arg.WalletID, arg.Amount, arg.Description)
 	return err
 }
 
 const getHistoriesByWallet = `-- name: GetHistoriesByWallet :many
-SELECT id, wallet_id, amount, detail, created_at FROM payment.histories WHERE wallet_id = $1
+SELECT id, wallet_id, amount, description, created_at FROM payment.histories WHERE wallet_id = $1
 `
 
 func (q *Queries) GetHistoriesByWallet(ctx context.Context, walletID uuid.UUID) ([]PaymentHistory, error) {
@@ -44,7 +44,7 @@ func (q *Queries) GetHistoriesByWallet(ctx context.Context, walletID uuid.UUID) 
 			&i.ID,
 			&i.WalletID,
 			&i.Amount,
-			&i.Detail,
+			&i.Description,
 			&i.CreatedAt,
 		); err != nil {
 			return nil, err
