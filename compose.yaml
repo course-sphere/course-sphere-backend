@@ -58,6 +58,24 @@ services:
     networks:
       - internal
 
+  payment-service:
+    image: ${REGISTRY}/payment-service:latest
+    container_name: course-sphere-payment
+    restart: on-failure:5
+    depends_on:
+      - database
+    environment:
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      API_URL: ${API_URL}
+      PROXY_URL: http://caddy:8080
+      DATABASE_URL: postgres://${PG_USER}:${PG_PASS}@database/${PG_DB}
+
+      PAYOS_CLIENT_ID: $PAYOS_CLIENT_ID
+      PAYOS_API_KEY: $PAYOS_API_KEY
+      PAYOS_CHECKSUM_KEY: $PAYOS_CHECKSUM_KEY
+    networks:
+      - internal
+
   general-service:
     image: ${REGISTRY}/general-service:latest
     container_name: course-sphere-general

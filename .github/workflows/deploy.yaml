@@ -36,6 +36,8 @@ jobs:
     env:
       REGISTRY: ghcr.io/course-sphere
 
+      API_URL: ${{ secrets.API_URL }}
+
       PG_USER: ${{ secrets.PG_USER }}
       PG_PASS: ${{ secrets.PG_PASS }}
       PG_DB: ${{ secrets.PG_DB }}
@@ -56,6 +58,10 @@ jobs:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
       S3_BUCKET: ${{ secrets.S3_BUCKET }}
+
+      PAYOS_CLIENT_ID: ${{ secrets.PAYOS_CLIENT_ID }}
+      PAYOS_API_KEY: ${{ secrets.PAYOS_API_KEY }}
+      PAYOS_CHECKSUM_KEY: ${{ secrets.PAYOS_CHECKSUM_KEY }}
     steps:
       - name: Checkout Develop
         uses: actions/checkout@v3
