@@ -13,6 +13,7 @@ type Database struct {
 	Material MaterialDatabase
 	Question QuestionDatabase
 	Attempt  AttemptDatabase
+	Roadmap  RoadmapDatabase
 }
 
 func NewPool(databaseURL string) (*pgxpool.Pool, error) {
@@ -46,5 +47,6 @@ func NewDatabase(databaseURL string) (*Database, error) {
 		Material: MaterialDatabase{Pool: pool},
 		Question: QuestionDatabase{Pool: pool},
 		Attempt:  AttemptDatabase{Pool: pool},
+		Roadmap:  RoadmapDatabase{Pool: pool},
 	}, nil
 }
