@@ -56,11 +56,11 @@ func (s *Server) RegisterRoutes(f *fuego.Server) {
 	roadmap := fuego.Group(f, "/roadmap")
 	fuego.Post(roadmap, "/", s.CreateRoadmap, authOptions...)
 	fuego.Post(roadmap, "/{id}", s.AddRoadmapCourse, authOptions...)
-	fuego.Post(roadmap, "/{id}", s.ApplyRoadmap, authOptions...)
+	fuego.Post(roadmap, "/{id}/apply", s.ApplyRoadmap, authOptions...)
 	fuego.Get(roadmap, "/", s.GetAllRoadmap)
 	fuego.Get(roadmap, "/my", s.GetRoadmapsByStudent, authOptions...)
 	fuego.Get(roadmap, "/{id}", s.GetRoadmap)
-	fuego.Post(roadmap, "/{id}", s.MoveRoadmap, authOptions...)
+	fuego.Post(roadmap, "/{id}/move", s.MoveRoadmap, authOptions...)
 	fuego.Patch(roadmap, "/{id}", s.UpdateRoadmap, authOptions...)
 }
 
