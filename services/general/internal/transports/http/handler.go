@@ -52,6 +52,16 @@ func (s *Server) RegisterRoutes(f *fuego.Server) {
 	fuego.Post(attempt, "/{id}", s.CreateAttemptDetails, authOptions...)
 	fuego.Get(attempt, "/{id}", s.GetAttemptDetails, authOptions...)
 	fuego.Patch(attempt, "/{id}", s.UpdateAttempt, authOptions...)
+
+	roadmap := fuego.Group(f, "/roadmap")
+	fuego.Post(roadmap, "/", s.CreateRoadmap, authOptions...)
+	fuego.Post(roadmap, "/{id}", s.AddRoadmapCourse, authOptions...)
+	fuego.Post(roadmap, "/{id}", s.ApplyRoadmap, authOptions...)
+	fuego.Get(roadmap, "/", s.GetAllRoadmap)
+	fuego.Get(roadmap, "/my", s.GetRoadmapsByStudent, authOptions...)
+	fuego.Get(roadmap, "/{id}", s.GetRoadmap)
+	fuego.Post(roadmap, "/{id}", s.MoveRoadmap, authOptions...)
+	fuego.Patch(roadmap, "/{id}", s.UpdateRoadmap, authOptions...)
 }
 
 func (s *Server) OpenAPI(specURL string) http.Handler {

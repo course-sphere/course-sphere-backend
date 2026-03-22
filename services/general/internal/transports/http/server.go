@@ -19,6 +19,7 @@ type Server struct {
 	Material usecase.Material
 	Question usecase.Question
 	Attempt  usecase.Attempt
+	Roadmap  usecase.Roadmap
 
 	AuthClient ports.AuthClient
 	UserClient ports.UserClient

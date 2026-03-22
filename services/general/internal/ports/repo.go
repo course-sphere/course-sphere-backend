@@ -39,3 +39,13 @@ type AttemptRepository interface {
 	GetDetails(ctx context.Context, id uuid.UUID) ([]domain.AttemptDetail, error)
 	Update(ctx context.Context, id uuid.UUID, score int32) error
 }
+
+type RoadmapRepository interface {
+	Create(ctx context.Context, authorID uuid.UUID, data domain.CreateRoadmapData) (uuid.UUID, error)
+	AddCourse(ctx context.Context, id uuid.UUID, courseID uuid.UUID) error
+	Apply(ctx context.Context, id uuid.UUID, studentID uuid.UUID) error
+	GetAll(ctx context.Context) ([]uuid.UUID, error)
+	GetByStudent(ctx context.Context, studentID uuid.UUID) ([]uuid.UUID, error)
+	Get(ctx context.Context, id uuid.UUID) (*domain.Roadmap, error)
+	Update(ctx context.Context, id uuid.UUID, data domain.UpdateRoadmapData) error
+}

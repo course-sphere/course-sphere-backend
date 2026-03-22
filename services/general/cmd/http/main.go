@@ -58,6 +58,7 @@ func main() {
 	material := usecase.Material{Repo: &repo.Material}
 	question := usecase.Question{Repo: &repo.Question}
 	attempt := usecase.Attempt{Repo: &repo.Attempt}
+	roadmap := usecase.Roadmap{Repo: &repo.Roadmap}
 
 	authClient := external.HTTPAuthClient{ProxyURL: cfg.ProxyURL}
 	userClient := external.HTTPUserClient{ProxyURL: cfg.ProxyURL}
@@ -69,6 +70,7 @@ func main() {
 		Material: material,
 		Question: question,
 		Attempt:  attempt,
+		Roadmap:  roadmap,
 
 		AuthClient: &authClient,
 		UserClient: &userClient,
