@@ -147,11 +147,11 @@ func (s *Server) GetRoadmap(c fuego.ContextNoBody) (*Roadmap, error) {
 		}
 	}
 
-	raw, err := s.Course.Get(ctx, id)
+	raw, err := s.Roadmap.Get(ctx, id)
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Err:    err,
-			Detail: "Invalid course",
+			Detail: "Invalid roadmap",
 		}
 	}
 	var roadmap Roadmap
