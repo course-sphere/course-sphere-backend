@@ -140,7 +140,7 @@ func (s *Server) CreatePaymentLink(c fuego.ContextWithBody[CreatePaymentLinkData
 	return payment.CheckoutUrl, nil
 }
 
-func (s *Server) PaymentCallback(c fuego.ContextWithParams[PaymentCallbackData]) (any, error) {
+func (s *Server) PaymentCallback(c fuego.ContextNoBody) (any, error) {
 	ctx := c.Context()
 
 	c.Request().ParseForm()
@@ -159,8 +159,11 @@ func (s *Server) PaymentCallback(c fuego.ContextWithParams[PaymentCallbackData])
 	key := cache[int64(orderCode)]
 
 	err = s.Wallet.Deposit(ctx, key.WalletID, key.Amount, key.Description)
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, err
+	return c.Redirect(302, s.Config.CorsOrigin)
 }
 
 func (s *Server) Withdraw(c fuego.ContextWithBody[WithdrawData]) (any, error) {
