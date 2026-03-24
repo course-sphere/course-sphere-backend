@@ -60,7 +60,7 @@ func (s *Server) RegisterRoutes(f *fuego.Server) {
 	fuego.Get(roadmap, "/", s.GetAllRoadmap)
 	fuego.Get(roadmap, "/my", s.GetRoadmapsByStudent, authOptions...)
 	fuego.Get(roadmap, "/{id}", s.GetRoadmap)
-	fuego.Post(roadmap, "/{id}/move", s.MoveRoadmap, authOptions...)
+	fuego.Post(roadmap, "/{id}/move-course", s.MoveRoadmapCourse, authOptions...)
 	fuego.Patch(roadmap, "/{id}", s.UpdateRoadmap, authOptions...)
 }
 
