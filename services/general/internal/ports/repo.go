@@ -36,6 +36,7 @@ type AttemptRepository interface {
 	Create(ctx context.Context, materialID uuid.UUID, studentID uuid.UUID) (uuid.UUID, error)
 	CreateDetails(ctx context.Context, id uuid.UUID, data []domain.CreateAttemptDetailData) error
 	GetByMaterial(ctx context.Context, materialID uuid.UUID, studentID uuid.UUID) ([]domain.Attempt, error)
+	Get(ctx context.Context, id uuid.UUID) (*domain.Attempt, error)
 	GetDetails(ctx context.Context, id uuid.UUID) ([]domain.AttemptDetail, error)
 	Update(ctx context.Context, id uuid.UUID, score int32) error
 }
