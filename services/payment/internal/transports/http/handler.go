@@ -27,7 +27,7 @@ func (s *Server) RegisterRoutes(f *fuego.Server) {
 
 	fuego.Post(f, "/", s.CreatePaymentLink, authOptions...)
 	fuego.Post(f, "/withdraw", s.Withdraw, authOptions...)
-	fuego.Post(f, "/callback", s.PaymentCallback)
+	fuego.Get(f, "/callback", s.PaymentCallback)
 
 	wallet := fuego.Group(f, "/wallet")
 	fuego.Get(wallet, "/", s.GetWalletByUser, authOptions...)

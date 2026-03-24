@@ -14,8 +14,14 @@ import (
 	"github.com/course-sphere/course-sphere-backend/shared/transports/http/middleware"
 )
 
+type Key struct {
+	WalletID    uuid.UUID
+	Amount      int64
+	Description string
+}
+
 var (
-	cache map[int64]uuid.UUID = make(map[int64]uuid.UUID)
+	cache map[int64]Key = make(map[int64]Key)
 )
 
 func (s *Server) GetWalletByUser(c fuego.ContextNoBody) (*Wallet, error) {
@@ -109,13 +115,18 @@ func (s *Server) CreatePaymentLink(c fuego.ContextWithBody[CreatePaymentLinkData
 	}
 	orderCode %= (int64(1) << 32)
 
-	cache[orderCode] = wallet.ID
+	cache[orderCode] = Key{
+		WalletID:    wallet.ID,
+		Amount:      body.Amount,
+		Description: body.Description,
+	}
 
 	paymentRequest := payos.CreatePaymentLinkRequest{
 		OrderCode:   orderCode,
 		Amount:      int(body.Amount),
 		Description: "Payment",
 		ReturnUrl:   fmt.Sprintf("%s/payment/callback", s.Config.ApiURL),
+		CancelUrl:   fmt.Sprintf("%s/payment/callback/cancel", s.Config.ApiURL),
 	}
 	payment, err := s.PayOSClient.PaymentRequests.Create(ctx, paymentRequest)
 	if err != nil {
@@ -128,32 +139,17 @@ func (s *Server) CreatePaymentLink(c fuego.ContextWithBody[CreatePaymentLinkData
 	return payment.CheckoutUrl, nil
 }
 
-func (s *Server) PaymentCallback(c fuego.Context[PaymentCallbackData, PaymentCallbackStatus]) (any, error) {
+func (s *Server) PaymentCallback(c fuego.ContextWithParams[PaymentCallbackData]) (any, error) {
 	ctx := c.Context()
 
-	status, err := c.Params()
-	if err != nil {
-		return nil, err
-	}
-	if !status.Success {
-		return nil, fuego.BadRequestError{
-			Detail: "Failed to process payment",
-		}
-	}
-
-	body, err := c.Body()
+	params, err := c.Params()
 	if err != nil {
 		return nil, err
 	}
 
-	_, err = s.PayOSClient.Webhooks.VerifyData(ctx, body)
-	if err != nil {
-		return nil, err
-	}
+	key := cache[params.OrderCode]
 
-	walletID := cache[body.OrderCode]
-
-	err = s.Wallet.Deposit(ctx, walletID, body.Amount, body.Description)
+	err = s.Wallet.Deposit(ctx, key.WalletID, key.Amount, key.Description)
 
 	return nil, err
 }
