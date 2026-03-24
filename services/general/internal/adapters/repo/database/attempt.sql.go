@@ -45,6 +45,25 @@ func (q *Queries) CreateAttemptDetail(ctx context.Context, arg CreateAttemptDeta
 	return err
 }
 
+const getAttempt = `-- name: GetAttempt :one
+SELECT id, material_id, student_id, score, created_at
+FROM general.attempts
+WHERE id = $1
+`
+
+func (q *Queries) GetAttempt(ctx context.Context, id uuid.UUID) (GeneralAttempt, error) {
+	row := q.db.QueryRow(ctx, getAttempt, id)
+	var i GeneralAttempt
+	err := row.Scan(
+		&i.ID,
+		&i.MaterialID,
+		&i.StudentID,
+		&i.Score,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const getAttemptDetails = `-- name: GetAttemptDetails :many
 SELECT attempt_id, question_id, answer
 FROM general.attempt_details

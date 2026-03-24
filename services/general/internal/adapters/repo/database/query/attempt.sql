@@ -12,6 +12,11 @@ SELECT *
 FROM general.attempts
 WHERE material_id = @material_id AND student_id = @student_id;
 
+-- name: GetAttempt :one
+SELECT *
+FROM general.attempts
+WHERE id = @id;
+
 -- name: GetAttemptDetails :many
 SELECT *
 FROM general.attempt_details
