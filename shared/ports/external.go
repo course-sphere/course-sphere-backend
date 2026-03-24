@@ -19,3 +19,8 @@ type UserClient interface {
 type GeneralClient interface {
 	GetEnrolledCourses(ctx context.Context, token string) ([]uuid.UUID, error)
 }
+
+type PaymentClient interface {
+	GetWalletByUser(ctx context.Context, token string) (*domain.Wallet, error)
+	Withdraw(ctx context.Context, token string, amount int64, detail string) error
+}
