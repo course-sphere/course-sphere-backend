@@ -60,7 +60,7 @@ func (s *Server) EnrollCourse(c fuego.ContextNoBody) (any, error) {
 		}
 	}
 
-	err = s.Course.Enroll(ctx, id, studentID)
+	err = s.Course.Enroll(ctx, id, studentID, c.Header("Authorization"))
 	if err != nil {
 		return nil, fuego.BadRequestError{
 			Err:    err,

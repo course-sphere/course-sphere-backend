@@ -50,10 +50,13 @@ func main() {
 		log.Fatal(err)
 	}
 
+	paymentClient := external.HTTPPaymentClient{ProxyURL: cfg.ProxyURL}
+
 	course := usecase.Course{
-		Repo:         &repo.Course,
-		MaterialRepo: &repo.Material,
-		AttemptRepo:  &repo.Attempt,
+		Repo:          &repo.Course,
+		MaterialRepo:  &repo.Material,
+		AttemptRepo:   &repo.Attempt,
+		PaymentClient: &paymentClient,
 	}
 	material := usecase.Material{Repo: &repo.Material}
 	question := usecase.Question{Repo: &repo.Question}

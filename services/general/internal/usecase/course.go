@@ -10,16 +10,20 @@ import (
 
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/domain"
 	"github.com/course-sphere/course-sphere-backend/services/general/internal/ports"
+	sharedPort "github.com/course-sphere/course-sphere-backend/shared/ports"
 )
 
 var (
-	ErrInvalidPrice = fmt.Errorf("price must be non negative")
+	ErrInvalidPrice     = fmt.Errorf("price must be non negative")
+	ErrNotEnoughBalance = fmt.Errorf("Not enough balance")
 )
 
 type Course struct {
 	Repo         ports.CourseRepository
 	MaterialRepo ports.MaterialRepository
 	AttemptRepo  ports.AttemptRepository
+
+	PaymentClient sharedPort.PaymentClient
 }
 
 func (u *Course) Create(ctx context.Context, instructorID uuid.UUID, data domain.CreateCourseData) (uuid.UUID, error) {
@@ -30,7 +34,28 @@ func (u *Course) Create(ctx context.Context, instructorID uuid.UUID, data domain
 	return u.Repo.Create(ctx, instructorID, data)
 }
 
-func (u *Course) Enroll(ctx context.Context, id uuid.UUID, studentID uuid.UUID) error {
+func (u *Course) Enroll(ctx context.Context, id uuid.UUID, studentID uuid.UUID, token string) error {
+	course, err := u.Repo.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	if course.Price == 0 {
+		return u.Repo.Enroll(ctx, id, studentID)
+	}
+
+	wallet, err := u.PaymentClient.GetWalletByUser(ctx, token)
+	if err != nil {
+		return err
+	}
+	if wallet.Balance < int64(course.Price) {
+		return ErrNotEnoughBalance
+	}
+
+	err = u.PaymentClient.Withdraw(ctx, token, int64(course.Price), fmt.Sprintf("Buy course %s", course.Title))
+	if err != nil {
+		return err
+	}
+
 	return u.Repo.Enroll(ctx, id, studentID)
 }
 
