@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jinzhu/copier"
 
@@ -64,6 +65,19 @@ func (db *AttemptDatabase) GetByMaterial(ctx context.Context, materialID uuid.UU
 	copier.Copy(&attempts, &raw)
 
 	return attempts, nil
+}
+
+func (db *AttemptDatabase) Get(ctx context.Context, id uuid.UUID) (*domain.Attempt, error) {
+	inner := database.New(db.Pool)
+
+	raw, err := inner.GetAttempt(ctx, id)
+	if err == pgx.ErrNoRows {
+		return nil, err
+	}
+	var attempt domain.Attempt
+	copier.Copy(&attempt, &raw)
+
+	return &attempt, nil
 }
 
 func (db *AttemptDatabase) GetDetails(ctx context.Context, id uuid.UUID) ([]domain.AttemptDetail, error) {
