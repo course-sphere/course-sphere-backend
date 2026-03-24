@@ -38,7 +38,7 @@ func (u *Roadmap) Get(ctx context.Context, id uuid.UUID) (*domain.Roadmap, error
 	return u.Repo.Get(ctx, id)
 }
 
-func (u *Roadmap) Move(ctx context.Context, id uuid.UUID, currentID uuid.UUID, prevID *uuid.UUID, nextID *uuid.UUID) error {
+func (u *Roadmap) MoveCourse(ctx context.Context, id uuid.UUID, currentID uuid.UUID, prevID *uuid.UUID, nextID *uuid.UUID) error {
 	getPosition := func(ctx context.Context, courseID uuid.UUID) (float64, error) {
 		return u.Repo.GetCoursePosition(ctx, id, courseID)
 	}
