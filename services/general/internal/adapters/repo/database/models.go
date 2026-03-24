@@ -234,7 +234,6 @@ type GeneralQuestionPossibleAnswer struct {
 type GeneralRoadmap struct {
 	ID          uuid.UUID
 	AuthorID    uuid.UUID
-	Position    float64
 	Title       string
 	Description string
 }
@@ -242,6 +241,7 @@ type GeneralRoadmap struct {
 type GeneralRoadmapCourse struct {
 	RoadmapID uuid.UUID
 	CourseID  uuid.UUID
+	Position  float64
 }
 
 type GeneralStudentRoadmap struct {

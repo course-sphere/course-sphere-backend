@@ -160,7 +160,7 @@ func (s *Server) GetRoadmap(c fuego.ContextNoBody) (*Roadmap, error) {
 	return &roadmap, nil
 }
 
-func (s *Server) MoveRoadmap(c fuego.ContextWithBody[MoveRoadmapData]) (any, error) {
+func (s *Server) MoveRoadmapCourse(c fuego.ContextWithBody[MoveRoadmapCourseData]) (any, error) {
 	ctx := c.Context()
 
 	id, err := uuid.Parse(c.PathParam("id"))
@@ -176,7 +176,7 @@ func (s *Server) MoveRoadmap(c fuego.ContextWithBody[MoveRoadmapData]) (any, err
 		return uuid.Nil, err
 	}
 
-	err = s.Material.Move(ctx, id, body.PrevID, body.NextID)
+	err = s.Roadmap.MoveCourse(ctx, id, body.CurrentID, body.PrevID, body.NextID)
 
 	return nil, err
 }

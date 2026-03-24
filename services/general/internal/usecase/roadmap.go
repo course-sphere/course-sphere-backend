@@ -38,21 +38,16 @@ func (u *Roadmap) Get(ctx context.Context, id uuid.UUID) (*domain.Roadmap, error
 	return u.Repo.Get(ctx, id)
 }
 
-func (u *Roadmap) Move(ctx context.Context, id uuid.UUID, prevID *uuid.UUID, nextID *uuid.UUID) error {
-	getPosition := func(ctx context.Context, id uuid.UUID) (float64, error) {
-		roadmap, err := u.Repo.Get(ctx, id)
-		if err != nil {
-			return 0, err
-		}
-
-		return roadmap.Position, nil
+func (u *Roadmap) MoveCourse(ctx context.Context, id uuid.UUID, currentID uuid.UUID, prevID *uuid.UUID, nextID *uuid.UUID) error {
+	getPosition := func(ctx context.Context, courseID uuid.UUID) (float64, error) {
+		return u.Repo.GetCoursePosition(ctx, id, courseID)
 	}
 	position, err := util.Midpoint(ctx, id, prevID, nextID, getPosition)
 	if err != nil {
 		return err
 	}
 
-	return u.Repo.Update(ctx, id, domain.UpdateRoadmapData{Position: &position})
+	return u.Repo.UpdateCoursePosition(ctx, id, currentID, position)
 }
 
 func (u *Roadmap) Update(ctx context.Context, id uuid.UUID, data domain.UpdateRoadmapData) error {

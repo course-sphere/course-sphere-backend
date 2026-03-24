@@ -47,5 +47,7 @@ type RoadmapRepository interface {
 	GetAll(ctx context.Context) ([]uuid.UUID, error)
 	GetByStudent(ctx context.Context, studentID uuid.UUID) ([]uuid.UUID, error)
 	Get(ctx context.Context, id uuid.UUID) (*domain.Roadmap, error)
+	GetCoursePosition(ctx context.Context, id uuid.UUID, courseID uuid.UUID) (float64, error)
 	Update(ctx context.Context, id uuid.UUID, data domain.UpdateRoadmapData) error
+	UpdateCoursePosition(ctx context.Context, id uuid.UUID, courseID uuid.UUID, position float64) error
 }
