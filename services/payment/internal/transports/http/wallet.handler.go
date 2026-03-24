@@ -3,6 +3,7 @@ package http
 import (
 	"fmt"
 	"hash/fnv"
+	"strconv"
 	"time"
 
 	"github.com/go-fuego/fuego"
@@ -142,12 +143,20 @@ func (s *Server) CreatePaymentLink(c fuego.ContextWithBody[CreatePaymentLinkData
 func (s *Server) PaymentCallback(c fuego.ContextWithParams[PaymentCallbackData]) (any, error) {
 	ctx := c.Context()
 
-	params, err := c.Params()
+	c.Request().ParseForm()
+	code := c.Request().Form.Get("code")
+	orderCode, err := strconv.Atoi(c.Request().Form.Get("orderCode"))
 	if err != nil {
 		return nil, err
 	}
 
-	key := cache[params.OrderCode]
+	if code != "00" {
+		return nil, fuego.BadRequestError{
+			Detail: "Failed to process payment",
+		}
+	}
+
+	key := cache[int64(orderCode)]
 
 	err = s.Wallet.Deposit(ctx, key.WalletID, key.Amount, key.Description)
 

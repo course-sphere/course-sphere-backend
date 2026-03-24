@@ -24,11 +24,6 @@ type CreatePaymentLinkData struct {
 	Description string `json:"description" example:"Buy course"`
 }
 
-type PaymentCallbackData struct {
-	Code      string `json:"code"`
-	OrderCode int64  `json:"orderCode"`
-}
-
 type WithdrawData struct {
 	Amount      int64  `json:"amount"`
 	Description string `json:"description"`
