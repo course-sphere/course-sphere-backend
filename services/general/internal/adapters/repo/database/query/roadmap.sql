@@ -49,7 +49,7 @@ SET
     description = COALESCE(sqlc.narg('description'), description)
 WHERE id = @id;
 
--- name: UpdateRoadmapCourse :exec
+-- name: UpdateRoadmapCoursePosition :exec
 UPDATE general.roadmap_courses
 SET position = @posistion
 WHERE roadmap_id = @id AND course_id = @course_id;

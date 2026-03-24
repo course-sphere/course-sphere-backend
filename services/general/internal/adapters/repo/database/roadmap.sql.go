@@ -199,19 +199,19 @@ func (q *Queries) UpdateRoadmap(ctx context.Context, arg UpdateRoadmapParams) er
 	return err
 }
 
-const updateRoadmapCourse = `-- name: UpdateRoadmapCourse :exec
+const updateRoadmapCoursePosition = `-- name: UpdateRoadmapCoursePosition :exec
 UPDATE general.roadmap_courses
 SET position = $1
 WHERE roadmap_id = $2 AND course_id = $3
 `
 
-type UpdateRoadmapCourseParams struct {
+type UpdateRoadmapCoursePositionParams struct {
 	Posistion float64
 	ID        uuid.UUID
 	CourseID  uuid.UUID
 }
 
-func (q *Queries) UpdateRoadmapCourse(ctx context.Context, arg UpdateRoadmapCourseParams) error {
-	_, err := q.db.Exec(ctx, updateRoadmapCourse, arg.Posistion, arg.ID, arg.CourseID)
+func (q *Queries) UpdateRoadmapCoursePosition(ctx context.Context, arg UpdateRoadmapCoursePositionParams) error {
+	_, err := q.db.Exec(ctx, updateRoadmapCoursePosition, arg.Posistion, arg.ID, arg.CourseID)
 	return err
 }

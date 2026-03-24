@@ -75,13 +75,31 @@ func (db *RoadmapDatabase) Get(ctx context.Context, id uuid.UUID) (*domain.Roadm
 	return &roadmap, nil
 }
 
+func (db RoadmapDatabase) GetCoursePosition(ctx context.Context, id uuid.UUID, courseID uuid.UUID) (float64, error) {
+	inner := database.New(db.Pool)
+
+	return inner.GetRoadmapCoursePosition(ctx, database.GetRoadmapCoursePositionParams{
+		ID:       id,
+		CourseID: courseID,
+	})
+}
+
 func (db *RoadmapDatabase) Update(ctx context.Context, id uuid.UUID, data domain.UpdateRoadmapData) error {
 	inner := database.New(db.Pool)
 
 	return inner.UpdateRoadmap(ctx, database.UpdateRoadmapParams{
 		ID:          id,
-		Position:    data.Position,
 		Title:       data.Title,
 		Description: data.Description,
+	})
+}
+
+func (db *RoadmapDatabase) UpdateCoursePosition(ctx context.Context, id uuid.UUID, courseID uuid.UUID, posistion float64) error {
+	inner := database.New(db.Pool)
+
+	return inner.UpdateRoadmapCoursePosition(ctx, database.UpdateRoadmapCoursePositionParams{
+		ID:        id,
+		CourseID:  courseID,
+		Posistion: posistion,
 	})
 }
