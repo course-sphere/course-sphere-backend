@@ -1,20 +1,19 @@
 -- name: CreateRoadmap :one
-INSERT INTO general.roadmaps(
-    author_id,
-    title,
-    description,
-    position
-) VALUES(
-    @author_id,
-    @title,
-    @description,
-    COALESCE((SELECT MAX(position) FROM general.roadmaps), 0) + 1000
-)
+INSERT INTO general.roadmaps(author_id, title, description)
+VALUES(@author_id, @title, @description)
 RETURNING id;
 
 -- name: AddRoadmapCourse :exec
-INSERT INTO general.roadmap_courses(roadmap_id, course_id)
-VALUES(@id, @course_id);
+INSERT INTO general.roadmap_courses(
+    roadmap_id,
+    course_id,
+    position
+)
+VALUES(
+    @id,
+    @course_id,
+    COALESCE((SELECT MAX(position) FROM general.roadmap_courses WHERE roadmap_id = @id), 0) + 1000
+);
 
 -- name: ApplyRoadmap :exec
 INSERT INTO general.student_roadmaps(student_id, roadmap_id)
@@ -35,12 +34,22 @@ WHERE id IN (
 SELECT * FROM general.roadmaps WHERE id = @id;
 
 -- name: GetRoadmapCourse :many
-SELECT course_id FROM general.roadmap_courses WHERE roadmap_id = @id;
+SELECT course_id
+FROM general.roadmap_courses
+WHERE roadmap_id = @id
+ORDER BY position;
+
+-- name: GetRoadmapCoursePosition :one
+SELECT position FROM general.roadmap_courses WHERE roadmap_id = @id AND course_id = @course_id;
 
 -- name: UpdateRoadmap :exec
 UPDATE general.roadmaps
 SET
-    position = COALESCE(sqlc.narg('position'), position),
     title = COALESCE(sqlc.narg('title'), title),
     description = COALESCE(sqlc.narg('description'), description)
 WHERE id = @id;
+
+-- name: UpdateRoadmapCourse :exec
+UPDATE general.roadmap_courses
+SET position = @posistion
+WHERE roadmap_id = @id AND course_id = @course_id;

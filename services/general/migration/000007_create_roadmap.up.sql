@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS general.roadmap_courses(
 
 CREATE TABLE IF NOT EXISTS general.student_roadmaps(
     student_id uuid NOT NULL,
-    roadmap_id uuid NOT NULL REFERENCES general.roadmaps(id).
+    roadmap_id uuid NOT NULL REFERENCES general.roadmaps(id),
 
     PRIMARY KEY(student_id, roadmap_id)
 );

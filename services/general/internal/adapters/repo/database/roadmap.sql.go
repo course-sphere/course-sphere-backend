@@ -12,8 +12,16 @@ import (
 )
 
 const addRoadmapCourse = `-- name: AddRoadmapCourse :exec
-INSERT INTO general.roadmap_courses(roadmap_id, course_id)
-VALUES($1, $2)
+INSERT INTO general.roadmap_courses(
+    roadmap_id,
+    course_id,
+    position
+)
+VALUES(
+    $1,
+    $2,
+    COALESCE((SELECT MAX(position) FROM general.roadmap_courses WHERE roadmap_id = $1), 0) + 1000
+)
 `
 
 type AddRoadmapCourseParams struct {
@@ -42,17 +50,8 @@ func (q *Queries) ApplyRoadmap(ctx context.Context, arg ApplyRoadmapParams) erro
 }
 
 const createRoadmap = `-- name: CreateRoadmap :one
-INSERT INTO general.roadmaps(
-    author_id,
-    title,
-    description,
-    position
-) VALUES(
-    $1,
-    $2,
-    $3,
-    COALESCE((SELECT MAX(position) FROM general.roadmaps), 0) + 1000
-)
+INSERT INTO general.roadmaps(author_id, title, description)
+VALUES($1, $2, $3)
 RETURNING id
 `
 
@@ -94,7 +93,7 @@ func (q *Queries) GetAllRoadmaps(ctx context.Context) ([]uuid.UUID, error) {
 }
 
 const getRoadmap = `-- name: GetRoadmap :one
-SELECT id, author_id, position, title, description FROM general.roadmaps WHERE id = $1
+SELECT id, author_id, title, description FROM general.roadmaps WHERE id = $1
 `
 
 func (q *Queries) GetRoadmap(ctx context.Context, id uuid.UUID) (GeneralRoadmap, error) {
@@ -103,7 +102,6 @@ func (q *Queries) GetRoadmap(ctx context.Context, id uuid.UUID) (GeneralRoadmap,
 	err := row.Scan(
 		&i.ID,
 		&i.AuthorID,
-		&i.Position,
 		&i.Title,
 		&i.Description,
 	)
@@ -111,7 +109,10 @@ func (q *Queries) GetRoadmap(ctx context.Context, id uuid.UUID) (GeneralRoadmap,
 }
 
 const getRoadmapCourse = `-- name: GetRoadmapCourse :many
-SELECT course_id FROM general.roadmap_courses WHERE roadmap_id = $1
+SELECT course_id
+FROM general.roadmap_courses
+WHERE roadmap_id = $1
+ORDER BY position
 `
 
 func (q *Queries) GetRoadmapCourse(ctx context.Context, id uuid.UUID) ([]uuid.UUID, error) {
@@ -132,6 +133,22 @@ func (q *Queries) GetRoadmapCourse(ctx context.Context, id uuid.UUID) ([]uuid.UU
 		return nil, err
 	}
 	return items, nil
+}
+
+const getRoadmapCoursePosition = `-- name: GetRoadmapCoursePosition :one
+SELECT position FROM general.roadmap_courses WHERE roadmap_id = $1 AND course_id = $2
+`
+
+type GetRoadmapCoursePositionParams struct {
+	ID       uuid.UUID
+	CourseID uuid.UUID
+}
+
+func (q *Queries) GetRoadmapCoursePosition(ctx context.Context, arg GetRoadmapCoursePositionParams) (float64, error) {
+	row := q.db.QueryRow(ctx, getRoadmapCoursePosition, arg.ID, arg.CourseID)
+	var position float64
+	err := row.Scan(&position)
+	return position, err
 }
 
 const getRoadmapsByStudent = `-- name: GetRoadmapsByStudent :many
@@ -166,25 +183,35 @@ func (q *Queries) GetRoadmapsByStudent(ctx context.Context, studentID uuid.UUID)
 const updateRoadmap = `-- name: UpdateRoadmap :exec
 UPDATE general.roadmaps
 SET
-    position = COALESCE($1, position),
-    title = COALESCE($2, title),
-    description = COALESCE($3, description)
-WHERE id = $4
+    title = COALESCE($1, title),
+    description = COALESCE($2, description)
+WHERE id = $3
 `
 
 type UpdateRoadmapParams struct {
-	Position    *float64
 	Title       *string
 	Description *string
 	ID          uuid.UUID
 }
 
 func (q *Queries) UpdateRoadmap(ctx context.Context, arg UpdateRoadmapParams) error {
-	_, err := q.db.Exec(ctx, updateRoadmap,
-		arg.Position,
-		arg.Title,
-		arg.Description,
-		arg.ID,
-	)
+	_, err := q.db.Exec(ctx, updateRoadmap, arg.Title, arg.Description, arg.ID)
+	return err
+}
+
+const updateRoadmapCourse = `-- name: UpdateRoadmapCourse :exec
+UPDATE general.roadmap_courses
+SET position = $1
+WHERE roadmap_id = $2 AND course_id = $3
+`
+
+type UpdateRoadmapCourseParams struct {
+	Posistion float64
+	ID        uuid.UUID
+	CourseID  uuid.UUID
+}
+
+func (q *Queries) UpdateRoadmapCourse(ctx context.Context, arg UpdateRoadmapCourseParams) error {
+	_, err := q.db.Exec(ctx, updateRoadmapCourse, arg.Posistion, arg.ID, arg.CourseID)
 	return err
 }
