@@ -22,5 +22,5 @@ type GeneralClient interface {
 
 type PaymentClient interface {
 	GetWalletByUser(ctx context.Context, token string) (*domain.Wallet, error)
-	Withdraw(ctx context.Context, id uuid.UUID, amount int64, detail string) error
+	Withdraw(ctx context.Context, token string, amount int64, detail string) error
 }
