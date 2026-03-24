@@ -174,6 +174,7 @@ func (db *CourseDatabase) Update(ctx context.Context, id uuid.UUID, instructorID
 		targetAudiences := strings.Join(*data.TargetAudiences, delimeter)
 		params.TargetAudiences = &targetAudiences
 	}
+	params.Status = (*string)(data.Status)
 	err = inner.UpdateCourse(ctx, params)
 	if err != nil {
 		return err
