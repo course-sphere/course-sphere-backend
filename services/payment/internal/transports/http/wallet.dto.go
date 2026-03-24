@@ -20,20 +20,11 @@ type History struct {
 }
 
 type CreatePaymentLinkData struct {
-	Amount int64 `json:"amount" description:"Amount to create payment link for (in smallest currency unit)" example:"50000"`
-}
-
-type PaymentCallbackStatus struct {
-	Success bool `json:"success"`
-}
-
-type PaymentCallbackData struct {
-	OrderCode   int64  `json:"orderCode"`
-	Amount      int64  `json:"amount"`
-	Description string `json:"description"`
+	Amount      int64  `json:"amount" description:"Amount to create payment link for (in smallest currency unit)" example:"50000"`
+	Description string `json:"description" example:"Buy course"`
 }
 
 type WithdrawData struct {
-	Amount int64 `json:"amount"`
+	Amount      int64  `json:"amount"`
 	Description string `json:"description"`
 }
