@@ -159,7 +159,6 @@ func (s *Server) PaymentCallback(c fuego.Context[PaymentCallbackData, PaymentCal
 }
 
 func (s *Server) Withdraw(c fuego.ContextWithBody[WithdrawData]) (any, error) {
-
 	ctx := c.Context()
 
 	token := c.Value(middleware.TokenKey).(jwt.Token)
