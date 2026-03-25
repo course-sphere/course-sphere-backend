@@ -207,7 +207,8 @@ func (s *Server) UpdateCourse(c fuego.ContextWithBody[UpdateCourseData]) (any, e
 		return uuid.Nil, err
 	}
 	var data domain.UpdateCourseData
-	copier.CopyWithOption(&data, raw, copier.Option{DeepCopy: true})
+	copier.CopyWithOption(&data, &raw, copier.Option{DeepCopy: true})
+	data.Status = (*domain.CourseStatus)(raw.Status)
 
 	err = s.Course.Update(ctx, id, instructorID, data)
 	if err != nil {
